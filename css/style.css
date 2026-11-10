@@ -1966,3 +1966,11 @@ section .usheet .sbox{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
 .kcard.big .kcin{min-height:104px}.kcard.big .kcsy{width:72px;height:72px;border-radius:20px}.kcard.big .kcnm{font-size:26px}
 .mlot.mcl2 .kcard .kcin{min-height:70px}
 @media (prefers-reduced-motion:reduce){.kcard .kcsy{animation:none!important}}
+/* ежедневный вход: длинные суммы помещаются в ячейку */
+.lgrid{gap:4px}
+.lcell{min-width:0;overflow:hidden;padding:6px 1px 5px}
+.lcell b{font-size:clamp(9px,2.9vw,12px);letter-spacing:-.3px;white-space:nowrap}
+/* игра не прокручивается в ширину */
+html,body{overflow-x:hidden;overflow-x:clip;max-width:100%;overscroll-behavior-x:none}
+body{touch-action:pan-y pinch-zoom}
+.ncards,.ptabs,.crchips,.mfrow,.chtabs{touch-action:pan-x pan-y}
