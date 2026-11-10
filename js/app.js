@@ -3,14 +3,14 @@ addEventListener('error',e=>{try{if(e.message==='Script error.'&&!e.filename&&!e
 addEventListener('unhandledrejection',e=>{try{console.error(e.reason)}catch(x){}});
 const $=s=>document.querySelector(s),tg=window.Telegram&&Telegram.WebApp;
 // если на хостинге лежит старый html без новых разделов (файлы загрузили не все) — создаём недостающие, чтобы игра не падала
-['ach','top','clan','market','museum','shop','auction','help','guide','season','games','battles','fair','friends','chances','coll'].forEach(k=>{if(!$('#tab-'+k)){const s=document.createElement('section');s.id='tab-'+k;s.className='list';s.hidden=true;($('#tab-bon')||document.body).after(s)}});
+['ach','top','clan','market','museum','shop','auction','help','guide','season','games','battles','fair','friends','chances'].forEach(k=>{if(!$('#tab-'+k)){const s=document.createElement('section');s.id='tab-'+k;s.className='list';s.hidden=true;($('#tab-bon')||document.body).after(s)}});
 // Вкладки-«таблетки» внутри разделов: Склад (ники, апгрейд, контракт, витрины, музей) и Магазин (магазин, рынок, аукцион)
-const SUBS={stock:[['col','Ники'],['coll','Коллекция'],['up','Апгрейд'],['craft','Контракт'],['battles','Поединки'],['museum','Музей']],shop:[['shop','Магазин'],['market','Рынок'],['auction','Аукцион']]};
+const SUBS={stock:[['col','Ники'],['up','Апгрейд'],['craft','Контракт'],['battles','Поединки'],['museum','Музей']],shop:[['shop','Магазин'],['market','Рынок'],['auction','Аукцион']]};
 const subTabs=(g,a)=>`<div class="ptabs" role="tablist">${SUBS[g].filter(([k])=>g!=='stock'||k!=='up'||a==='up').map(([k,l])=>`<button role="tab" data-sub="${k}"${k==='craft'?' data-craft="1"':''} aria-selected="${k===a}">${l}</button>`).join('')}</div>`;
 function ptFix(){document.querySelectorAll('.ptabs').forEach(p=>{const b=p.querySelector('[aria-selected=true]');if(b&&p.scrollWidth>p.clientWidth){p.style.scrollBehavior='auto';p.scrollLeft=b.offsetLeft-(p.clientWidth-b.offsetWidth)/2;p.style.scrollBehavior=''}})}
 try{const g=document.getElementById('gsub');if(g)g.innerHTML=SUBS.stock.filter(([k])=>k!=='show'&&k!=='museum').map(([k,l])=>`<button role="tab" data-sub="${k}"${k==='craft'?' data-craft="1"':''} aria-selected="false">${l}</button>`).join('')}catch(e){}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-sub]');if(!b)return;const k=b.dataset.sub;if(k==='craft')return;tab(k)});
-const NAVMAP={game:'game',col:'col',coll:'col',up:'col',museum:'col',shop:'shop',market:'shop',auction:'shop',top:'top',clan:'top',prof:'more',ach:'more',guide:'more',help:'more',friends:'more',chances:'more'};
+const NAVMAP={game:'game',col:'col',up:'col',museum:'col',shop:'shop',market:'shop',auction:'shop',top:'top',clan:'top',prof:'more',ach:'more',guide:'more',help:'more',friends:'more',chances:'more'};
 // отступ сверху под системную панель Telegram («Закрыть», «…»): берём из SDK, иначе запасной
 function safeTop(){
   let t=0;try{t=((tg.safeAreaInset||{}).top||0)+((tg.contentSafeAreaInset||{}).top||0)}catch(e){}
@@ -906,7 +906,7 @@ function colPanel(){
 function renderCol(){
   const col=$('#tab-col'),its=[...S.items].sort((a,b)=>b.t-a.t);
   if(colSel)colSel=new Set([...colSel].filter(id=>S.items.some(i=>i.id===id)));
-  let h=subTabs('stock','col')+colPanel()+(window.collStrip?collStrip():'');
+  let h=subTabs('stock','col')+colPanel();
   if(!its.length){colSel=null;h+=`<div class="empty">Коллекция пуста.<br>Крути рулетку и забирай понравившиеся ники.<br><button class="btn" data-go="game">К рулетке</button></div>`}
   else h+=`<div class="chead"><div><h2>Мои ники</h2></div>`+
     (colSel?`<div class="cbtns"><button class="btn sm" data-a="all">Все</button><button class="btn sm" data-a="cancel">Отмена</button></div>`:`<button class="btn sm" data-a="selmode">Выбрать</button>`)+`</div>`+
@@ -1434,7 +1434,7 @@ $('#prof-btn').onclick=()=>tab($('#tab-prof').hidden?'prof':'game');
 // Страницы: index.html (игра), rating.html (рейтинг), achievements.html (достижения). Состояние общее — в localStorage и облаке Telegram.
 const PAGE=document.body.dataset.page||'main',PAGES={top:'rating.html',ach:'achievements.html',clan:'clans.html',market:'market.html',museum:'museum.html',shop:'shop.html',auction:'auction.html'};
 function tab(n){
-  const here=PAGE==='main'?['game','col','coll','up','prof','bon','help','guide','season','games','battles','fair','friends','chances']:[PAGE];
+  const here=PAGE==='main'?['game','col','up','prof','bon','help','guide','season','games','battles','fair','friends','chances']:[PAGE];
   if(here.includes(n))return tabIn(n);
   save();try{if(cloudDone)cloudPush()}catch(e){}
   const go=(PAGES[n]||'index.html')+(PAGES[n]||n==='game'?'':'#'+n);
@@ -1443,7 +1443,7 @@ function tab(n){
 }
 function tabIn(n){
   {const nn=NAVMAP[n]||'';document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===nn))}
-  ['game','col','coll','up','prof','bon','ach','top','clan','market','museum','shop','auction','help','guide','season','games','battles','fair','friends','chances'].forEach(k=>{const e=$('#tab-'+k);if(!e)return;
+  ['game','col','up','prof','bon','ach','top','clan','market','museum','shop','auction','help','guide','season','games','battles','fair','friends','chances'].forEach(k=>{const e=$('#tab-'+k);if(!e)return;
     if(k===n){if(e.hidden){e.hidden=false;e.classList.remove('tabin');void e.offsetWidth;e.classList.add('tabin');clearTimeout(e._ti);e._ti=setTimeout(()=>e.classList.remove('tabin'),900)}}else e.hidden=true});
   $('#prof-btn').setAttribute('aria-pressed',n==='prof');
   $('#bon-btn').setAttribute('aria-pressed',['bon','games','battles','fair'].includes(n));
@@ -1451,7 +1451,6 @@ function tabIn(n){
   if(n!=='col')colSel=null;
   if(n==='col')renderCol();else updSelbar();
   if(n==='up')renderUp();
-  if(n==='coll')try{openColl()}catch(e){}
   if(n==='prof')renderProf();
   if(n==='bon'){renderBon();try{const gw=sessionStorage.getItem('nr_gw');if(gw){sessionStorage.removeItem('nr_gw');setTimeout(()=>{const w=gw==='games'?document.querySelector('.bmini'):$('#wheel');if(w)w.scrollIntoView({behavior:'smooth',block:'center'})},450)}}catch(e){}}
   if(n==='ach')renderAch();
@@ -2113,7 +2112,7 @@ async function mAuto(){
   try{await mLoad()}catch(e){}
 }
 async function mLoad(){
-  const [l,m,cl]=await Promise.all([lbReq(`/market?sort=${mk.sort==='rar'?'new':mk.sort}&q=${encodeURIComponent(mk.q)}`),lbReq('/market/my'),lbReq(`/coll/market?q=${encodeURIComponent(mk.q)}`).catch(()=>({lots:[]}))]);mk.lots=l.lots;mk.my=m;mk.cl=(cl&&cl.lots)||[];
+  const [l,m]=await Promise.all([lbReq(`/market?sort=${mk.sort==='rar'?'new':mk.sort}&q=${encodeURIComponent(mk.q)}`),lbReq('/market/my')]);mk.lots=l.lots;mk.my=m;
 }
 async function mAct(path,body,fn){
   if(mk.busy)return false;mk.busy=true;
@@ -2125,21 +2124,12 @@ function mLot(l){
   return `<div class="mlot${l.top?' mtop':''}" style="--tc:${T[n.t].c}"><div class="mi"><b>${l.top?'<em class="topb">🔝 ТОП</em> ':''}@${escH(l.name)}</b><small><span class="mtier">${T[n.t].n}</span> · ${escH(l.seller)}</small><small>Оценка ${fmt(n.v)} 🪙 ${deal}</small></div>
   <div class="mpr"><b>${fmt(l.price)} 🪙</b>${l.mine?'<span class="cchip">Твой</span>':`<button class="btn main sm" data-buy="${l.id}" data-pr="${l.price}"${S.coins<l.price?' disabled':''}>${S.coins<l.price?'Не хватает':'Купить'}</button>`}</div></div>`;
 }
-const mkSel=()=>{const k=mk.sel;if(!k)return null;if(k[0]==='c'&&k[1]===':'){const c=(S.cl||[]).find(x=>'c:'+x.id===k);return c?{cl:c,n:c.n,v:window.collVal?collVal(c):0}:null}const it=S.items.find(i=>i.id===k);return it?{it,n:it.n,v:val(it.t,it.p,it.n)}:null};
-const mApplyC=ls=>mk.rar>=0?[]:ls.filter(l=>l.price>=MPR[mk.pr][0]&&l.price<MPR[mk.pr][1]);
-function mLotC(l){
-  const c={n:l.nick,bg:l.bg,sym:l.sym,frm:l.frm,N:l.n,base:l.base},v=collVal(c),d=Math.round((l.price/v-1)*100),deal=d<=-10?`<em class="mdeal good">−${-d}% от оценки</em>`:d>=30?`<em class="mdeal hot">+${d}% к оценке</em>`:'';
-  return `<div class="mlot mcl2">${collCard(c)}<div class="mclf"><div class="mcli"><small>${escH(l.seller)}</small><small>Оценка ${fmt(v)} 🪙 ${deal}</small></div><div class="mpr"><b>${fmt(l.price)} 🪙</b>${l.mine?'<span class="cchip">Твой</span>':`<button class="btn main sm" data-cbuy="${l.id}" data-pr="${l.price}"${S.coins<l.price?' disabled':''}>${S.coins<l.price?'Не хватает':'Купить'}</button>`}</div></div></div>`;
-}
-function clMy(){
-  const a=(S.cl||[]).filter(c=>c.price>0);
-  return a.map(c=>`<div class="mlot mcl2">${collCard(c)}<div class="mclf"><div class="mcli"><small>Оценка ${fmt(collVal(c))} 🪙</small></div><div class="mpr"><b>${fmt(c.price)} 🪙</b><button class="btn sm" data-ccancel="${c.id}">Снять</button></div></div></div>`).join('');
-}
+const mkSel=()=>{const k=mk.sel;if(!k)return null;const it=S.items.find(i=>i.id===k);return it?{it,n:it.n,v:val(it.t,it.p,it.n)}:null};
 function marketSheet(){
   if(!mk.sheet)return '';
   const its=[...S.items].sort((a,b)=>val(b.t,b.p,b.n)-val(a.t,a.p,a.n)),sel=mkSel(),v=sel?sel.v:0,pr=Math.round(+mk.price)||0,fee=(mk.my&&mk.my.fee)||.05;
   return `<div class="usheet" id="msheet"><div class="sbg" data-mclose="1"></div><div class="sbox"><div class="shead"><b>Выставить ник</b><button class="btn sm" data-mclose="1">✕</button></div>
-  <div class="slist mpick">${its.length?its.map(x=>`<label class="item pick" style="--tc:${T[x.t].c}"><input type="radio" name="mpick" data-msel="${x.id}"${x.id===mk.sel?' checked':''}><div><b>@${escH(x.n)}</b><small>${T[x.t].n}</small></div><span>${fmt(val(x.t,x.p,x.n))} 🪙</span></label>`).join('')+(S.cl||[]).filter(c=>!(c.price>0)).map(c=>`<label class="cpick"><input type="radio" name="mpick" data-msel="c:${c.id}"${'c:'+c.id===mk.sel?' checked':''}>${collCard(c,{val:1})}</label>`).join(''):(S.cl||[]).filter(c=>!(c.price>0)).map(c=>`<label class="cpick"><input type="radio" name="mpick" data-msel="c:${c.id}"${'c:'+c.id===mk.sel?' checked':''}>${collCard(c,{val:1})}</label>`).join('')||'<p class="sum">В коллекции пусто.</p>'}</div>
+  <div class="slist mpick">${its.length?its.map(x=>`<label class="item pick" style="--tc:${T[x.t].c}"><input type="radio" name="mpick" data-msel="${x.id}"${x.id===mk.sel?' checked':''}><div><b>@${escH(x.n)}</b><small>${T[x.t].n}</small></div><span>${fmt(val(x.t,x.p,x.n))} 🪙</span></label>`).join(''):'<p class="sum">Склад пуст.</p>'}</div>
   ${sel?`<label class="mlab">Цена, 🪙<input id="m-price" inputmode="numeric" value="${escH(mk.price)}" placeholder="${v}"></label>
   <div class="mchips">${[1,1.5,2,3].map(k=>`<button class="btn sm" data-mk="${k}">×${k}</button>`).join('')}</div>
   <small class="sum">Оценка: ${fmt(v)} 🪙${pr>=10?` · ты получишь ${fmt(Math.floor(pr*(1-fee)))} 🪙 (комиссия ${Math.round(fee*100)}%)`:''}</small>`:''}
@@ -2179,12 +2169,12 @@ function renderMarket(){
   else if(mk.tab==='hist')body=!mk.hist?'<div class="pcard lbmsg"><small>Загружаю…</small></div>':(mk.hist.length?mk.hist.map(h=>{const n=nickVal(h.name),sold=h.kind==='sold';return `<div class="mlot hrow2" style="--tc:${T[n.t].c}"><div class="mi"><b>${sold?'💰 Продано':'🛒 Куплено'} · @${escH(h.name)}</b><small>${T[n.t].n} · ${sold?'покупатель':'продавец'}: ${escH(h.who)}</small><small>${fmtDate(h.ts)}</small></div><div class="mpr"><b class="${sold?'hplus':'hminus'}">${sold?'+':'−'}${fmt(sold?h.get:h.price)} 🪙</b>${sold?`<small>цена ${fmt(h.price)}</small>`:''}</div></div>`}).join(''):'<div class="pcard lbmsg"><small>Сделок пока нет.</small></div>')
   else if(mk.tab==='buy')body=`<label class="msrch"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="m-q" type="search" placeholder="Поиск ника" value="${escH(mk.q)}" autocomplete="off"></label>
     ${mFilters()}`+
-    (()=>{const all0=mk.lots||[],cls=mApplyC(mk.cl||[]),all=all0.concat(mk.cl||[]),ls0=mApply(all0),ls=ls0.concat(cls);return `<div class="mcnt"><b>${ls.length}</b> ${mpl(ls.length)}${ls.length!==all.length?` из ${all.length}`:''}</div>`+(ls.length?cls.map(mLotC).join('')+ls0.map(mLot).join(''):`<div class="pcard lbmsg"><small>${all.length?'По этим фильтрам лотов нет. Сбрось фильтры.':'Лотов нет. Выстави свой ник во вкладке «Мои лоты».'}</small></div>`)})()
+    (()=>{const all=mk.lots||[],ls0=mApply(all),ls=ls0;return `<div class="mcnt"><b>${ls.length}</b> ${mpl(ls.length)}${ls.length!==all.length?` из ${all.length}`:''}</div>`+(ls.length?ls0.map(mLot).join(''):`<div class="pcard lbmsg"><small>${all.length?'По этим фильтрам лотов нет. Сбрось фильтры.':'Лотов нет. Выстави свой ник во вкладке «Мои лоты».'}</small></div>`)})()
   else{
     const m=mk.my||{active:[],sold:[],fee:.05,max:10},tot=m.sold.reduce((s,x)=>s+x.get,0);
     body=(S.toppick?`<div class="pcard msold toppick"><div><b>🔝 Выбери лот для топа</b><small>Оплачено ⭐ · лот будет первым на рынке 24 часа</small></div><button class="btn sm" id="m-topx">Отмена</button></div>`:'')+`<button class="btn main cwide" id="m-new">＋ Выставить ник</button>${S.toppick?'':'<button class="btn cwide" data-stgo="top">🔝 Лот в топ · ⭐ 19</button>'}`+
     (m.sold.length?`<div class="pcard msold"><div><b>Продано: ${m.sold.length}</b><small>${m.sold.map(x=>'@'+escH(x.name)).slice(0,3).join(', ')}${m.sold.length>3?'…':''}</small></div><button class="btn main" id="m-claim">Забрать +${fmt(tot)} 🪙</button></div>`:'')+
-    `<h3 class="ch3">Мои лоты · ${m.active.length} из ${m.max}</h3>`+clMy()+
+    `<h3 class="ch3">Мои лоты · ${m.active.length} из ${m.max}</h3>`+
     (m.active.length?m.active.map(x=>{const n=nickVal(x.name);return `<div class="mlot" style="--tc:${T[n.t].c}"><div class="mi"><b>@${escH(x.name)}</b><small>${T[n.t].n}</small></div><div class="mpr"><b>${fmt(x.price)} 🪙</b>${S.toppick?(x.top>(m.now||Date.now())?'<span class="cchip ok">🔝 уже в топе</span>':`<button class="btn main sm" data-top="${x.id}">В топ</button>`):(x.top>(m.now||Date.now())?'<span class="cchip ok">🔝 в топе</span>':'')+`<button class="btn sm" data-cancel="${x.id}">Снять</button>`}</div></div>`}).join(''):(S.cl||[]).some(c=>c.price>0)?'':'<div class="pcard lbmsg"><small>Ты пока ничего не выставил.</small></div>')+
     `<small class="sum">Комиссия рынка ${Math.round(m.fee*100)}% берётся с продавца.</small>`;
   }
@@ -2219,17 +2209,10 @@ $('#tab-market').onclick=async e=>{
   const kk=t.closest('[data-mk]');if(kk){const it=mkSel();if(it){mk.price=String(Math.round(it.v*+kk.dataset.mk));renderMarket()}return}
   if(t.closest('#m-ok')){
     const sl=mkSel(),pr=+mk.price;if(!sl||!(pr>=10))return;
-    if(sl.cl){const r=await mAct('/coll/list',{id:sl.cl.id,price:pr},()=>{sl.cl.price=pr;save();render()});if(r){mk.sheet=false;mk.tab='my';toast('Ник выставлен на рынок')}return renderMarket()}
     const it=sl.it;
     const r=await mAct('/market/list',{name:it.n,price:pr},()=>{S.items=S.items.filter(i=>i.id!==it.id);save();render()});
     if(r){mk.sheet=false;mk.tab='my';toast('Ник выставлен на рынок')}return renderMarket();
   }
-  const cb=t.closest('[data-cbuy]');
-  if(cb){const price=+cb.dataset.pr;if(S.coins<price)return toast('Не хватает монет');
-    await mAct('/coll/buy',{id:+cb.dataset.cbuy,max:price},r=>{S.coins-=r.price;save();render();sfx('coins');toast(`Куплено: @${r.nick}`);try{collSync()}catch(x){}});
-    return renderMarket()}
-  const cc=t.closest('[data-ccancel]');
-  if(cc){await mAct('/coll/cancel',{id:+cc.dataset.ccancel},()=>{const c=(S.cl||[]).find(x=>x.id===+cc.dataset.ccancel);if(c)c.price=0;save();toast('Ник снят с рынка')});return renderMarket()}
   const by=t.closest('[data-buy]');
   if(by){
     const price=+by.dataset.pr;if(S.coins<price)return toast('Не хватает монет');
@@ -3355,7 +3338,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)ntSync()});
 setTimeout(()=>ntSync(),7000);
 renderUp();
 if(PAGE!=='main')tabIn(PAGE);
-else{const h=location.hash.slice(1);if(['col','coll','up','prof','bon','help','guide','season','games','battles','fair','friends','chances'].includes(h)){if(h==='friends'||h==='chances')setTimeout(()=>tabIn(h),0);else tabIn(h)}}
+else{const h=location.hash.slice(1);if(['col','up','prof','bon','help','guide','season','games','battles','fair','friends','chances'].includes(h)){if(h==='friends'||h==='chances')setTimeout(()=>tabIn(h),0);else tabIn(h)}}
 try{if(PAGE!=='main'&&tg&&tg.BackButton){tg.BackButton.show();tg.BackButton.onClick(()=>{location.href=PAGE==='clan'?'rating.html':'index.html'})}}catch(e){}
 refInit();
 cloudLoad();
