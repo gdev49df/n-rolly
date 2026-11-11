@@ -64,3 +64,10 @@ html.v2 .brand h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font
 html.v2 .top{flex:none;flex-wrap:nowrap}
 html.v2 .top>.pill{padding:7px 8px;font-size:12px;white-space:nowrap}
 html.v2 .top .bon-btn,html.v2 #bon-btn{margin-left:6px;flex:none}
+html.v2 .top>.pill{box-sizing:border-box;height:38px;display:inline-flex;align-items:center;justify-content:center;gap:4px;margin:0!important;padding:0 10px;line-height:1;border:2px solid rgba(255,255,255,.88);border-left-width:0;border-right-color:rgba(255,255,255,.18);border-radius:0}
+html.v2 .top>.pill:first-child{border-left-width:2px;border-radius:999px 0 0 999px}
+html.v2 .top>.pill:nth-last-child(2){border-right-color:rgba(255,255,255,.88);border-radius:0 999px 999px 0}
+html.v2 .top>.pill:first-child:nth-last-child(2){border-radius:999px;border-left-width:2px}
+html.v2 .top>.pill:not(:first-child):not(:nth-last-child(2)){border-radius:0}
+html.v2 #bon-btn{height:38px;width:38px;margin-left:8px}
+html.v2 .brand h1{display:none}
