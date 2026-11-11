@@ -11,3 +11,4 @@ html.v2:not([data-theme]) .btn.main:not([disabled]){background:linear-gradient(1
 html.v2:not([data-theme]) .btn.main[disabled]{background:#26262c;color:#7c7c88;box-shadow:none}
 html.v2:not([data-theme]) .fastb{background:rgba(54,224,124,.14);border-color:rgba(54,224,124,.55);color:#7cf29b}
 html.v2:not([data-theme]) .fastb[aria-pressed=true]{background:linear-gradient(180deg,#43e585,#22b95e);border-color:transparent;color:#04210e;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)}
+#adb .adg{background:linear-gradient(180deg,#43e585,#22b95e)!important;color:#04210e!important;border-color:transparent!important;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)!important}
