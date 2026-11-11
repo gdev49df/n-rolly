@@ -5,3 +5,4 @@ html.v2 body{background-image:radial-gradient(120% 50% at 50% -8%,rgba(150,150,1
 html.v2 .stage{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015)) padding-box,linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.06) 40%,rgba(255,255,255,.22)) border-box;box-shadow:0 24px 60px -28px #000}
 html.v2 .reel .at{text-shadow:none}
 html.v2 .brand h1{display:block}
+html.v2 [data-bank=open],html.v2 .bankcard .btn.main{background:linear-gradient(180deg,#43e585,#22b95e)!important;color:#04210e!important;box-shadow:0 10px 26px -10px rgba(34,185,94,.75)!important}
