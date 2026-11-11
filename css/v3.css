@@ -9,3 +9,5 @@ html.v2 [data-bank=open],html.v2 .bankcard .btn.main{background:linear-gradient(
 /* главные кнопки действий — зелёные (только стандартная тема) */
 html.v2:not([data-theme]) .btn.main:not([disabled]){background:linear-gradient(180deg,#43e585,#22b95e);color:#04210e;border-color:transparent;box-shadow:0 10px 26px -10px rgba(34,185,94,.75)}
 html.v2:not([data-theme]) .btn.main[disabled]{background:#26262c;color:#7c7c88;box-shadow:none}
+html.v2:not([data-theme]) .fastb{background:rgba(54,224,124,.14);border-color:rgba(54,224,124,.55);color:#7cf29b}
+html.v2:not([data-theme]) .fastb[aria-pressed=true]{background:linear-gradient(180deg,#43e585,#22b95e);border-color:transparent;color:#04210e;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)}
