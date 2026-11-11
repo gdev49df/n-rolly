@@ -6,3 +6,6 @@ html.v2 .stage{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,
 html.v2 .reel .at{text-shadow:none}
 html.v2 .brand h1{display:block}
 html.v2 [data-bank=open],html.v2 .bankcard .btn.main{background:linear-gradient(180deg,#43e585,#22b95e)!important;color:#04210e!important;box-shadow:0 10px 26px -10px rgba(34,185,94,.75)!important}
+/* главные кнопки действий — зелёные (только стандартная тема) */
+html.v2:not([data-theme]) .btn.main:not([disabled]){background:linear-gradient(180deg,#43e585,#22b95e);color:#04210e;border-color:transparent;box-shadow:0 10px 26px -10px rgba(34,185,94,.75)}
+html.v2:not([data-theme]) .btn.main[disabled]{background:#26262c;color:#7c7c88;box-shadow:none}
