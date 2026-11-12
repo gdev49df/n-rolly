@@ -1854,10 +1854,13 @@ const ST_C=15000,ST_E=15;   // награда за историю: раз в с�
 function storyCard(){const got=S.storyD===todayK();
   return `<div class="pcard story"><div class="strow"><div class="stph"><img src="media/story.jpg" alt=""></div><div class="stb"><h3>Выложи в историю</h3><p>Похвастайся в Telegram — награда каждый день</p><div class="stchips"><span class="stch${got?' got':''}">⚡ +${ST_E} энергии</span><span class="stch${got?' got':''}">🪙 ${fmt(ST_C)}</span></div></div></div>`+
     (storyOk()?`<button class="btn main stgo" id="story-go">${got?'Награда получена · выложить ещё раз':'Выложить в историю'}</button>`:`<div class="ststrip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Истории выкладываются из Telegram на телефоне</div>`)+`</div>`}
+let stP=0;   // когда открыли редактор истории; награда только после возвращения в игру через 10+ секунд
+function storyPay(){if(!stP||document.hidden||Date.now()-stP<10000||S.storyD===todayK())return;stP=0;S.storyD=todayK();S.coins=Math.min(CAP,S.coins+ST_C);S.en+=ST_E;try{sfx('coin')}catch(x){}save();toast(`За историю: +${fmt(ST_C)} 🪙 и +${ST_E} ⚡`);render();try{if(!$('#tab-bon').hidden)renderBon()}catch(x){}}
+['visibilitychange','focus','pointerdown'].forEach(ev=>addEventListener(ev,()=>setTimeout(storyPay,300),true));
 function shareStory(){
   const link=refLink(),text=S.spins?`Мой лучший ник в Нейм-рулетке: ${T[S.best].n}. Заходи, выбей лучше!`:'Выбивай редкие юзернеймы в Нейм-рулетке!',media=new URL('media/story.jpg',location.href).href;
   try{if(storyOk()){tg.shareToStory(media,{text,widget_link:{url:link,name:'Нейм-рулетка'}});
-    if(S.storyD!==todayK()){S.storyD=todayK();S.coins=Math.min(CAP,S.coins+ST_C);S.en+=ST_E;try{sfx('coin')}catch(x){}save();toast(`За историю: +${fmt(ST_C)} 🪙 и +${ST_E} ⚡`);render()}
+    if(S.storyD!==todayK()){stP=Date.now();toast('Выложи историю и вернись в игру: награда придёт сама')}
     return}}catch(x){}
   openTg(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
   toast('Истории не поддерживаются в этой версии Telegram: открыл обычную отправку');
