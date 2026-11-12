@@ -3500,7 +3500,7 @@ function gmHtml(){
     card('gs-open','🔎','Дороже или дешевле','Угадай ник: серия верных — награда',`${limLeft('gs')} из ${LIM.gs} забегов · ${fmt(GSC)} 🪙`,'#27D9BD')+
     card('mn-open','💣','Минное поле','Открывай клетки: призы и мины',`${limLeft('mn')} из ${LIM.mn} сегодня · ${fmt(MNP)} 🪙`,'#FF5F7A')+
     card('ws-open','🔤','Найди слова','Сетка 10×10, в конце колесо ×1,2–10',`${wsLeft()} из ${WS_DAY} забегов · бесплатно`,'#FF8A3D')+
-    `</div><h4 class="gmh">Игры на удачу</h4><div class="gmg">`+
+    `</div><h4 class="gmh">Игры на удачу</h4><div class="gmg one">`+
     card('','🧳','Кейсы','Тематические кейсы, шансы открыты',`Открыто: ${fmt(S.casen)}`,'#8B7CFF','data-gm="cases"')+
     card('','⚔️','Батлы','Открывай кейсы против игроков — забирай всё',S.btn?`<i class="gmdot"></i>результатов: ${S.btn}`:'создай свой','#FF5F7A','data-gm="bt"')+
     `</div><button class="gmfair" data-gm="fair">🛡 Честная игра <span>как всё работает и какие шансы</span></button>
