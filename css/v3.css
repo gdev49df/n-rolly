@@ -82,3 +82,8 @@ html body nav [aria-selected=true] svg{filter:none;color:#43e585}
 html body nav button::before,html body nav button::after{display:none!important;content:none}
 /* карточка сезона: приглушённее */
 html.v2 .szhero,html.v2 .pcard.szhero,html.v2 .szbig{background:radial-gradient(90% 80% at 100% 0,rgba(110,120,255,.38),transparent 62%),radial-gradient(80% 70% at 0 100%,rgba(255,120,90,.16),transparent 64%),linear-gradient(155deg,#2a2850 0,#1e1d3a 55%,#171728 100%);border:1px solid rgba(160,150,255,.22);box-shadow:none}
+/* кнопка «копировать» в складе */
+html.v2 .item button[data-a=copy]{display:grid;place-items:center;width:44px;height:44px;border-radius:15px;padding:0;color:#b9bdd0;background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);transition:transform .15s,background .2s,color .2s,border-color .2s}
+html.v2 .item button[data-a=copy] svg{width:20px;height:20px}
+html.v2 .item button[data-a=copy]:active{transform:scale(.88);color:#43e585;border-color:rgba(67,229,133,.6);background:rgba(67,229,133,.14)}
+@media(hover:hover){html.v2 .item button[data-a=copy]:hover{color:#fff;border-color:rgba(255,255,255,.3)}}
