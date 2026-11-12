@@ -1,7 +1,7 @@
 /* v3: наш стиль, но вместо фиолетового нейтральный серый */
-html.v2:not([data-theme]){--bg:#14161e;--paper:#1c1e27;--tile:#272a35;--fg:#f4f5f8;--dark:#14161e;--mute:#8b8fa2;--dot:transparent;--glow:#272a35;--blue:#a4a8b8;--line:#363a47;--tc:#a8acbc}
-html.v2 body::before{background:radial-gradient(40% 40% at 25% 30%,rgba(120,140,185,.2),transparent 70%),radial-gradient(35% 35% at 78% 20%,rgba(255,255,255,.07),transparent 70%)}
-html.v2 body{background-image:radial-gradient(120% 50% at 50% -8%,rgba(120,140,185,.18) 0,transparent 62%)}
+html.v2:not([data-theme]){--bg:#0d0d12;--paper:#18181f;--tile:#22222b;--fg:#f4f5f8;--dark:#0d0d12;--mute:#8b8fa2;--dot:transparent;--glow:#22222b;--blue:#a4a8b8;--line:#2d2d38;--tc:#a8acbc}
+html.v2 body::before{background:radial-gradient(40% 40% at 25% 30%,rgba(120,100,255,.08),transparent 70%),radial-gradient(35% 35% at 78% 20%,rgba(255,255,255,.04),transparent 70%)}
+html.v2 body{background-image:radial-gradient(90% 38% at 50% -6%,rgba(120,100,255,.13),transparent 64%)}
 html.v2 .stage{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015)) padding-box,linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.06) 40%,rgba(255,255,255,.22)) border-box;box-shadow:0 24px 60px -28px #000}
 html.v2 .reel .at{text-shadow:none}
 html.v2 .brand h1{display:block}
@@ -12,9 +12,9 @@ html.v2:not([data-theme]) .btn.main[disabled]{background:#26262c;color:#7c7c88;b
 html.v2:not([data-theme]) .fastb{background:rgba(54,224,124,.14);border-color:rgba(54,224,124,.55);color:#7cf29b}
 html.v2:not([data-theme]) .fastb[aria-pressed=true]{background:linear-gradient(180deg,#43e585,#22b95e);border-color:transparent;color:#04210e;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)}
 #adb .adg{background:linear-gradient(180deg,#43e585,#22b95e)!important;color:#04210e!important;border-color:transparent!important;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)!important}
-html.v2 body{background-color:#14161e}
-html.v2 nav{background:rgba(39,42,53,.94)}
-html.v2 .sbox{background:#1c1e27}
+html.v2 body{background-color:#0d0d12}
+html.v2 nav{background:#18181f}
+html.v2 .sbox{background:#18181f}
 /* шапка: аватар + имя/уровень/«Профиль» слева, подарок справа, валюты ниже */
 html.v2 header{display:flex;flex-wrap:wrap;align-items:center;row-gap:12px;column-gap:10px}
 html.v2 header .brand{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:12px}
@@ -27,7 +27,7 @@ html.v2 .hsub em{font-style:normal;color:#9a8dff}
 html.v2 header:has(.hwho) #bon-btn{order:2;width:54px;height:54px;border-radius:50%;margin:0;flex:none;border:0;color:#fff;background:linear-gradient(160deg,#ffc45c,#f3735b);box-shadow:0 10px 26px -8px rgba(243,115,91,.65);display:grid;place-items:center;position:relative}
 html.v2 header:has(.hwho) #bon-btn svg{width:24px;height:24px}
 html.v2 header:has(.hwho) #bon-btn[aria-pressed=true]{background:linear-gradient(160deg,#ffd27a,#f58a6b);color:#fff}
-html.v2 header:has(.hwho) #bon-btn .dot{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:#ee4a5f;border:2px solid #14161e}
+html.v2 header:has(.hwho) #bon-btn .dot{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:#ee4a5f;border:2px solid #0d0d12}
 html.v2 header .top{order:3;flex:1 1 100%;margin:0;justify-content:flex-start;gap:6px}
 /* игры: цветные карточки с градиентом, как в референсе */
 html.v2 .gmh{font:800 22px var(--head);margin:22px 0 12px;gap:10px;letter-spacing:-.01em}
@@ -53,18 +53,18 @@ html.v2 header:has(.hwho) #bon-btn .dot:not([hidden]){animation:bondot 1.4s ease
 @keyframes bondot{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
 @media(prefers-reduced-motion:reduce){html.v2 header:has(.hwho) #bon-btn,html.v2 header:has(.hwho) #bon-btn svg,html.v2 header:has(.hwho) #bon-btn .dot{animation:none!important}}
 /* нижняя панель: плоская, на всю ширину, как в референсе */
-html.v2 nav{left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;padding:8px 6px calc(10px + env(safe-area-inset-bottom));gap:2px;border-radius:26px 26px 0 0;background:#181a22;backdrop-filter:none;-webkit-backdrop-filter:none;border:0;border-top:1px solid #2a2d38;box-shadow:0 -10px 30px rgba(0,0,0,.35)}
+html.v2 nav{left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;padding:8px 6px calc(10px + env(safe-area-inset-bottom));gap:2px;border-radius:26px 26px 0 0;background:#18181f;backdrop-filter:none;-webkit-backdrop-filter:none;border:0;border-top:1px solid #2d2d38;box-shadow:0 -10px 30px rgba(0,0,0,.35)}
 html.v2 nav button{flex:1;min-width:0;padding:7px 2px 6px;gap:5px;border-radius:18px;background:none;box-shadow:none;border:0;font:700 12px/1.1 var(--head);color:#8b8fa2}
 html.v2 nav button svg{width:26px;height:26px}
-html.v2 nav [aria-selected=true]{background:#272a35;color:#fff;box-shadow:none}
+html.v2 nav [aria-selected=true]{background:#22222b;color:#fff;box-shadow:none}
 html.v2 nav [aria-selected=true] svg{color:#43e585;transform:none;filter:none}
 html.v2 nav button::before,html.v2 nav button::after{display:none!important}
 html.v2 .app{padding-bottom:112px}
 /* перебить liquid-glass из style.css */
-html body nav[role=tablist]{position:fixed;left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;padding:8px 6px calc(10px + env(safe-area-inset-bottom));gap:2px;border-radius:26px 26px 0 0;background:#181a22;-webkit-backdrop-filter:none;backdrop-filter:none;border:0;border-top:1px solid #2a2d38;box-shadow:0 -10px 30px rgba(0,0,0,.35);overflow:visible}
+html body nav[role=tablist]{position:fixed;left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;padding:8px 6px calc(10px + env(safe-area-inset-bottom));gap:2px;border-radius:26px 26px 0 0;background:#18181f;-webkit-backdrop-filter:none;backdrop-filter:none;border:0;border-top:1px solid #2d2d38;box-shadow:0 -10px 30px rgba(0,0,0,.35);overflow:visible}
 html body nav[role=tablist]::before,html body nav[role=tablist]::after{display:none!important;content:none}
 html body nav button{flex:1;min-width:0;padding:7px 2px 6px;border-radius:18px;background:none;box-shadow:none;border:0;color:#8b8fa2;font:700 12px/1.1 var(--head)}
-html body nav [aria-selected=true]{color:#fff;background:#272a35;box-shadow:none;border:0}
+html body nav [aria-selected=true]{color:#fff;background:#22222b;box-shadow:none;border:0}
 html body nav [aria-selected=true] svg{filter:none;color:#43e585}
 html body nav button::before,html body nav button::after{display:none!important;content:none}
 /* карточка сезона: приглушённее */
@@ -105,11 +105,11 @@ html body nav button svg,html.v2 nav button svg{width:21px;height:21px}
 body[data-page=shop] .btn.main:not([disabled]),body[data-page=shop] .spin:not([disabled]),body[data-page=shop] #tab-shop .btn.main:not([disabled]){background:linear-gradient(180deg,#ffd75a,#f5a623)!important;color:#2a1a00!important;border-color:transparent!important;box-shadow:0 10px 26px -10px rgba(245,166,35,.7)!important}
 .dprev{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);color:var(--mute);font-size:13px}.dprev b{color:#fff}
 .dwin{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}.dwin span{padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.07);font-size:12px;font-weight:700;color:#cfd2e0}.dwin .me{background:rgba(67,229,133,.18);color:#43e585}
-.daycard.chal{border-color:rgba(108,196,255,.4);background:linear-gradient(160deg,rgba(80,170,255,.14),#14161e)}
+.daycard.chal{border-color:rgba(108,196,255,.4);background:linear-gradient(160deg,rgba(80,170,255,.14),#0d0d12)}
 /* кланы */
 #tab-clan .ahead h2{font:800 28px var(--head)}
 #tab-clan .seg.two{margin:4px 0 14px}
-html.v2 .ccard{grid-template-columns:56px 1fr auto;gap:14px;padding:14px 16px;border-radius:26px;border:1px solid hsl(var(--ch) 50% 38% / .55);background:radial-gradient(110% 120% at 0 0,hsl(var(--ch) 60% 40% / .26),transparent 60%),linear-gradient(180deg,#171922,#12141b);box-shadow:none}
+html.v2 .ccard{grid-template-columns:56px 1fr auto;gap:14px;padding:14px 16px;border-radius:26px;border:1px solid hsl(var(--ch) 50% 38% / .55);background:radial-gradient(110% 120% at 0 0,hsl(var(--ch) 60% 40% / .26),transparent 60%),linear-gradient(180deg,#18181f,#12141b);box-shadow:none}
 html.v2 .ccard.mine{border-color:rgba(255,255,255,.55)}
 html.v2 .cic{width:56px;height:56px;border-radius:19px;font-size:26px;background:hsl(var(--ch) 45% 24%);box-shadow:inset 0 0 0 1px hsl(var(--ch) 60% 55% / .45),0 10px 24px -10px hsl(var(--ch) 70% 50%)}
 html.v2 .cbody b{font:800 17px/1.15 var(--head)}
@@ -124,8 +124,8 @@ html.v2 .cn{font:800 20px/1.15 var(--head)}
 html.v2 .cmain .qbar{height:8px;border-radius:99px}
 .ch3{display:flex;align-items:center;gap:10px;font:800 18px var(--head);margin:22px 0 10px}
 .ch3::before{content:"";width:22px;height:5px;border-radius:3px;background:linear-gradient(90deg,#c9c9d3 0 9px,transparent 9px 13px,#c9c9d3 13px 22px)}
-html.v2 .mrow{border-radius:20px;padding:12px 14px;background:#171922;border:1px solid rgba(255,255,255,.07)}
-html.v2 .mrow.me{border-color:rgba(67,229,133,.5);background:linear-gradient(90deg,rgba(67,229,133,.12),#171922)}
+html.v2 .mrow{border-radius:20px;padding:12px 14px;background:#18181f;border:1px solid rgba(255,255,255,.07)}
+html.v2 .mrow.me{border-color:rgba(67,229,133,.5);background:linear-gradient(90deg,rgba(67,229,133,.12),#18181f)}
 html.v2 .mrow.top1{border-color:rgba(255,201,51,.5)}
 html.v2 .mrow em{font-style:normal;font-size:18px;min-width:26px;text-align:center}
 html.v2 .chd b{font:800 18px var(--head)}
@@ -219,3 +219,6 @@ html.v2 header:has(.hwho) #bon-btn svg{width:25px;height:25px;filter:drop-shadow
 #more-sheet .mrow{border:1px solid #2d2d38;border-radius:18px;background:#18181f;padding:12px 14px}
 #more-sheet .mrow:last-child{border-bottom:1px solid #2d2d38}
 #more-sheet .mrow:active{background:#1f1f28}
+
+/* общая палитра: плоские карточки на всех вкладках стандартной темы */
+html.v2:not([data-theme]) .pcard:not(.holc){background:#18181f;border:1px solid #2d2d38;box-shadow:none;backdrop-filter:none}
