@@ -150,3 +150,10 @@ html.v2 .nct b{font:800 13px/1.15 var(--head);white-space:nowrap}
 html.v2 .nct small{font:600 11px/1.2 var(--head);white-space:nowrap}
 html.v2 .ndot{top:-3px;right:-3px;width:9px;height:9px;box-shadow:0 0 0 2px #0b0b0e}
 html.v2 .app{padding-bottom:92px}
+
+/* ежедневный вход: дни 1-4 в первом ряду, 5-7 под ними */
+.lgrid{grid-template-columns:repeat(12,1fr);gap:8px}
+.lgrid .lcell{grid-column:span 3;overflow:visible;padding:8px 2px 7px}
+.lgrid .lcell:nth-child(n+5){grid-column:span 4}
+.lgrid .lcell small{font-size:11px}
+.lgrid .lcell b{font-size:16px;letter-spacing:0;margin-top:3px}
