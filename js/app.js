@@ -881,7 +881,7 @@ function colPanel(){
   <button class="crow" data-a="auto"><span>Автопродажа</span><b>${AUTO[S.auto]} ›</b></button></div>`;
 }
 function renderCol(){
-  const col=$('#tab-col'),its=[...S.items].sort((a,b)=>b.t-a.t);
+  const col=$('#tab-col'),its=[...S.items].sort((a,b)=>val(b.t,b.p,b.n)-val(a.t,a.p,a.n)||b.t-a.t);   // сначала дорогие
   if(colSel)colSel=new Set([...colSel].filter(id=>S.items.some(i=>i.id===id)));
   let h=subTabs('stock','col')+colPanel();
   if(!its.length){colSel=null;h+=`<div class="empty">Коллекция пуста.<br>Крути рулетку и забирай понравившиеся ники.<br><button class="btn" data-go="game">К рулетке</button></div>`}
