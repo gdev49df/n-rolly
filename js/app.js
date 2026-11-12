@@ -930,6 +930,7 @@ function updAva(){
   btn.innerHTML=frameRing(fid)+`<svg class="pbr" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19" class="pbt"/><circle cx="22" cy="22" r="19" class="pbp" stroke-dasharray="${(C*pr).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 22 22)"/></svg>`+
     `<span class="pbi">${photo?`<img src="${eh(photo)}" alt="" referrerpolicy="no-referrer">`:`<b>${eh([...String(nm)][0]||'?').toUpperCase()}</b>`}</span><span class="pbl">${S.lvl}</span>`;
   const im=btn.querySelector('img');if(im)im.onerror=()=>{avaOk=false;avaKey='';updAva()};
+  const hn=document.getElementById('hname'),hl=document.getElementById('hlv');if(hn)hn.textContent=(u&&(u.first_name||u.username))||'Игрок';if(hl)hl.textContent=S.lvl;
 }
 function render(){
   try{updAva()}catch(e){}
@@ -1430,6 +1431,7 @@ function renderAch(){
 }
 $('#tab-ach').onclick=e=>{if(e.target.closest('#ach-back'))return tab('prof');const b=e.target.closest('[data-claim]');if(b)claimAch(b.dataset.claim)};
 $('#prof-btn').onclick=()=>tab($('#tab-prof').hidden?'prof':'game');
+{const w=document.getElementById('hwho');if(w)w.onclick=()=>$('#prof-btn').click()}
 
 // Страницы: index.html (игра), rating.html (рейтинг), achievements.html (достижения). Состояние общее — в localStorage и облаке Telegram.
 const PAGE=document.body.dataset.page||'main',PAGES={top:'rating.html',ach:'achievements.html',clan:'clans.html',market:'market.html',museum:'museum.html',shop:'shop.html',auction:'auction.html'};

@@ -1,5 +1,5 @@
 /* v3: наш стиль, но вместо фиолетового нейтральный серый */
-html.v2:not([data-theme]){--bg:#0b0b0e;--paper:#15151a;--tile:#1e1e24;--fg:#f4f4f7;--dark:#0b0b0e;--mute:#9a9aa5;--dot:transparent;--glow:#26262c;--blue:#a4a4b0;--line:rgba(255,255,255,.1);--tc:#a8a8b2}
+html.v2:not([data-theme]){--bg:#19181e;--paper:#202027;--tile:#2a2a34;--fg:#f4f4f7;--dark:#19181e;--mute:#8d8c98;--dot:transparent;--glow:#2a2a34;--blue:#a4a4b0;--line:#3a3941;--tc:#a8a8b2}
 html.v2 body::before{background:radial-gradient(40% 40% at 25% 30%,rgba(150,150,165,.18),transparent 70%),radial-gradient(35% 35% at 78% 20%,rgba(255,255,255,.07),transparent 70%)}
 html.v2 body{background-image:radial-gradient(120% 50% at 50% -8%,rgba(150,150,165,.16) 0,transparent 62%)}
 html.v2 .stage{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015)) padding-box,linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.06) 40%,rgba(255,255,255,.22)) border-box;box-shadow:0 24px 60px -28px #000}
@@ -12,3 +12,20 @@ html.v2:not([data-theme]) .btn.main[disabled]{background:#26262c;color:#7c7c88;b
 html.v2:not([data-theme]) .fastb{background:rgba(54,224,124,.14);border-color:rgba(54,224,124,.55);color:#7cf29b}
 html.v2:not([data-theme]) .fastb[aria-pressed=true]{background:linear-gradient(180deg,#43e585,#22b95e);border-color:transparent;color:#04210e;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)}
 #adb .adg{background:linear-gradient(180deg,#43e585,#22b95e)!important;color:#04210e!important;border-color:transparent!important;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)!important}
+html.v2 body{background-color:#19181e}
+html.v2 nav{background:rgba(42,42,52,.94)}
+html.v2 .sbox{background:#202027}
+/* шапка: аватар + имя/уровень/«Профиль» слева, подарок справа, валюты ниже */
+html.v2 header{display:flex;flex-wrap:wrap;align-items:center;row-gap:12px;column-gap:10px}
+html.v2 header .brand{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:12px}
+html.v2 .hwho{min-width:0;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+html.v2 .hwho b{font:800 18px/1.1 var(--head);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.v2 .hsub{display:flex;align-items:center;gap:8px;font:700 13px/1 var(--head);color:var(--mute);white-space:nowrap}
+html.v2 .hlv u{text-decoration:none}
+html.v2 .hbar{display:block;width:22px;height:5px;border-radius:3px;background:#2be37a}
+html.v2 .hsub em{font-style:normal;color:#9a8dff}
+html.v2 #bon-btn{order:2;width:54px;height:54px;border-radius:50%;margin:0;flex:none;border:0;color:#fff;background:linear-gradient(160deg,#ffc45c,#f3735b);box-shadow:0 10px 26px -8px rgba(243,115,91,.65);display:grid;place-items:center;position:relative}
+html.v2 #bon-btn svg{width:24px;height:24px}
+html.v2 #bon-btn[aria-pressed=true]{background:linear-gradient(160deg,#ffd27a,#f58a6b);color:#fff}
+html.v2 #bon-btn .dot{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:#ee4a5f;border:2px solid #19181e}
+html.v2 header .top{order:3;flex:1 1 100%;margin:0;justify-content:flex-start;gap:6px}
