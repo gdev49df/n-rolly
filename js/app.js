@@ -19,7 +19,7 @@ function safeTop(){
 }
 if(tg){tg.ready();tg.expand();safeTop();['safeAreaChanged','contentSafeAreaChanged','fullscreenChanged','viewportChanged'].forEach(ev=>{try{tg.onEvent(ev,safeTop)}catch(e){}});try{tg.setHeaderColor('#0D0B1A');tg.setBackgroundColor('#0D0B1A')}catch(e){}}
 const hap=(k,v)=>{try{tg&&tg.HapticFeedback&&(k==='n'?tg.HapticFeedback.notificationOccurred(v):tg.HapticFeedback.impactOccurred(v))}catch(e){}};
-const T=[{n:'Обычный',c:'#9AA5DB',v:390},{n:'Необычный',c:'#27D9BD',v:1470},{n:'Редкий',c:'#9B7BFF',v:4800},{n:'Эпический',c:'#FF5FA2',v:17700},{n:'Легендарный',c:'#FFC933',v:72000},{n:'Мифический',c:'#19E6D4',v:378000},{n:'Секретный',c:'#FFFFFF',v:1000000},{n:'Эксклюзивный',c:'#B455FF',v:25000000}]
+const T=[{n:'Обычный',c:'#9AA5DB',v:390},{n:'Необычный',c:'#27D9BD',v:1470},{n:'Редкий',c:'#9B7BFF',v:4800},{n:'Эпический',c:'#FF5FA2',v:17700},{n:'Легендарный',c:'#FFC933',v:72000},{n:'Мифический',c:'#FF4B5C',v:378000},{n:'Секретный',c:'#19E6D4',v:1000000},{n:'Эксклюзивный',c:'#B455FF',v:25000000}]
 const BDGP={crown:10000000,dragon:7500000,unicorn:5000000,liberty:4000000,slot:3000000,fire:2000000,rose:1500000,coin:1000000,moai:1000000},TOPP=500000,MULTIP=1000000,MULTIN=5;
 T.forEach((t,i)=>t.s=['Обычн.','Необыч.','Редкий','Эпик','Легенд.','Миф.','Секрет','Эксклюз.'][i]);;
 const MULTI5={l:'×5',min:0,cost:0};   // мульти-крутка ×5: только за монеты, 5 000 🪙 за каждый ник, режим не выбирается
