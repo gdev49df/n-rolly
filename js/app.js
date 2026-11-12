@@ -1860,6 +1860,16 @@ async function promoUse(raw){
   save();sfx('ach');hap('n','success');toast(`🎟️ Промокод принят: кейс «${c.n}»`+(r.left>=0&&r.left<=20?` · осталось активаций: ${r.left}`:''));render();
   cs.id=c.id;cs.res=null;caseSheet();
 }
+// ---------- История в Telegram ----------
+// shareToStory открывает редактор истории с картинкой media/story.jpg; кнопка-виджет в истории ведёт в игру по реферальной ссылке.
+function storyCard(){return `<div class="pcard story"><div class="bhead"><h3>Выложи в историю</h3><span class="bsub">со ссылкой на игру</span></div><p class="sum">В историю уйдёт картинка игры и ссылка, по которой друзья зайдут к тебе в приглашённые.</p><button class="btn main" id="story-go">Выложить в историю</button></div>`}
+function shareStory(){
+  const link=refLink(),text=S.spins?`Мой лучший ник в Нейм-рулетке: ${T[S.best].n}. Заходи, выбей лучше!`:'Выбивай редкие юзернеймы в Нейм-рулетке!',media=new URL('media/story.jpg',location.href).href;
+  try{if(tg&&tg.shareToStory&&tg.isVersionAtLeast&&tg.isVersionAtLeast('7.8')){tg.shareToStory(media,{text,widget_link:{url:link,name:'Нейм-рулетка'}});return}}catch(x){}
+  openTg(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
+  toast('Истории не поддерживаются в этой версии Telegram: открыл обычную отправку');
+}
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#story-go'))shareStory()});
 function promoCard(){return `<details class="pcard fold promo" data-fold="promo"${fo('promo',0)}><summary class="bhead"><h3>Промокод</h3><span class="bsub">один раз на игрока</span></summary><div class="prow"><input id="promo-in" type="text" placeholder="Введи код" maxlength="24" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn main" id="promo-go">Применить</button></div></details>`}
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#promo-go')){const i=document.getElementById('promo-in');promoUse(i&&i.value);if(i)i.value=''}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='promo-in'){promoUse(e.target.value);e.target.value=''}});
@@ -2835,6 +2845,7 @@ function renderBon(){
     ${wheelHtml()}<p class="sum" hidden>${fmt(Math.min(...WHEEL.filter(p=>p.k==='c').map(p=>p.v)))} до ${fmt(Math.max(...WHEEL.filter(p=>p.k==='c').map(p=>p.v)))} 🪙 и ники от «${T[Math.min(...WHEEL.filter(p=>p.k==='n').map(p=>p.t))].n}» до «${T[Math.max(...WHEEL.filter(p=>p.k==='n').map(p=>p.t))].n}».</p>`+
     (can?`<button class="spin" data-b="wheel">Крутить рулетку${S.wheelx?` · ещё ×${S.wheelx}`:''}</button>`:S.wheelx?`<button class="spin" data-b="wheel">Крутить ещё · осталось ${S.wheelx}</button>`:`<button class="spin" disabled>Уже крутили · ещё <span data-t="day"></span></button>`)+
     `<div class="upres">${wresHtml()}</div></details>`;
+  h+='<h4 class="bgrp">Расскажи друзьям</h4>'+storyCard();
   h+='<h4 class="bgrp">Задания и коды</h4>';
   h+=`<details class="pcard fold" data-fold="quests"${fo('quests',1)}><summary class="bhead"><h3>Задания недели</h3><span class="bsub">обновятся через <span data-t="week"></span></span></summary>`+
     S.q.list.map((q,i)=>{const d=QDEF[q.id],ok=q.p>=q.n;
