@@ -121,7 +121,6 @@ nav [aria-selected=true] svg{transform:translateY(-1px) scale(1.08)}
 
 /* Мифический */
 .stage.mythic.hit{box-shadow:8px 8px 0 var(--tc),0 0 56px rgba(255,75,62,.6)}
-.stage.mythic .badge{background:linear-gradient(90deg,#FF4B3E,#FFC933,#27D9BD,#b8b9c2,#FF5FA2,#FF4B3E);background-size:300% 100%;animation:badge .55s .1s both cubic-bezier(.3,1.6,.5,1),rbow 3s linear infinite}
 @keyframes rbow{to{background-position:300% 0}}
 
 /* Секретный */
@@ -129,7 +128,6 @@ nav [aria-selected=true] svg{transform:translateY(-1px) scale(1.08)}
 .stage.secret.hit .cell{text-shadow:2px 0 #FF2D55,-2px 0 #00E5FF}
 .stage.secret.hit .reel{animation:glitch .8s steps(2,end) 3}
 @keyframes glitch{25%{transform:translate(-3px,1px) skewX(-4deg)}50%{transform:translate(3px,-1px)}75%{transform:translate(-2px,0) skewX(3deg)}}
-.stage.secret .badge{background:#fff;color:#000;text-shadow:1px 0 #FF2D55,-1px 0 #00E5FF}
 .od small,.tg small{font-size:8.5px}
 
 /* Шапка и профиль */

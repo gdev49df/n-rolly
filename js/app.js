@@ -646,27 +646,7 @@ function sfxPlay(name,a){
 document.addEventListener('pointerdown',e=>{const b=e.target.closest&&e.target.closest('button,label.item');if(b&&!b.disabled&&b.id!=='spin')sfx('tap')},true);
 
 // ---------- Эпичная сцена на весь экран: мифический (t=5) и секретный (t=6) ----------
-function epic(r){return epicOld(r)}   // вернули первые CSS-анимации секретки и мифика (canvas-сцены из js/epic.js отключены)
-function epicOld(r){
-  return new Promise(res=>{
-    if(reduce){res();return}
-    const t=r.t,sec=t===6,chars=[...r.name],n=chars.length;
-    const fk=S.fast?.55:1,st=Math.round((sec?1300:900)*fk),sp=Math.round((sec?520:240)*fk),hold=Math.round((sec?1700:1500)*fk),dur=st+(n-1)*sp+hold;
-    const o=document.createElement('div');o.id='epic';o.className='ep '+(sec?'sec':'myt');
-    const sz=Math.max(26,Math.min(72,Math.floor((innerWidth-48)/((n+1)*.74))));
-    o.style.cssText=`--st:${st}ms;--sp:${sp}ms;--sz:${sz}px;--fd:${dur-900}ms`;
-    const embers=sec?'':Array.from({length:44},()=>`<span style="left:${R(100)}%;--s:${3+R(6)}px;--d:${2200+R(2600)}ms;--dl:${R(1800)}ms;--x:${R(120)-60}px"></span>`).join('');
-    o.innerHTML=`<div class="ep-bg"></div><div class="ep-rays"></div><div class="ep-ring"></div><div class="ep-ring r2"></div><div class="ep-fx">${embers}</div>
-      <div class="ep-box"><div class="ep-tier">${T[t].n}</div><div class="ep-name"><span class="at" style="--i:-1">@</span>${chars.map((ch,i)=>`<span style="--i:${i}">${ch}</span>`).join('')}</div></div><div class="ep-skip">нажми, чтобы продолжить</div>`;
-    document.body.append(o);
-    r.epic=true;sfx('tier',t);try{hap('n','success');rareHap(t)}catch(x){}
-    const timers=[];let done=false;
-    chars.forEach((_,i)=>timers.push(setTimeout(()=>{sfx(sec?'sec':'myt',i);hap('i',sec?'medium':'heavy')},st+i*sp)));
-    const fin=()=>{if(done)return;done=true;timers.forEach(clearTimeout);o.classList.add('out');setTimeout(()=>{o.remove();res()},480)};
-    timers.push(setTimeout(fin,dur));
-    setTimeout(()=>{o.onclick=fin},900);   // пропустить можно после первой секунды
-  });
-}
+function epic(){return Promise.resolve()}   // полноэкранные сцены мифика и секретки убраны: выпадают как обычные ники
 
 // ---------- Уровень игрока ----------
 const lvReward=l=>({c:9000+l*3600,e:l%5===0?7:2});
@@ -735,13 +715,9 @@ function build(name,animate,reel=$('#reel'),kind=0){
 // показать результат на табло и включить эффекты редкости
 function playStage(st,reel,r,fresh){
   const sid=st.id,rid=reel.id;
-  const fx2=()=>{st=(sid&&document.getElementById(sid))||st;st.classList.add('hit');st.classList.toggle('shake',r.t>=3);st.classList.toggle('mythic',r.t===5);st.classList.toggle('secret',r.t===6)};
-  if(fresh&&r.t>=5&&!reduce){
-    const w0=build('??????',true,reel,0);   // сначала обычная прокрутка (останавливается на «??????»), потом сцена мифика или секретки
-    sleep(w0+150).then(()=>epic(r)).then(()=>{const rl=(rid&&document.getElementById(rid))||reel;build(r.name,false,rl);fx2();hap('n','success');boom(T[r.t].c,r.t)});return;
-  }
+  const fx2=()=>{st=(sid&&document.getElementById(sid))||st;st.classList.add('hit');st.classList.toggle('shake',r.t>=3&&r.t<5)};
   const wait=build(r.name,fresh,reel,0);
-  if(fresh)setTimeout(()=>{fx2();hap('n','success');rareHap(r.t);sfx('tier',r.t);if(r.t>=3)boom(T[r.t].c,r.t)},wait);else fx2();
+  if(fresh)setTimeout(()=>{fx2();hap('n','success');rareHap(r.t);sfx('tier',r.t);if(r.t>=3&&r.t<5)boom(T[r.t].c,r.t)},wait);else fx2();
 }
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1786,8 +1762,8 @@ async function openCase(){
   await sleep(dur+250);
   const w=trk.children[WIN];if(w)w.classList.add('win');
   await sleep(reduce?0:650);
-  if(pr.t>=5&&!reduce)await epic({name:pr.name,t:pr.t,p:pr.p});else sfx('tier',pr.t);
-  hap('n','success');if(pr.t<5||reduce)rareHap(pr.t);
+  sfx('tier',pr.t);
+  hap('n','success');rareHap(pr.t);
   cs.res={name:pr.name,t:pr.t,price:pr.price,msg};cs.busy=false;xbusy=0;
   save();render();caseSheet();
   const t2=$('#crt'),r2=$('#crl');if(t2&&r2){r2.classList.add('on');t2.innerHTML=tiles.join('');t2.style.transition='none';t2.style.transform=`translateX(${r2.clientWidth/2-(WIN*pitch+tw/2+off)}px)`;const ww=t2.children[WIN];if(ww)ww.classList.add('win')}
