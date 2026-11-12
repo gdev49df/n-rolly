@@ -383,9 +383,8 @@ setTimeout(()=>{try{taxTick()}catch(e){}},2500);setInterval(()=>{try{taxTick()}c
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)try{taxTick()}catch(e){}});
 const LOGIN=[300000,450000,600000,900000,1200000,1500000,2250000];   // бонус за вход ×10
 // Призы ежедневной рулетки; w = шанс в процентах (сумма 100). k:'c' монеты, k:'n' ник редкости t
-const WHEEL0=[{k:'c',v:30000,w:32},{k:'c',v:60000,w:22},{k:'c',v:120000,w:13},{k:'c',v:200000,w:7},{k:'c',v:300000,w:3.5},{k:'c',v:600000,w:1},
-  {k:'n',t:3,w:11},{k:'n',t:4,w:6},{k:'n',t:5,w:3.5},{k:'n',t:6,w:1}];
-const WHEEL=[0,8,3,6,5,1,9,2,7,4].map(i=>WHEEL0[i]);   // секторы расставлены вперемешку; шансы остаются прежними
+const WHEEL0=[{k:'c',v:30000,w:32},{k:'c',v:60000,w:22},{k:'c',v:120000,w:13},{k:'c',v:200000,w:7},{k:'c',v:300000,w:3.5},{k:'c',v:600000,w:1}];   // ежедневная рулетка: только денежные призы
+const WHEEL=[0,4,1,3,2,5].map(i=>WHEEL0[i]);   // секторы расставлены вперемешку; шансы остаются прежними
 const WTOT=WHEEL.reduce((a,p)=>a+p.w,0);
 // Недельные задания: n цель, r награда в монетах. Каждую неделю выбираются 3 из 6
 const QDEF={
@@ -2842,7 +2841,7 @@ function renderBon(){
       :`<button class="btn main" data-b="login">Забрать день ${li.idx+1}: ${fmt(Math.round(LOGIN[li.idx]*evC()))} 🪙${evC()>1?' ×'+evF(evC()):''}</button>`)+
     (!li.done&&!li.alive&&S.login.n>0?`<p class="sum">Серия прервалась, награды идут с первого дня.</p>`:streakLine(li.alive?li.n:0))+`</details>`;
   h+=`<details class="pcard fold" data-fold="wheel"${fo('wheel',1)}><summary class="bhead"><h3>Ежедневная рулетка</h3><span class="bsub">${S.wheelx?`1 в сутки + ${S.wheelx} докупленных`:'1 попытка в сутки'}</span></summary>
-    ${wheelHtml()}<p class="sum" hidden>${fmt(Math.min(...WHEEL.filter(p=>p.k==='c').map(p=>p.v)))} до ${fmt(Math.max(...WHEEL.filter(p=>p.k==='c').map(p=>p.v)))} 🪙 и ники от «${T[Math.min(...WHEEL.filter(p=>p.k==='n').map(p=>p.t))].n}» до «${T[Math.max(...WHEEL.filter(p=>p.k==='n').map(p=>p.t))].n}».</p>`+
+    ${wheelHtml()}<p class="sum" hidden>${fmt(Math.min(...WHEEL.filter(p=>p.k==='c').map(p=>p.v)))} до ${fmt(Math.max(...WHEEL.filter(p=>p.k==='c').map(p=>p.v)))} 🪙.</p>`+
     (can?`<button class="spin" data-b="wheel">Крутить рулетку${S.wheelx?` · ещё ×${S.wheelx}`:''}</button>`:S.wheelx?`<button class="spin" data-b="wheel">Крутить ещё · осталось ${S.wheelx}</button>`:`<button class="spin" disabled>Уже крутили · ещё <span data-t="day"></span></button>`)+
     `<div class="upres">${wresHtml()}</div></details>`;
   h+='<h4 class="bgrp">Расскажи друзьям</h4>'+storyCard();
