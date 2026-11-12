@@ -1623,11 +1623,11 @@ function clanMy(){
   const need=(c.lvl)*3000000,pr=Math.min(100,(c.pts%3000000)/3000000*100);
   let h=`<div class="pcard cmain" style="--ch:${chash(c.tag)%360}"><div class="chead"><div class="cic big">${ic}</div><div><b class="cn"><em class="ctag">[${escH(c.tag)}]</em> ${escH(c.name)}</b><small>${c.lvl} уровень · ${c.n}/${c.cap} · ${joinWord(c.join)}${c.minlvl>1?` · с ${c.minlvl} ур.`:''}</small></div></div>
     ${c.descr?`<p class="cdesc2">${escH(c.descr)}</p>`:''}
-    <div class="cpts2"><span>Очки клана</span><b>${fmt(c.pts)}</b></div>
+    <div class="cstats"><div><b>${c.lvl}</b><span>уровень</span></div><div><b>${c.n}/${c.cap}</b><span>участники</span></div><div><b>${kfmt(c.pts)}</b><span>очки</span></div></div>
     <div class="qbar"><i style="width:${c.lvl>=20?100:pr}%"></i></div><small class="cnext">${c.lvl>=20?'Максимальный уровень':`До ${c.lvl+1} уровня: ${fmt(c.lvl*3000000-c.pts)} очков (+2 места)`}</small>
     <div class="crow2">${m.leader?'<button class="btn" id="cl-edit">⚙ Настройки</button>':''}<button class="btn${cl.armed==='leave'?' danger':''}" data-arm="leave">${cl.armed==='leave'?'Точно выйти?':'Выйти'}</button></div></div>`;
   if(m.leader&&m.requests.length)h+=`<h3 class="ch3">Заявки · ${m.requests.length}</h3>`+m.requests.map(r=>`<div class="mrow"><div class="mn"><b>${escH(r.name)}</b><small>${r.lvl} ур. · ${fmtC(r.pts)} 🪙</small></div><div class="mbt"><button class="btn main sm" data-acc="${r.uid}">✓</button><button class="btn sm" data-rej="${r.uid}">✕</button></div></div>`).join('');
-  h+=`<h3 class="ch3">Участники · ${m.members.length}</h3>`+m.members.map((x,i)=>`<div class="mrow${x.me?' me':''}"><em>${i+1}</em><div class="mn"><b>${escH(x.name)}${x.owner?' 👑':''}</b><small>${x.lvl} ур.</small></div><span class="mpt">${fmtC(x.pts)} 🪙</span>${m.leader&&!x.me?`<button class="btn sm${cl.armed==='k'+x.uid?' danger':''}" data-arm="k${x.uid}" aria-label="Выгнать">${cl.armed==='k'+x.uid?'Выгнать?':'✕'}</button>`:''}</div>`).join('');
+  h+=`<h3 class="ch3">Участники · ${m.members.length}</h3>`+m.members.map((x,i)=>`<div class="mrow${x.me?' me':''}${i<3?' top'+(i+1):''}"><em>${i<3?['🥇','🥈','🥉'][i]:i+1}</em><div class="mn"><b>${escH(x.name)}${x.owner?' 👑':''}</b><small>${x.lvl} ур.</small></div><span class="mpt">${fmtC(x.pts)} 🪙</span>${m.leader&&!x.me?`<button class="btn sm${cl.armed==='k'+x.uid?' danger':''}" data-arm="k${x.uid}" aria-label="Выгнать">${cl.armed==='k'+x.uid?'Выгнать?':'✕'}</button>`:''}</div>`).join('');
   return h;
 }
 function clanSheet(){
