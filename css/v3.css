@@ -107,3 +107,12 @@ html.v2 .daycard{padding:18px}
 .dhex span{color:var(--mute);font-size:13px}.dhex b{font:800 22px var(--head);letter-spacing:.06em}
 .dfoot{display:flex;justify-content:space-between;align-items:center;color:var(--mute);font-size:13px}.dfoot em{font-style:normal;font-weight:800;color:#43e585}
 .hunt.done{border-color:rgba(67,229,133,.4)}
+/* ленты-карточки сверху: как в референсе (тёмная плашка, крупная цветная плитка-иконка) */
+html.v2 .ncards{gap:12px;padding:4px 16px 6px}
+html.v2 .ncard{flex:0 0 auto;min-width:64%;max-width:none;gap:14px;padding:14px 18px 14px 14px;border-radius:28px;background:#17181f;border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 22px -14px #000}
+html.v2 .nci{width:56px;height:56px;border-radius:19px;background:color-mix(in srgb,var(--nc) 20%,#14151b);color:var(--nc);box-shadow:none}
+html.v2 .nci svg{width:26px;height:26px}
+html.v2 .nct{gap:4px}
+html.v2 .nct b{font:800 18px/1.15 var(--head);color:#fff;overflow:visible;text-overflow:clip}
+html.v2 .nct small{font:600 15px/1.2 var(--head);color:#7f8294}
+html.v2 .ndot{top:14px;right:14px;box-shadow:0 0 0 3px #17181f}
