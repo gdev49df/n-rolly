@@ -37,3 +37,6 @@ html.v2 .gmc b{font:800 21px/1.1 var(--head)}
 html.v2 .gmc small{color:rgba(255,255,255,.62)}
 html.v2 .gmc .gmm{background:rgba(0,0,0,.35);border-radius:999px}
 html.v2 .gmplq{border-radius:28px}
+/* карточка сезона: насыщенный цветной градиент */
+html.v2 .szhero,html.v2 .pcard.szhero,html.v2 .szbig{background:radial-gradient(90% 80% at 100% 0,rgba(110,120,255,.75),transparent 60%),radial-gradient(80% 70% at 0 100%,rgba(255,120,90,.45),transparent 62%),linear-gradient(155deg,#3b2f86 0,#241a52 55%,#1a1236 100%);border:1px solid rgba(160,150,255,.45);box-shadow:0 18px 44px -22px rgba(110,100,255,.7)}
+html.v2 .szhero .szbar{background:rgba(0,0,0,.35)}
