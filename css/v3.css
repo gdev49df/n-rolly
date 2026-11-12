@@ -80,3 +80,5 @@ html body nav button{flex:1;min-width:0;padding:7px 2px 6px;border-radius:18px;b
 html body nav [aria-selected=true]{color:#fff;background:#272a35;box-shadow:none;border:0}
 html body nav [aria-selected=true] svg{filter:none;color:#43e585}
 html body nav button::before,html body nav button::after{display:none!important;content:none}
+/* карточка сезона: приглушённее */
+html.v2 .szhero,html.v2 .pcard.szhero,html.v2 .szbig{background:radial-gradient(90% 80% at 100% 0,rgba(110,120,255,.38),transparent 62%),radial-gradient(80% 70% at 0 100%,rgba(255,120,90,.16),transparent 64%),linear-gradient(155deg,#2a2850 0,#1e1d3a 55%,#171728 100%);border:1px solid rgba(160,150,255,.22);box-shadow:none}
