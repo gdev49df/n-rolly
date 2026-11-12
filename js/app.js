@@ -735,7 +735,7 @@ const SER_LEN=10,SER_EVERY=100,serK=()=>vipOn()?5:3;
 function serOn(n){return n>=SER_EVERY&&n%SER_EVERY<SER_LEN}
 function luckK(n){const t=luckOn()?3:1,s=n!=null&&serOn(n)?serK():1;return Math.min(6,Math.max(t,s)*fartK())}
 function roll(m,n){let best=null;const kk=luckK(n),lk=kk>1.001?luckAcc(kk):null;for(let i=0;i<3000;i++){const s=gen(),r=score(s);if(r.t>6)continue;if(lk&&Math.random()>lk[r.t])continue;if(!best||r.t>best.t)best={name:s,...r};if(r.t>=m.min)break}return{...best,kept:false,res:''}}
-function flushPrev(){const left=cur.filter(c=>!c.kept);cur.forEach(c=>c.kept=true);S.pend=null;if(left.length)toast('Прошлые ники: '+stashAll(left))}
+function flushPrev(){const left=cur.filter(c=>!c.kept);cur.forEach(c=>c.kept=true);S.pend=null;if(left.length)stashAll(left)}
 // Итог крутки: в плюсе или в минусе (стоимость выпавших ников минус потраченные монеты)
 var sessPL=0;
 function plHide(){const e=document.getElementById('spres');if(e)e.hidden=true}
@@ -822,7 +822,7 @@ function stashAll(list){
     if(S.auto&&c.t<S.auto){S.coins+=val(c.t,c.p,c.name);S.sold++;au++}
     else if(S.items.length<MAX){addItem(c.name,c.t,c.p);k++}
     else{S.coins+=val(c.t,c.p,c.name);S.sold++;s++}});
-  return [k?`сохранено: ${k}`:'',au?`автопродано: ${au}`:'',s?`продано из-за полной коллекции: ${s}`:''].filter(Boolean).join(', ');
+  return '';   // уведомления об автопродаже убраны
 }
 const pl=n=>n%10===1&&n%100!==11?'ник':[2,3,4].includes(n%10)&&![12,13,14].includes(n%100)?'ника':'ников';
 function collapse(els,done){els.forEach(e=>{e.style.maxHeight=e.offsetHeight+'px';e.style.overflow='hidden';void e.offsetWidth;e.classList.add('out')});setTimeout(done,reduce?0:320)}
@@ -996,7 +996,7 @@ $('#selsell').onclick=()=>{
     collapse(els,()=>{const ids=new Set(its.map(i=>i.id));S.items=S.items.filter(i=>!ids.has(i.id));S.coins+=sum;S.sold+=its.length;colSel=null;addQuest('sell',its.length);addXp(2*its.length);sfx('coins');save();toast(`Продано: ${its.length} ${pl(its.length)} за ${fmt(sum)} 🪙`);render()});
   });
 };
-{const arr=Array.isArray(S.pend)?S.pend:S.pend?[S.pend]:[];S.pend=null;if(arr.length){const m=stashAll(arr);save();setTimeout(()=>toast('Прошлые ники: '+m),500)}}
+{const arr=Array.isArray(S.pend)?S.pend:S.pend?[S.pend]:[];S.pend=null;if(arr.length){stashAll(arr);save()}}
 render();showIdle();
 addEventListener('resize',()=>{if(busy||$('#tab-game').hidden)return;document.querySelectorAll('#reels .reel').forEach(r=>r.dataset.name&&build(r.dataset.name,false,r))});
 
