@@ -283,3 +283,6 @@ html.v2 header:has(.hwho) #bon-btn:has(.dot:not([hidden])){animation:bonglow 2.2
 #tab-prof .pf-row small{display:block;color:var(--mute);font-size:12px;margin-top:2px}
 #tab-prof .tri>div{padding:10px}
 #tab-prof .tri b{font-size:13.5px;text-overflow:clip}
+/* активная вкладка: фиолетовая */
+html body nav [aria-selected=true]{background:#2a2750;color:#fff}
+html body nav [aria-selected=true] svg{color:#8a7dff}
