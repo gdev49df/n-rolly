@@ -222,3 +222,7 @@ html.v2 header:has(.hwho) #bon-btn svg{width:25px;height:25px;filter:drop-shadow
 
 /* общая палитра: плоские карточки на всех вкладках стандартной темы */
 html.v2:not([data-theme]) .pcard:not(.holc){background:#18181f;border:1px solid #2d2d38;box-shadow:none;backdrop-filter:none}
+
+/* счётчик наград на кнопке-подарке */
+html.v2 header:has(.hwho) #bon-btn .dot,#bon-btn .dot{top:-5px;right:-5px;width:auto;min-width:22px;height:22px;padding:0 6px;box-sizing:border-box;border-radius:999px;background:#f0364b;border:2px solid #0d0d12;color:#fff;font:800 12px/1 var(--head);display:grid;place-items:center;box-shadow:0 2px 8px -2px rgba(240,54,75,.7)}
+#bon-btn .dot[hidden]{display:none}
