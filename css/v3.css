@@ -1,7 +1,7 @@
 /* v3: наш стиль, но вместо фиолетового нейтральный серый */
-html.v2:not([data-theme]){--bg:#19181e;--paper:#202027;--tile:#2a2a34;--fg:#f4f4f7;--dark:#19181e;--mute:#8d8c98;--dot:transparent;--glow:#2a2a34;--blue:#a4a4b0;--line:#3a3941;--tc:#a8a8b2}
-html.v2 body::before{background:radial-gradient(40% 40% at 25% 30%,rgba(150,150,165,.18),transparent 70%),radial-gradient(35% 35% at 78% 20%,rgba(255,255,255,.07),transparent 70%)}
-html.v2 body{background-image:radial-gradient(120% 50% at 50% -8%,rgba(150,150,165,.16) 0,transparent 62%)}
+html.v2:not([data-theme]){--bg:#14161e;--paper:#1c1e27;--tile:#272a35;--fg:#f4f5f8;--dark:#14161e;--mute:#8b8fa2;--dot:transparent;--glow:#272a35;--blue:#a4a8b8;--line:#363a47;--tc:#a8acbc}
+html.v2 body::before{background:radial-gradient(40% 40% at 25% 30%,rgba(120,140,185,.2),transparent 70%),radial-gradient(35% 35% at 78% 20%,rgba(255,255,255,.07),transparent 70%)}
+html.v2 body{background-image:radial-gradient(120% 50% at 50% -8%,rgba(120,140,185,.18) 0,transparent 62%)}
 html.v2 .stage{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015)) padding-box,linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.06) 40%,rgba(255,255,255,.22)) border-box;box-shadow:0 24px 60px -28px #000}
 html.v2 .reel .at{text-shadow:none}
 html.v2 .brand h1{display:block}
@@ -12,9 +12,9 @@ html.v2:not([data-theme]) .btn.main[disabled]{background:#26262c;color:#7c7c88;b
 html.v2:not([data-theme]) .fastb{background:rgba(54,224,124,.14);border-color:rgba(54,224,124,.55);color:#7cf29b}
 html.v2:not([data-theme]) .fastb[aria-pressed=true]{background:linear-gradient(180deg,#43e585,#22b95e);border-color:transparent;color:#04210e;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)}
 #adb .adg{background:linear-gradient(180deg,#43e585,#22b95e)!important;color:#04210e!important;border-color:transparent!important;box-shadow:0 6px 18px -6px rgba(34,185,94,.8)!important}
-html.v2 body{background-color:#19181e}
-html.v2 nav{background:rgba(42,42,52,.94)}
-html.v2 .sbox{background:#202027}
+html.v2 body{background-color:#14161e}
+html.v2 nav{background:rgba(39,42,53,.94)}
+html.v2 .sbox{background:#1c1e27}
 /* шапка: аватар + имя/уровень/«Профиль» слева, подарок справа, валюты ниже */
 html.v2 header{display:flex;flex-wrap:wrap;align-items:center;row-gap:12px;column-gap:10px}
 html.v2 header .brand{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:12px}
@@ -24,10 +24,10 @@ html.v2 .hsub{display:flex;align-items:center;gap:8px;font:700 13px/1 var(--head
 html.v2 .hlv u{text-decoration:none}
 html.v2 .hbar{display:block;width:22px;height:5px;border-radius:3px;background:#2be37a}
 html.v2 .hsub em{font-style:normal;color:#9a8dff}
-html.v2 #bon-btn{order:2;width:54px;height:54px;border-radius:50%;margin:0;flex:none;border:0;color:#fff;background:linear-gradient(160deg,#ffc45c,#f3735b);box-shadow:0 10px 26px -8px rgba(243,115,91,.65);display:grid;place-items:center;position:relative}
-html.v2 #bon-btn svg{width:24px;height:24px}
-html.v2 #bon-btn[aria-pressed=true]{background:linear-gradient(160deg,#ffd27a,#f58a6b);color:#fff}
-html.v2 #bon-btn .dot{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:#ee4a5f;border:2px solid #19181e}
+html.v2 header:has(.hwho) #bon-btn{order:2;width:54px;height:54px;border-radius:50%;margin:0;flex:none;border:0;color:#fff;background:linear-gradient(160deg,#ffc45c,#f3735b);box-shadow:0 10px 26px -8px rgba(243,115,91,.65);display:grid;place-items:center;position:relative}
+html.v2 header:has(.hwho) #bon-btn svg{width:24px;height:24px}
+html.v2 header:has(.hwho) #bon-btn[aria-pressed=true]{background:linear-gradient(160deg,#ffd27a,#f58a6b);color:#fff}
+html.v2 header:has(.hwho) #bon-btn .dot{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:#ee4a5f;border:2px solid #14161e}
 html.v2 header .top{order:3;flex:1 1 100%;margin:0;justify-content:flex-start;gap:6px}
 /* игры: цветные карточки с градиентом, как в референсе */
 html.v2 .gmh{font:800 22px var(--head);margin:22px 0 12px;gap:10px;letter-spacing:-.01em}
@@ -41,14 +41,14 @@ html.v2 .gmplq{border-radius:28px}
 html.v2 .szhero,html.v2 .pcard.szhero,html.v2 .szbig{background:radial-gradient(90% 80% at 100% 0,rgba(110,120,255,.75),transparent 60%),radial-gradient(80% 70% at 0 100%,rgba(255,120,90,.45),transparent 62%),linear-gradient(155deg,#3b2f86 0,#241a52 55%,#1a1236 100%);border:1px solid rgba(160,150,255,.45);box-shadow:0 18px 44px -22px rgba(110,100,255,.7)}
 html.v2 .szhero .szbar{background:rgba(0,0,0,.35)}
 /* кнопка бонусов: плавные анимации вместо «сдвига» */
-html.v2 #bon-btn{transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .25s,filter .25s;transform-origin:50% 60%;will-change:transform}
-html.v2 #bon-btn:active{transform:scale(.9)!important;box-shadow:0 4px 12px -6px rgba(243,115,91,.6)}
-html.v2 #bon-btn[aria-pressed=true]{background:linear-gradient(160deg,#ffc45c,#f3735b);filter:brightness(1.1);box-shadow:0 0 0 3px rgba(255,255,255,.85),0 10px 26px -8px rgba(243,115,91,.65)}
-html.v2 #bon-btn svg{transform-origin:50% 100%}
-html.v2 #bon-btn:has(.dot:not([hidden])){animation:bonglow 2.8s ease-in-out infinite}
-html.v2 #bon-btn:has(.dot:not([hidden])) svg{animation:bongift 2.8s ease-in-out infinite}
-html.v2 #bon-btn .dot:not([hidden]){animation:bondot 1.4s ease-in-out infinite}
+html.v2 header:has(.hwho) #bon-btn{transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .25s,filter .25s;transform-origin:50% 60%;will-change:transform}
+html.v2 header:has(.hwho) #bon-btn:active{transform:scale(.9)!important;box-shadow:0 4px 12px -6px rgba(243,115,91,.6)}
+html.v2 header:has(.hwho) #bon-btn[aria-pressed=true]{background:linear-gradient(160deg,#ffc45c,#f3735b);filter:brightness(1.1);box-shadow:0 0 0 3px rgba(255,255,255,.85),0 10px 26px -8px rgba(243,115,91,.65)}
+html.v2 header:has(.hwho) #bon-btn svg{transform-origin:50% 100%}
+html.v2 header:has(.hwho) #bon-btn:has(.dot:not([hidden])){animation:bonglow 2.8s ease-in-out infinite}
+html.v2 header:has(.hwho) #bon-btn:has(.dot:not([hidden])) svg{animation:bongift 2.8s ease-in-out infinite}
+html.v2 header:has(.hwho) #bon-btn .dot:not([hidden]){animation:bondot 1.4s ease-in-out infinite}
 @keyframes bongift{0%,58%,100%{transform:none}64%{transform:translateY(-3px) rotate(-9deg)}70%{transform:translateY(0) rotate(8deg)}76%{transform:translateY(-2px) rotate(-5deg)}82%{transform:rotate(3deg)}88%{transform:none}}
 @keyframes bonglow{0%,100%{box-shadow:0 10px 26px -8px rgba(243,115,91,.6)}50%{box-shadow:0 10px 34px -4px rgba(255,170,90,.95)}}
 @keyframes bondot{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
-@media(prefers-reduced-motion:reduce){html.v2 #bon-btn,html.v2 #bon-btn svg,html.v2 #bon-btn .dot{animation:none!important}}
+@media(prefers-reduced-motion:reduce){html.v2 header:has(.hwho) #bon-btn,html.v2 header:has(.hwho) #bon-btn svg,html.v2 header:has(.hwho) #bon-btn .dot{animation:none!important}}
