@@ -29,3 +29,11 @@ html.v2 #bon-btn svg{width:24px;height:24px}
 html.v2 #bon-btn[aria-pressed=true]{background:linear-gradient(160deg,#ffd27a,#f58a6b);color:#fff}
 html.v2 #bon-btn .dot{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:#ee4a5f;border:2px solid #19181e}
 html.v2 header .top{order:3;flex:1 1 100%;margin:0;justify-content:flex-start;gap:6px}
+/* игры: цветные карточки с градиентом, как в референсе */
+html.v2 .gmh{font:800 22px var(--head);margin:22px 0 12px;gap:10px;letter-spacing:-.01em}
+html.v2 .gmh:before{width:22px;height:5px;border-radius:3px;background:linear-gradient(90deg,#c9c9d3 0 9px,transparent 9px 13px,#c9c9d3 13px 22px)}
+html.v2 .gmc{border-radius:28px;border:1px solid color-mix(in srgb,var(--cc) 35%,transparent);background:linear-gradient(155deg,color-mix(in srgb,var(--cc) 34%,#12121a) 0,#101016 72%);box-shadow:none;padding:18px}
+html.v2 .gmc b{font:800 21px/1.1 var(--head)}
+html.v2 .gmc small{color:rgba(255,255,255,.62)}
+html.v2 .gmc .gmm{background:rgba(0,0,0,.35);border-radius:999px}
+html.v2 .gmplq{border-radius:28px}

@@ -5,7 +5,7 @@ const $=s=>document.querySelector(s),tg=window.Telegram&&Telegram.WebApp;
 // если на хостинге лежит старый html без новых разделов (файлы загрузили не все) — создаём недостающие, чтобы игра не падала
 ['ach','top','clan','market','museum','shop','auction','help','guide','season','games','battles','fair','friends','chances'].forEach(k=>{if(!$('#tab-'+k)){const s=document.createElement('section');s.id='tab-'+k;s.className='list';s.hidden=true;($('#tab-bon')||document.body).after(s)}});
 // Вкладки-«таблетки» внутри разделов: Склад (ники, апгрейд, контракт, витрины, музей) и Магазин (магазин, рынок, аукцион)
-const SUBS={stock:[['col','Ники'],['up','Апгрейд'],['craft','Контракт'],['battles','Поединки'],['museum','Музей']],shop:[['shop','Магазин'],['market','Рынок'],['auction','Аукцион']]};
+const SUBS={stock:[['col','Ники'],['up','Апгрейд'],['craft','Контракт'],['battles','Батлы'],['museum','Музей']],shop:[['shop','Магазин'],['market','Рынок'],['auction','Аукцион']]};
 const subTabs=(g,a)=>`<div class="ptabs" role="tablist">${SUBS[g].filter(([k])=>g!=='stock'||k!=='up'||a==='up').map(([k,l])=>`<button role="tab" data-sub="${k}"${k==='craft'?' data-craft="1"':''} aria-selected="${k===a}">${l}</button>`).join('')}</div>`;
 function ptFix(){document.querySelectorAll('.ptabs').forEach(p=>{const b=p.querySelector('[aria-selected=true]');if(b&&p.scrollWidth>p.clientWidth){p.style.scrollBehavior='auto';p.scrollLeft=b.offsetLeft-(p.clientWidth-b.offsetWidth)/2;p.style.scrollBehavior=''}})}
 try{const g=document.getElementById('gsub');if(g)g.innerHTML=SUBS.stock.filter(([k])=>k!=='show'&&k!=='museum').map(([k,l])=>`<button role="tab" data-sub="${k}"${k==='craft'?' data-craft="1"':''} aria-selected="false">${l}</button>`).join('')}catch(e){}
@@ -383,7 +383,7 @@ setTimeout(()=>{try{taxTick()}catch(e){}},2500);setInterval(()=>{try{taxTick()}c
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)try{taxTick()}catch(e){}});
 const LOGIN=[300000,450000,600000,900000,1200000,1500000,2250000];   // бонус за вход ×10
 // Призы ежедневной рулетки; w = шанс в процентах (сумма 100). k:'c' монеты, k:'n' ник редкости t
-const WHEEL0=[{k:'c',v:150000,w:32},{k:'c',v:300000,w:22},{k:'c',v:600000,w:13},{k:'c',v:1000000,w:7},{k:'c',v:1500000,w:3.5},{k:'c',v:3000000,w:1},
+const WHEEL0=[{k:'c',v:30000,w:32},{k:'c',v:60000,w:22},{k:'c',v:120000,w:13},{k:'c',v:200000,w:7},{k:'c',v:300000,w:3.5},{k:'c',v:600000,w:1},
   {k:'n',t:3,w:11},{k:'n',t:4,w:6},{k:'n',t:5,w:3.5},{k:'n',t:6,w:1}];
 const WHEEL=[0,8,3,6,5,1,9,2,7,4].map(i=>WHEEL0[i]);   // секторы расставлены вперемешку; шансы остаются прежними
 const WTOT=WHEEL.reduce((a,p)=>a+p.w,0);
@@ -1491,7 +1491,7 @@ spark:'<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>',
 help:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9.5 12l2 2 3.5-4"/>',
 doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
 lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'};
-const MORE=[['prof','Профиль','Уровень, оформление, настройки','user'],['friends','Друзья','Приглашай друзей и получай награды','friends'],['clan','Кланы','Вступи в клан или создай свой','clan'],['ach','Достижения','Награды за прогресс','ach'],['bon','Бонусы и игры','Колесо, мини-игры, кейсы, поединки','gift'],['season','Сезонный пропуск','50 уровней наград','season'],['market','Рынок','Купить и продать ники игрокам','cart'],['auction','Аукцион','Торги за редкие ники','hammer'],['craft','Контракт','Обменять несколько ников на один','flask'],['battles','Поединки','Кейсы против соперника','swords'],['museum','Музей','Ники на витрине славы, доход','bank'],['chances','Шансы','Редкости, цены, удача и честная игра','pct'],['idea','Предложить идею / Сообщить о баге','Чего не хватает — ответим в Telegram','send'],['guide','Обучение','Как играть, видео и шаги','spark'],['help','Правила и поддержка','Что можно и как с нами связаться','help'],['terms','Условия использования','Правила игры и покупок ⭐','doc'],['privacy','Политика конфиденциальности','Какие данные мы храним','lock']];
+const MORE=[['prof','Профиль','Уровень, оформление, настройки','user'],['friends','Друзья','Приглашай друзей и получай награды','friends'],['clan','Кланы','Вступи в клан или создай свой','clan'],['ach','Достижения','Награды за прогресс','ach'],['bon','Бонусы и игры','Колесо, мини-игры, кейсы, батлы','gift'],['season','Сезонный пропуск','50 уровней наград','season'],['market','Рынок','Купить и продать ники игрокам','cart'],['auction','Аукцион','Торги за редкие ники','hammer'],['craft','Контракт','Обменять несколько ников на один','flask'],['battles','Батлы','Кейсы против соперника','swords'],['museum','Музей','Ники на витрине славы, доход','bank'],['chances','Шансы','Редкости, цены, удача и честная игра','pct'],['idea','Предложить идею / Сообщить о баге','Чего не хватает — ответим в Telegram','send'],['guide','Обучение','Как играть, видео и шаги','spark'],['help','Правила и поддержка','Что можно и как с нами связаться','help'],['terms','Условия использования','Правила игры и покупок ⭐','doc'],['privacy','Политика конфиденциальности','Какие данные мы храним','lock']];
 function moreSheet(){
   let el=document.getElementById('more-sheet');if(el)el.remove();
   el=document.createElement('div');el.className='usheet';el.id='more-sheet';
@@ -2017,9 +2017,9 @@ function crGo(){
 }
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('[data-craft]')){cr.sel=[];cr.res=null;crSheet()}});
 
-// ---------- Моментальный розыгрыш: три одинаковых символа — приз ----------
+// ---------- Мгновенная лотерея: три одинаковых символа — приз ----------
 var LOTP=100000,LOT=[{s:'🍒',v:200000,p:.07},{s:'🍋',v:300000,p:.035},{s:'🔔',v:600000,p:.018},{s:'⭐',v:1500000,p:.006},{s:'💎',v:5000000,p:.0012},{s:'👑',v:25000000,p:.0001},{s:'🔮',nick:1,p:.0002}],lt={t:null,done:false};
-function lotCard(){return `<button class="lotcard${S.coins<LOTP?' poor':''}" id="lot-open"><span class="lci">🎟️</span><div><b>Моментальный розыгрыш</b><small>Билет ${fmt(LOTP)} 🪙 · найди три одинаковых из девяти</small></div><span class="lcp">›</span></button>`}
+function lotCard(){return `<button class="lotcard${S.coins<LOTP?' poor':''}" id="lot-open"><span class="lci">🎟️</span><div><b>Мгновенная лотерея</b><small>Билет ${fmt(LOTP)} 🪙 · найди три одинаковых из девяти</small></div><span class="lcp">›</span></button>`}
 var LOTX=['🍀','🎲','🍉','🍇'];   // «пустые» символы для заполнения билета
 function lotRoll(){
   let r=Math.random(),w=null;for(const x of LOT){if(r<x.p){w=x;break}r-=x.p}
@@ -2054,15 +2054,15 @@ function lotScratch(cv,done){
 }
 function lotSheet(close){
   let o=document.getElementById('lotsh');
-  if(close){if(o)o.remove();if(S.lotp){const m=claimLot();if(m)toast('Приз розыгрыша: '+m)}lt.t=null;lt.done=false;return}
+  if(close){if(o)o.remove();if(S.lotp){const m=claimLot();if(m)toast('Приз лотереи: '+m)}lt.t=null;lt.done=false;return}
   if(!o){o=document.createElement('div');o.id='lotsh';o.className='usheet';document.body.append(o);
     o.onclick=e=>{
       if(e.target.closest('[data-lx]'))return lotSheet(true);
       if(e.target.closest('#lot-wipe')){const cv=$('#lot-cv');cv&&cv.wipe&&cv.wipe();return}
       if(e.target.closest('#lot-buy')){
         if(S.coins<LOTP)return toast('Не хватает монет');
-        if(!limLeft('lot'))return toast('Лимит розыгрыша на сегодня: '+LIM.lot+' из '+LIM.lot);limUse('lot');
-        if(S.lotp){const m=claimLot();if(m)toast('Приз розыгрыша: '+m)}
+        if(!limLeft('lot'))return toast('Лимит лотереи на сегодня: '+LIM.lot+' из '+LIM.lot);limUse('lot');
+        if(S.lotp){const m=claimLot();if(m)toast('Приз лотереи: '+m)}
         const r=lotRoll();S.coins-=LOTP;S.lotn++;
         r.nm=P(SECRETS);S.lotp=r.w?(r.w.nick?{k:'n',name:r.nm}:{k:'c',v:r.w.v}):null;   // приз записан сразу: закрытие приложения его не отменит
         save();render();lt.t=r;lt.done=false;lotSheet();
@@ -2070,7 +2070,7 @@ function lotSheet(close){
   const t=lt.t,poor=S.coins<LOTP;
   const symsHtml=t?t.cells.map((x,i)=>`<span class="lsy${lt.done&&t.hit.includes(i)?' hit':''}">${x}</span>`).join(''):'';
   const res=t&&lt.done?(t.w?`<div class="lotres win"><b>Выигрыш!</b><span>${t.w.nick?'Секретный ник: @'+escH(t.nm||''):'+'+fmt(t.w.v)+' 🪙'}</span></div>`:'<div class="lotres lose"><b>Не повезло</b><span>Трёх одинаковых нет</span></div>'):'';
-  o.innerHTML=`<div class="sbg" data-lx="1"></div><div class="sbox casebox lotbox"><div class="shead"><b>🎟️ Моментальный розыгрыш</b><button class="btn sm" data-lx="1">✕</button></div>
+  o.innerHTML=`<div class="sbg" data-lx="1"></div><div class="sbox casebox lotbox"><div class="shead"><b>🎟️ Мгновенная лотерея</b><button class="btn sm" data-lx="1">✕</button></div>
     <p class="cdesc3">Сотри защитный слой. Найдёшь три одинаковых символа среди девяти — приз твой сразу.</p>
     <div class="ticket"><div class="thd"><b>МОМЕНТАЛЬНАЯ ЛОТЕРЕЯ</b><span>№ ${S.lotn?String(S.lotn).padStart(6,'0'):'—'}</span></div>
       <div class="lscr${t&&lt.done&&t.w?' win':''}">${t?`<div class="lsyms">${symsHtml}</div>${lt.done?'':'<canvas id="lot-cv"></canvas>'}`:'<div class="lph"><span>🎟️</span><b>Купи билет ниже</b></div>'}</div></div>
@@ -2088,7 +2088,7 @@ function lotSheet(close){
   });
 }
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target;if(!t)return;if(t.closest('#lot-open')){lt.t=null;lt.done=false;lotSheet()}else if(t.closest('[data-work]'))workSheet()});
-try{const m=claimLot();if(m)setTimeout(()=>toast('Приз розыгрыша: '+m),1500)}catch(e){}
+try{const m=claimLot();if(m)setTimeout(()=>toast('Приз лотереи: '+m),1500)}catch(e){}
 
 renderCases();
 
@@ -3383,7 +3383,7 @@ function renderNotes(){
   const can=S.wheel!==todayK(),wx=S.wheelx||0,au=nt.au,tp=nt.top;
   const ic=p=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
   const cards=[
-    {k:'games',c:'#6E7BFF',i:ic('<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/>'),t:'Игры',d:'розыгрыш, слова, кейсы, поединки',dot:0},
+    {k:'games',c:'#6E7BFF',i:ic('<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/>'),t:'Игры',d:'лотерея, слова, кейсы, батлы',dot:0},
     {k:'wheel',c:'#FFB23C',i:ic('<circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/>'),t:can||wx?'Бесплатный спин':'Спин через',d:can?'ежедневное колесо готово':wx?`докупленных круток: ${wx}`:leftT(msToDay()),dot:can||wx?1:0},
     {k:'auction',c:'#36E07C',i:ic('<path d="M14 4l6 6-3 3-6-6zM11 7L4 14l3 3 7-7M3 21h10"/>'),t:'Аукцион',d:au?(au.lead&&au.lead.length?`ты лидируешь: ${au.lead.length}`:au.lots&&au.lots.length?`твоих лотов: ${au.lots.length}`:'лоты игроков и ставки'):'лоты игроков и ставки',dot:au&&(au.pend>0)?1:0},
     {k:'top',c:'#FF5FA2',i:ic('<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>'),t:'Лучшие за всё время',d:tp&&tp.top&&tp.top[0]?`№1 ${tp.top[0].name} · @${tp.top[0].bestn||'—'}`.slice(0,34):'рейтинг лучших ников',dot:0}
@@ -3480,14 +3480,14 @@ function mnSheet(close){
 }
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#mn-open')){mnReset();mnSheet()}});
 
-// ---------- Раздел «Игры» в бонусах: мини-игры, кейсы, поединки, «Честная игра» ----------
+// ---------- Раздел «Игры» в бонусах: мини-игры, кейсы, батлы, «Честная игра» ----------
 var LIM={lot:3,gs:8,mn:5};
 function limGet(){const k=todayK();if(!S.lim||typeof S.lim!=='object'||S.lim.d!==k)S.lim={d:k,lot:0,gs:0,mn:0};return S.lim}
 function limLeft(k){return Math.max(0,LIM[k]-(limGet()[k]|0))}
 function limUse(k){limGet()[k]=(limGet()[k]|0)+1;save()}
-function gmReady(){return (limLeft('mn')>0&&S.coins>=MNP?1:0)+(limLeft('lot')>0&&S.coins>=LOTP?1:0)+(limLeft('gs')>0&&S.coins>=GSC?1:0)+(wsLeft()>0?1:0)+(S.btn|0)+(S.rkp>0?1:0)}
+function gmReady(){return (limLeft('mn')>0&&S.coins>=MNP?1:0)+(limLeft('lot')>0&&S.coins>=LOTP?1:0)+(limLeft('gs')>0&&S.coins>=GSC?1:0)+(wsLeft()>0?1:0)+(S.btn|0)}
 function gmPlaque(){const n=gmReady();
-  return `<button class="gmplq" id="gm-open"><span class="gmi">🎮</span><div><b>Игры: <em>${n?'ждут '+n:'пока нет новых'}</em></b><small>Розыгрыш, дороже или дешевле, найди слова, кейсы, поединки</small></div><span class="gma">›</span></button>`}
+  return `<button class="gmplq" id="gm-open"><span class="gmi">🎮</span><div><b>Игры: <em>${n?'ждут '+n:'пока нет новых'}</em></b><small>Лотерея, дороже или дешевле, найди слова, кейсы, батлы</small></div><span class="gma">›</span></button>`}
 var gmv='main';
 function gmHtml(){
   const eh=escH;
@@ -3496,14 +3496,13 @@ function gmHtml(){
   if(gmv==='cases')body=`<div class="bcases">${casesHtml()}</div>`;
   else if(gmv==='risk')body=riskHtml();
   else body=`<h4 class="gmh">Мини-игры</h4><div class="gmg">`+
-    card('lot-open','🎟️','Розыгрыш','Найди три одинаковых из девяти',`${limLeft('lot')} из ${LIM.lot} сегодня · ${fmt(LOTP)} 🪙`,'#FFC933')+
+    card('lot-open','🎟️','Лотерея','Найди три одинаковых из девяти',`${limLeft('lot')} из ${LIM.lot} сегодня · ${fmt(LOTP)} 🪙`,'#FFC933')+
     card('gs-open','🔎','Дороже или дешевле','Угадай ник: серия верных — награда',`${limLeft('gs')} из ${LIM.gs} забегов · ${fmt(GSC)} 🪙`,'#27D9BD')+
     card('mn-open','💣','Минное поле','Открывай клетки: призы и мины',`${limLeft('mn')} из ${LIM.mn} сегодня · ${fmt(MNP)} 🪙`,'#FF5F7A')+
     card('ws-open','🔤','Найди слова','Сетка 10×10, в конце колесо ×1,2–10',`${wsLeft()} из ${WS_DAY} забегов · бесплатно`,'#FF8A3D')+
     `</div><h4 class="gmh">Игры на удачу</h4><div class="gmg">`+
     card('','🧳','Кейсы','Тематические кейсы, шансы открыты',`Открыто: ${fmt(S.casen)}`,'#8B7CFF','data-gm="cases"')+
-    card('','🎲','Крутка-множитель','Выбери сумму и выиграй множитель',S.rkp>0?'<i class="gmdot"></i>ждёт выигрыш':`${RK_DAY-rkEnsure().n} из ${RK_DAY} сегодня`,'#FFB62E','data-gm="risk"')+
-    card('','⚔️','Поединки','Открывай кейсы против игроков — забирай всё',S.btn?`<i class="gmdot"></i>результатов: ${S.btn}`:'создай свой','#FF5F7A','data-gm="bt"')+
+    card('','⚔️','Батлы','Открывай кейсы против игроков — забирай всё',S.btn?`<i class="gmdot"></i>результатов: ${S.btn}`:'создай свой','#FF5F7A','data-gm="bt"')+
     `</div><button class="gmfair" data-gm="fair">🛡 Честная игра <span>как всё работает и какие шансы</span></button>
     <p class="gmage"><b>18+</b> Это не казино и не азартная игра на деньги. Игры на удачу идут на виртуальные монеты и вещи внутри игры. Они не приносят реальных денег и не обменяются на них. Играй в меру.</p>`;
   return `<div class="ahead"><button class="btn sm" data-gm="${gmv==='cases'||gmv==='risk'?'main':'back'}">‹ ${gmv==='cases'||gmv==='risk'?'Игры':'Бонусы'}</button><h2>${gmv==='cases'?'Кейсы':gmv==='risk'?'Крутка-множитель':'Игры'}</h2></div><div class="gmpage">${body}</div>`;
@@ -3615,47 +3614,47 @@ function renderFair(){
   const rows=CASES.filter(c=>c.price>0).map(c=>`<div class="fgr"><b>${c.ic} ${c.n}</b><small>${c.w.map(([t,w])=>`${T[t].n} ${pctw(w)}%`).join(' · ')}</small></div>`).join('');
   sh.innerHTML=`<div class="ahead"><button class="btn sm" data-fgx="1">‹ Назад</button><h2>Честная игра</h2></div><div class="gmpage">
   <div class="fgc"><b>Шансы открыты</b><p>Перед каждым кейсом в его окне показаны шансы редкости. Ниже все они в одном месте.</p>${rows}</div>
-  <div class="fgc"><b>Как определяется результат</b><p>Кейсы, розыгрыш, колесо и «Найди слова» выбирают результат случайно прямо в твоей игре по тем шансам, что указаны. Подкруток и скрытых условий нет.</p>
-  <p>В поединке двое открывают один и тот же кейс. Побеждает ник с большей ценой и забирает оба. При равной цене каждый оставляет свой. Сервер только сводит двух игроков и сравнивает цены.</p></div>
+  <div class="fgc"><b>Как определяется результат</b><p>Кейсы, лотерея, колесо и «Найди слова» выбирают результат случайно прямо в твоей игре по тем шансам, что указаны. Подкруток и скрытых условий нет.</p>
+  <p>В батле двое открывают один и тот же кейс. Побеждает ник с большей ценой и забирает оба. При равной цене каждый оставляет свой. Сервер только сводит двух игроков и сравнивает цены.</p></div>
   <div class="fgc"><b>Монеты виртуальные</b><p>Игровые монеты, ники и награды нельзя вывести или обменять на деньги. За ⭐ продаются только дополнительные возможности, а не шанс выиграть.</p></div>
   <p class="gmage"><b>18+</b> Это не казино: денег выиграть нельзя. Игры на удачу не для несовершеннолетних. Если игра перестала быть в радость, сделай перерыв.</p>
   <p class="gmage"><a href="terms.html">Условия</a> · <a href="privacy.html">Конфиденциальность</a> · платежи: /paysupport в боте</p>
   <button class="btn cwide" data-fgx="1">Назад</button></div>`;
 }
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#tab-fair [data-fgx]'))tab(fgFrom==='battles'?'battles':'games')});
-// --- Поединки в реальном времени ---
+// --- Батлы в реальном времени ---
 var bt={open:[],mine:[],busy:false,err:'',load:false,cid:'start',n:1,custom:false,off:0,room:null};
 const BTCIDS=['start','rare','all','star','abyss'],btCase=id=>CASES.find(c=>c.id===id),BT_NS=[1,3,5,10],BT_MAX=20;
 const btOk=()=>!!(API&&tg&&tg.initData);
 const btNow=()=>Date.now()+bt.off;
 async function btPoll(){if(!btOk())return;try{const r=await lbReq('/battle/list');bt.open=r.open||[];bt.mine=r.mine||[];if(r.now)bt.off=r.now-Date.now();S.btn=bt.mine.filter(x=>x.st==='ready'||x.st==='live').length}catch(e){}}
-async function btLoad(){bt.load=true;bt.err='';renderBattles();if(!btOk()){bt.err='Поединки работают только внутри Telegram';bt.load=false;return renderBattles()}
-  try{await btPoll()}catch(e){bt.err='Не удалось загрузить поединки'}bt.load=false;renderBattles()}
+async function btLoad(){bt.load=true;bt.err='';renderBattles();if(!btOk()){bt.err='Батлы работают только внутри Telegram';bt.load=false;return renderBattles()}
+  try{await btPoll()}catch(e){bt.err='Не удалось загрузить батлы'}bt.load=false;renderBattles()}
 function btGive(list){for(const x of list){if(S.items.length<MAX){addItem(x.name,x.t,x.p)}else{S.coins=Math.min(CAP,S.coins+x.v);S.sold++}S.best=Math.max(S.best,x.t);try{noteBest(x.v,x.name)}catch(e){}}}
 const btRoll=(c,n)=>Array.from({length:n},()=>{const pr=P(poolOf(rollTier(c)));return {name:pr.name,t:pr.t,p:pr.p,v:pr.price}});
 async function btCreate(){
   const c=btCase(bt.cid),n=Math.max(1,Math.min(BT_MAX,bt.n|0)),cost=c.price*n;if(!c||bt.busy||S.coins<cost)return;bt.busy=true;renderBattles();
   try{const r=await lbReq('/battle/create',{cid:c.id,n,pulls:btRoll(c,n)});
-    S.coins-=cost;save();render();sfx('tap');toast('Поединок создан: ждём соперника');bt.busy=false;await btPoll();return btEnter(r.id)}
-  catch(e){toast(/many/.test(e.message)?'Уже есть 3 открытых поединка':'Не получилось создать поединок')}
+    S.coins-=cost;save();render();sfx('tap');toast('Батл создан: ждём соперника');bt.busy=false;await btPoll();return btEnter(r.id)}
+  catch(e){toast(/many/.test(e.message)?'Уже есть 3 открытых батла':'Не получилось создать батл')}
   bt.busy=false;await btLoad()}
 async function btAccept(id,cid,n){
   const c=btCase(cid);if(!c||bt.busy)return;if(S.coins<c.price*n)return toast('Не хватает монет');bt.busy=true;renderBattles();
   try{await lbReq('/battle/accept',{id,pulls:btRoll(c,n)});S.coins-=c.price*n;save();render();sfx('tap');bt.busy=false;await btPoll();return btEnter(id)}
-  catch(e){toast(/gone|own/.test(e.message)?'Поединок уже занят':'Не получилось принять поединок')}
+  catch(e){toast(/gone|own/.test(e.message)?'Батл уже занят':'Не получилось принять батл')}
   bt.busy=false;await btLoad()}
 async function btCancel(id){
   if(bt.busy)return;bt.busy=true;renderBattles();
-  try{const r=await lbReq('/battle/cancel',{id});S.coins=Math.min(CAP,S.coins+r.price);save();render();toast('Поединок отменён, монеты возвращены')}catch(e){toast('Поединок уже не отменить')}
+  try{const r=await lbReq('/battle/cancel',{id});S.coins=Math.min(CAP,S.coins+r.price);save();render();toast('Батл отменён, монеты возвращены')}catch(e){toast('Батл уже не отменить')}
   bt.busy=false;btLeave();await btLoad()}
-// комната поединка
+// комната батла
 async function btEnter(id){
   bt.room={id,d:null,round:-1,built:false,claimed:false,res:null,tm:0};renderBattles();btRoomPoll()}
 function btLeave(){if(bt.room){clearTimeout(bt.room.tm);clearInterval(bt.room.iv)}bt.room=null;renderBattles();btLoad()}
 async function btRoomPoll(){
   const R0=bt.room;if(!R0)return;
   try{const d=await lbReq('/battle/get?id='+R0.id);if(bt.room!==R0)return;if(d.now)bt.off=d.now-Date.now();R0.d=d;
-    if(d.st==='cancel'){toast('Поединок отменён');return btLeave()}
+    if(d.st==='cancel'){toast('Батл отменён');return btLeave()}
     if(d.st==='open'){R0.built=false;renderBattles();R0.tm=setTimeout(btRoomPoll,1800);return}
     if(!R0.built){R0.built=true;renderBattles();R0.iv=setInterval(btTick,160)}
   }catch(e){R0.tm=setTimeout(btRoomPoll,2500)}
@@ -3686,7 +3685,7 @@ function btTick(){
     info.textContent=`Раунд ${r+1} из ${n}`+(w<4400?' · открываем кейс':'');
     if(w>=4400&&R0.shown===r){ensure(r+1);sides.forEach(sd=>sd.classList.add('rv'));const a=arr[0][r].v,b=arr[1][r].v;sides[0].classList.toggle('rwin',a>b);sides[1].classList.toggle('rwin',b>a);sfx('tier',Math.max(arr[0][r].t,arr[1][r].t));hap('n','success')}
     return}
-  ensure(n);info.textContent='Поединок завершён';
+  ensure(n);info.textContent='Батл завершён';
   if(t>=n*RD+d.tail&&!R0.claimed){R0.claimed=true;btClaim()}
 }
 function btTotals(el,d,k){[d.mine,d.his].forEach((a,i)=>{const sd=el.querySelectorAll('.btsd')[i];sd.querySelector('.bttot').textContent=fmt(a.slice(0,k).reduce((t,x)=>t+x.v,0))+' 🪙'})}
@@ -3712,14 +3711,14 @@ function renderBattles(){
       if(b=q('[data-btd]'))return btCancel(+b.dataset.btd);
       if(q('#bt-fair')){fgFrom='battles';return tab('fair')}
     });
-    sh.addEventListener('input',e=>{if(e.target.id==='bt-num'){bt.n=Math.max(1,Math.min(BT_MAX,Math.floor(+e.target.value)||1));const c=btCase(bt.cid),nb=document.getElementById('bt-new');if(nb){nb.textContent=S.coins<c.price*bt.n?`Не хватает ${fmt(c.price*bt.n-S.coins)} 🪙`:`Создать поединок · ${fmt(c.price*bt.n)} 🪙`;nb.disabled=S.coins<c.price*bt.n||bt.busy||!btOk()}}});
+    sh.addEventListener('input',e=>{if(e.target.id==='bt-num'){bt.n=Math.max(1,Math.min(BT_MAX,Math.floor(+e.target.value)||1));const c=btCase(bt.cid),nb=document.getElementById('bt-new');if(nb){nb.textContent=S.coins<c.price*bt.n?`Не хватает ${fmt(c.price*bt.n-S.coins)} 🪙`:`Создать батл · ${fmt(c.price*bt.n)} 🪙`;nb.disabled=S.coins<c.price*bt.n||bt.busy||!btOk()}}});
   }
   const eh=escH,R0=bt.room;let body;
   if(R0){
     const d=R0.d;
-    if(!d||d.st==='open'){const c=d&&btCase(d.cid);body=`<div class="btwait"><div class="btspin"></div><b>Ждём соперника…</b><small>${c?`${c.ic} ${c.n} ×${d.n} · ${fmt(d.price*d.n)} 🪙`:''}</small><p>Как только кто-то примет поединок, откроется комната и начнётся розыгрыш.</p>${d?`<button class="btn" data-btd="${d.id}">Отменить поединок</button>`:''}</div>`}
+    if(!d||d.st==='open'){const c=d&&btCase(d.cid);body=`<div class="btwait"><div class="btspin"></div><b>Ждём соперника…</b><small>${c?`${c.ic} ${c.n} ×${d.n} · ${fmt(d.price*d.n)} 🪙`:''}</small><p>Как только кто-то примет батл, откроется комната и начнётся лотерея.</p>${d?`<button class="btn" data-btd="${d.id}">Отменить батл</button>`:''}</div>`}
     else if(R0.res){const rr=R0.res,tt=rr.res==='win'?'🏆 Победа! Все ники твои':rr.res==='tie'?'🤝 Ничья: каждый оставил свои':rr.res==='lose'?'Проиграл: ники ушли сопернику':'Результат получен';
-      body=`<div class="btinfo">Поединок завершён</div>${btRoomHtml(d)}<div class="btres b-${rr.res==='win'?'win':rr.res==='lose'?'lose':'tie'}"><b>${tt}</b>${rr.cnt?`<small>получено ников: ${rr.cnt}</small>`:''}</div><button class="btn main cwide" id="bt-ok">К поединкам</button>`}
+      body=`<div class="btinfo">Батл завершён</div>${btRoomHtml(d)}<div class="btres b-${rr.res==='win'?'win':rr.res==='lose'?'lose':'tie'}"><b>${tt}</b>${rr.cnt?`<small>получено ников: ${rr.cnt}</small>`:''}</div><button class="btn main cwide" id="bt-ok">К батлам</button>`}
     else body=`<div class="btinfo">Старт скоро</div>${btRoomHtml(d)}<small class="btwho">Не закрывай страницу: результат получишь в конце автоматически</small>`;
   }else{
     const c0=btCase(bt.cid),n=Math.max(1,Math.min(BT_MAX,bt.n|0)),cost=c0.price*n;
@@ -3728,16 +3727,16 @@ function renderBattles(){
     const rowOpen=x=>{const c=btCase(x.cid)||{ic:'📦',n:x.cid};return `<div class="btrow"><span class="bti">${c.ic}</span><div><b>${eh(x.cn)}</b><small>${c.n} ×${x.n} · ${agoT(x.ts)}</small></div><button class="btn main sm" data-bta="${x.id}" data-bc="${x.cid}" data-bn="${x.n}"${bt.busy||S.coins<x.price*x.n?' disabled':''}>Принять · ${fmt(x.price*x.n)}</button></div>`};
     const rowMine=x=>{const c=btCase(x.cid)||{ic:'📦',n:x.cid};const lab=x.st==='open'?'ждёт соперника · '+agoT(x.ts):x.st==='live'?'идёт прямо сейчас':'завершён, забери результат';
       return `<div class="btrow"><span class="bti">${c.ic}</span><div><b>${c.n} ×${x.n}</b><small>${lab}</small></div>${x.st==='open'?`<button class="btn sm" data-btd="${x.id}"${bt.busy?' disabled':''}>Отменить</button>`:`<button class="btn main sm" data-btk="${x.id}">${x.st==='live'?'Смотреть':'Результат'}</button>`}</div>`};
-    body=`<p class="cdesc3">Выбери кейс и сколько раз его открыть, потом создай поединок. Когда соперник примет, вы вместе в реальном времени откроете кейсы раунд за раундом. У кого сумма дороже, тот забирает все ники.</p>
+    body=`<p class="cdesc3">Выбери кейс и сколько раз его открыть, потом создай батл. Когда соперник примет, вы вместе в реальном времени откроете кейсы раунд за раундом. У кого сумма дороже, тот забирает все ники.</p>
     <div class="btchips">${chips}</div>
     <h4 class="gmh">Сколько кейсов</h4><div class="btns">${ns}</div>
     ${bt.custom?`<input id="bt-num" class="btnum" type="number" inputmode="numeric" min="1" max="${BT_MAX}" value="${bt.n}" placeholder="от 1 до ${BT_MAX}">`:''}
-    <button class="btn main cwide" id="bt-new"${bt.busy||!btOk()||S.coins<cost?' disabled':''}>${bt.busy?'Подожди…':S.coins<cost?`Не хватает ${fmt(cost-S.coins)} 🪙`:`Создать поединок · ${fmt(cost)} 🪙`}</button>
+    <button class="btn main cwide" id="bt-new"${bt.busy||!btOk()||S.coins<cost?' disabled':''}>${bt.busy?'Подожди…':S.coins<cost?`Не хватает ${fmt(cost-S.coins)} 🪙`:`Создать батл · ${fmt(cost)} 🪙`}</button>
     ${bt.err?`<div class="pcard lbmsg"><small>${eh(bt.err)}</small></div>`:''}
-    ${bt.mine.length?`<h4 class="gmh">Мои поединки</h4>${bt.mine.map(rowMine).join('')}`:''}
-    <h4 class="gmh">Открытые поединки</h4>${bt.load?'<div class="pcard lbmsg"><small>Загружаю…</small></div>':bt.open.length?bt.open.map(rowOpen).join(''):'<div class="pcard lbmsg"><small>Пока никто не ждёт. Создай свой поединок.</small></div>'}
+    ${bt.mine.length?`<h4 class="gmh">Мои батлы</h4>${bt.mine.map(rowMine).join('')}`:''}
+    <h4 class="gmh">Открытые батлы</h4>${bt.load?'<div class="pcard lbmsg"><small>Загружаю…</small></div>':bt.open.length?bt.open.map(rowOpen).join(''):'<div class="pcard lbmsg"><small>Пока никто не ждёт. Создай свой батл.</small></div>'}
     <button class="gmfair" id="bt-fair">🛡 Честная игра <span>шансы и правила</span></button>`}
-  sh.innerHTML=`<div class="ahead"><button class="btn sm" data-btx="1">‹ ${R0?'К поединкам':'Игры'}</button><h2>Поединки</h2></div><div class="gmpage${R0&&R0.res?' fin':''}" id="btroom">${body}</div>`;
+  sh.innerHTML=`<div class="ahead"><button class="btn sm" data-btx="1">‹ ${R0?'К батлам':'Игры'}</button><h2>Батлы</h2></div><div class="gmpage${R0&&R0.res?' fin':''}" id="btroom">${body}</div>`;
   if(R0&&R0.d&&R0.d.st!=='open'){const el=document.getElementById('btroom'),d=R0.d,sd=el.querySelectorAll('.btsd');
     sd[0].querySelector('.btnm').textContent=d.myName+' (ты)';sd[1].querySelector('.btnm').textContent=d.hisName;
     R0.shown=0;R0.round=-1;btTotals(el,d,0);
