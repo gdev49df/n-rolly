@@ -1178,7 +1178,6 @@ async function doUp(){
   up.busy=false;xbusy=0;
   document.querySelectorAll('#tab-up button,#tab-up input').forEach(e=>e.disabled=false);
   save();render();
-  if(!reduce){[250,1100].forEach(d=>setTimeout(()=>{const r=$('#upres');if(r&&!$('#tab-up').hidden)r.scrollIntoView({behavior:'smooth',block:'end'})},d))}
 }
 $('#tab-up').onclick=e=>{
   const g=e.target.closest('[data-go]');if(g)return tab(g.dataset.go);
