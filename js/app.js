@@ -1020,7 +1020,7 @@ function prizePool(){
 }
 // цель: по множителю (×2…×10) или по заданному шансу; берём ближайший по цене ник из пула
 function pickPrize(s){
-  const target=up.mode==='c'?UPK*s.v/(up.c/100):s.v*up.mode,ok=prizePool().filter(x=>x.price>s.v);
+  const target=up.mode==='c'?UPK*s.v/(up.c/100):s.v*up.mode,own=new Set(S.items.map(i=>i.n)),ok=prizePool().filter(x=>x.price>s.v&&!own.has(x.name));   // ник, который уже есть в коллекции, не выпадает
   if(!ok.length||!s.its.length){up.prize=null;return}
   const dist=x=>Math.abs(x.price-target),best=Math.min(...ok.map(dist));
   const near=ok.filter(x=>dist(x)<=best+Math.max(2,target*.03));
@@ -1129,11 +1129,12 @@ function renderUp(){
   if(up.busy)return;
   up.sel=new Set([...up.sel].filter(id=>S.items.some(i=>i.id===id)).slice(0,UPMAX));
   const el=$('#tab-up');if(!el.querySelector('#dneedle'))el.innerHTML=upSkeleton();
-  const s=stake();if(!s.its.length)up.prize=null;else if(!up.prize)pickPrize(s);
+  const s=stake();if(!s.its.length)up.prize=null;else if(!up.prize||S.items.some(i=>i.n===up.prize.name))pickPrize(s);
   fillUp();renderRes();renderSheet();
 }
 async function doUp(){
   const s=stake(),pr=up.prize;if(up.busy||!pr||!s.its.length)return;
+  if(S.items.some(i=>i.n===pr.name)){pickPrize(s);renderUp();toast('Такой ник у тебя уже есть: выбрал другой приз');return}
   const fee=up.ins?insFee(s):0;
   if(fee>S.coins){toast('Не хватает монет на страховку');return}
   const ch=chanceOf(s,pr),pity=false,won=Math.random()<ch,ins=up.ins,bonOn=upbRem()>0;
