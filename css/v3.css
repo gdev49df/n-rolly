@@ -40,3 +40,15 @@ html.v2 .gmplq{border-radius:28px}
 /* карточка сезона: насыщенный цветной градиент */
 html.v2 .szhero,html.v2 .pcard.szhero,html.v2 .szbig{background:radial-gradient(90% 80% at 100% 0,rgba(110,120,255,.75),transparent 60%),radial-gradient(80% 70% at 0 100%,rgba(255,120,90,.45),transparent 62%),linear-gradient(155deg,#3b2f86 0,#241a52 55%,#1a1236 100%);border:1px solid rgba(160,150,255,.45);box-shadow:0 18px 44px -22px rgba(110,100,255,.7)}
 html.v2 .szhero .szbar{background:rgba(0,0,0,.35)}
+/* кнопка бонусов: плавные анимации вместо «сдвига» */
+html.v2 #bon-btn{transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .25s,filter .25s;transform-origin:50% 60%;will-change:transform}
+html.v2 #bon-btn:active{transform:scale(.9)!important;box-shadow:0 4px 12px -6px rgba(243,115,91,.6)}
+html.v2 #bon-btn[aria-pressed=true]{background:linear-gradient(160deg,#ffc45c,#f3735b);filter:brightness(1.1);box-shadow:0 0 0 3px rgba(255,255,255,.85),0 10px 26px -8px rgba(243,115,91,.65)}
+html.v2 #bon-btn svg{transform-origin:50% 100%}
+html.v2 #bon-btn:has(.dot:not([hidden])){animation:bonglow 2.8s ease-in-out infinite}
+html.v2 #bon-btn:has(.dot:not([hidden])) svg{animation:bongift 2.8s ease-in-out infinite}
+html.v2 #bon-btn .dot:not([hidden]){animation:bondot 1.4s ease-in-out infinite}
+@keyframes bongift{0%,58%,100%{transform:none}64%{transform:translateY(-3px) rotate(-9deg)}70%{transform:translateY(0) rotate(8deg)}76%{transform:translateY(-2px) rotate(-5deg)}82%{transform:rotate(3deg)}88%{transform:none}}
+@keyframes bonglow{0%,100%{box-shadow:0 10px 26px -8px rgba(243,115,91,.6)}50%{box-shadow:0 10px 34px -4px rgba(255,170,90,.95)}}
+@keyframes bondot{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@media(prefers-reduced-motion:reduce){html.v2 #bon-btn,html.v2 #bon-btn svg,html.v2 #bon-btn .dot{animation:none!important}}
