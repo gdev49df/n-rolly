@@ -1301,31 +1301,42 @@ function renderProf(){
   if(typeof refPoll==='function'&&!renderProf.t){renderProf.t=1;setTimeout(()=>{renderProf.t=0;refPoll()},0)}
   const u=tgUser(),name=u.first_name||'Игрок',need=xpNeed(S.lvl),pct=S.xp/need*100,rk=rankOf(S.lvl),nx=RANKS.find(x=>x[0]>S.lvl),nr=lvReward(S.lvl+1);
   const av=u.photo_url?`<img src="${u.photo_url}" alt="" onerror="this.remove()">`:'';
+  const I=(d)=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const IC={trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>',book:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11"/>',chat:'<path d="M4 5h16v11H9l-5 4z"/>',rec:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/>',flask:'<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M17 5a3 3 0 0 1 0 6M21 20c0-2.6-1.6-4.8-4-5.6"/>',spk:'<path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7"/>',moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',chev:'<path d="M9 6l6 6-6 6"/>',nav:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>'};
+  const cap=S.coins>=1e9?short(S.coins):S.coins>=1e6?tz((S.coins/1e6).toFixed(1))+' млн':fmtC(S.coins);
+  const achN=ACH.filter(achOk).length,achR=achReady().length;
+  const tile=(id,ic,col,t,sub,ex)=>`<button class="pf-t" id="${id}"${ex||''} style="--ic:${col}"><span class="pf-i">${I(IC[ic])}</span><b>${t}</b><small>${sub}</small></button>`;
   $('#tab-prof').innerHTML=`<h2 class="ptitle">Профиль</h2>
   <div class="pcard pro"><div class="ptop"><div class="av" style="--p:${pct}">${frameRing(frameId())}<span class="avi">${av}<b>${name.slice(0,1).toUpperCase()}</b></span><em class="lvb">${S.lvl}</em></div>
-    <div class="pnm"><b class="pname">${nickHtml(name,cosOwn(S.cn)?S.cn:'')}</b>${cosOwn(S.ct)?`<span class="ttlrow">${titleHtml(S.ct)}</span>`:''}${vipOn()?'<span class="vipb">👑 VIP</span>':''}${lgHtml(lgOf(((lb.data.net||{}).me||{}).rank))}<span class="rank" style="--rc:${rk[2]}">🛡 ${rk[1]}</span>${nx?`<small>до «${nx[1]}»: ${nx[0]} ур.</small>`:'<small>Высший ранг</small>'}</div></div>
+    <div class="pnm"><b class="pname">${nickHtml(name,cosOwn(S.cn)?S.cn:'')}</b>${cosOwn(S.ct)?`<span class="ttlrow">${titleHtml(S.ct)}</span>`:''}<span class="pf-bd">${vipOn()?'<span class="vipb">👑 VIP</span>':''}${lgHtml(lgOf(((lb.data.net||{}).me||{}).rank))}<span class="rank" style="--rc:${rk[2]}">🛡 ${rk[1]}</span></span>${nx?`<small>до «${nx[1]}»: ${nx[0]} ур.</small>`:'<small>Высший ранг</small>'}</div></div>
   <div class="pid idc"><span class="idtag">ID</span><b>${idStr()}</b><button id="idcopy" aria-label="Скопировать ID">⧉</button></div>
   <div class="lvrow"><b>Уровень ${S.lvl}</b><small>${fmt(S.xp)} / ${fmt(need)} опыта</small></div>
   <div class="xbar"><i style="width:${pct}%"></i></div>
-  <div class="path"><span class="pi">🧭</span><b>Путь игрока</b><small>${S.lvl+1} ур.: +${fmt(nr.c)} 🪙 и +${nr.e} ⚡</small></div>
-  <div class="tri"><div><small>Капитал</small><b>${S.coins>=1e9?short(S.coins):S.coins>=1e6?tz((S.coins/1e6).toFixed(1))+' млн':fmtC(S.coins)} 🪙</b></div><div><small>Коллекция</small><b>${S.items.length} из ${S.slots}</b></div></div></div>
-  ${(()=>{try{return albumCard()}catch(e){return ''}})()}
-  <div class="ptiles">
-    <button class="ptile" id="clan-open"><span class="pti">🛡️</span><b>Кланы</b><small>${cl.me&&cl.me.clan?escH('['+(cl.me.clan.tag||'')+'] '+(cl.me.clan.name||'')):'Вступи или создай'}</small></button>
-    <button class="ptile" id="ach-open"><span class="pti">🎖️</span><b>Достижения</b><small>${ACH.filter(achOk).length} из ${ACH.length}${achReady().length?' · наград: '+achReady().length:''}</small><span class="ptbar"><i style="width:${ACH.filter(achOk).length/ACH.length*100}%"></i></span></button>
-    <button class="ptile" id="cos-open"><span class="pti">✨</span><b>Оформление</b><small>титулы, рамки, ник, тема · куплено ${S.cown.length}</small></button>
-    <button class="ptile" id="guide-open"><span class="pti">📖</span><b>Как играть</b><small>видео и 8 шагов</small></button>
-    <button class="ptile" id="chat-open"><span class="pti">💬</span><b>Чат игроков</b><small>общий и личные</small></button>
-    <button class="ptile" id="hist-open"><span class="pti">🧾</span><b>Покупки</b><small>история за звёзды</small></button>
-    <button class="ptile" data-craft="1"><span class="pti">🧪</span><b>Контракт</b><small>3 ника → 1 новый</small></button>
+  <div class="path"><span class="pi">${I(IC.nav)}</span><b>Путь игрока</b><small>${S.lvl+1} ур.: +${fmt(nr.c)} 🪙 и +${nr.e} ⚡</small></div>
+  <div class="tri"><div><small>Капитал</small><b>${cap} 🪙</b></div><div><small>Коллекция</small><b>${S.items.length} из ${S.slots}</b></div><div><small>Круток</small><b>${fmt(S.spins)}</b></div></div></div>
+  <div class="pf-g pf-big">
+    <button class="pf-t pf-b" id="ach-open" style="--ic:#ffa23d"><span class="pf-i">${I(IC.trophy)}</span><em class="pf-n">${achN}<s>/${ACH.length}</s></em><b>Достижения</b><small>награды за успехи${achR?' · '+achR+' к выдаче':''}</small><span class="ptbar"><i style="width:${achN/ACH.length*100}%"></i></span></button>
+    <button class="pf-t pf-b" id="clan-open" style="--ic:#7c6cff"><span class="pf-i">${I(IC.shield)}</span><b>Кланы</b><small>${cl.me&&cl.me.clan?escH('['+(cl.me.clan.tag||'')+'] '+(cl.me.clan.name||'')):'вступи или создай свой'}</small></button>
   </div>
-  <div class="pcard inv invx"><div><b>Позвать друзей</b><small>За каждого друга: +${fmt(REF_C)} 🪙 и +${REF_E} ⚡ и 5% ⭐ с его покупок · приглашено ${S.refc}</small></div><div class="invb">${lb.refn>0?`<button class="btn main" id="ref-claim">Забрать +${fmt(lb.refn*REF_C)} 🪙</button>`:''}<button class="btn${lb.refn>0?'':' main'}" id="invite">Позвать</button></div></div>
-  <div class="pcard"><h3>Статистика</h3>
-    <div class="pgrid"><div class="pt"><small>Круток</small><b>${fmt(S.spins)}</b></div><div class="pt"><small>Удачных апгрейдов</small><b>${fmt(S.upw)}</b></div>
-    <div class="pt"><small>В игре за всё время</small><b id="tm-all">${fmtT(S.time)}</b></div><div class="pt"><small>В игре сегодня</small><b id="tm-day">${fmtT(todaySec())}</b></div></div>
-    <div class="pgrid tiers">${T.map((t,i)=>`<div class="pt${i===99?' last':''}" style="--tc:${t.c}"><small>${TN[i]}</small><b>${fmt(S.cnt[i])}</b></div>`).join('')}</div></div>
-  <div class="pcard sndrow"><div><b>Звуки</b><small>Эффекты рулетки, наград и колеса</small></div><button class="sw${S.snd?' on':''}" id="snd-tg" role="switch" aria-checked="${S.snd}" aria-label="Звуки"><i></i></button></div>
-  <div class="pcard sndrow"><div><b>Новый дизайн</b><small>Мягкое тёмное оформление. Выключи, чтобы вернуть прежний вид.</small></div><button class="sw${S.ui2===0?'':' on'}" id="ui2-tg" role="switch" aria-checked="${S.ui2!==0}" aria-label="Новый дизайн"><i></i></button></div>
+  <div class="pf-g">
+    ${tile('cos-open','spark','#d56bff','Оформление','титулы, рамки, ник, тема')}
+    ${tile('guide-open','book','#2fb6a5','Как играть','видео и 8 шагов')}
+    ${tile('chat-open','chat','#4e8dff','Чат игроков','общий и личные')}
+    ${tile('hist-open','rec','#e0a13a','Покупки','история за звёзды')}
+    ${tile('','flask','#35c47c','Контракт','3 ника → 1 новый',' data-craft="1"')}
+  </div>
+  ${(()=>{try{return albumCard()}catch(e){return ''}})()}
+  <div class="pcard inv invx"><span class="pf-i" style="--ic:#35c47c">${I(IC.users)}</span><div><b>Позвать друзей</b><small>+${fmt(REF_C)} 🪙 и +${REF_E} ⚡ за друга и 5% ⭐ с его покупок · приглашено ${S.refc}</small></div><div class="invb">${lb.refn>0?`<button class="btn main" id="ref-claim">Забрать +${fmt(lb.refn*REF_C)} 🪙</button>`:''}<button class="btn${lb.refn>0?'':' main'}" id="invite">Позвать</button></div></div>
+  <h4 class="pf-h">Статистика</h4>
+  <div class="pcard pf-st">
+    <div class="pf-sg"><div><b>${fmt(S.spins)}</b><small>круток</small></div><div><b>${fmt(S.upw)}</b><small>удачных апгрейдов</small></div>
+    <div><b id="tm-all">${fmtT(S.time)}</b><small>в игре за всё время</small></div><div><b id="tm-day">${fmtT(todaySec())}</b><small>в игре сегодня</small></div></div>
+    <div class="pf-tl">${T.map((t,i)=>`<div style="--tc:${t.c}"><i></i><span>${TN[i]}</span><b>${fmt(S.cnt[i])}</b></div>`).join('')}</div></div>
+  <h4 class="pf-h">Настройки</h4>
+  <div class="pcard pf-set">
+    <div class="pf-row"><span class="pf-i" style="--ic:#7c6cff">${I(IC.spk)}</span><div><b>Звуки</b><small>эффекты рулетки, наград и колеса</small></div><button class="sw${S.snd?' on':''}" id="snd-tg" role="switch" aria-checked="${S.snd}" aria-label="Звуки"><i></i></button></div>
+    <div class="pf-row"><span class="pf-i" style="--ic:#7c6cff">${I(IC.moon)}</span><div><b>Новый дизайн</b><small>мягкое тёмное оформление</small></div><button class="sw${S.ui2===0?'':' on'}" id="ui2-tg" role="switch" aria-checked="${S.ui2!==0}" aria-label="Новый дизайн"><i></i></button></div>
+  </div>
   <div class="pcard anrow"><b>Анимация крутки</b><small>Как открываются буквы ника. Выбери стиль, он сразу покажется ниже.</small><div class="anopts">${ANIMN.map(a=>`<button class="anb" data-an="${a[0]}" aria-pressed="${animMode()===a[0]}"><b>${a[1]}</b><small>${animSub(a)}</small></button>`).join('')}</div><div class="stage anprev"><div class="reel" id="anreel"></div></div></div>${ntfCard()}`;
   requestAnimationFrame(()=>{const r=document.getElementById('anreel');if(r)build('hjaajh',false,r)});
 }
