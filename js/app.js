@@ -1063,7 +1063,7 @@ function dialSvg(){
     <circle class="dwin" id="dwin" cx="100" cy="100" r="${DR}" transform="rotate(-90 100 100)" stroke-dasharray="0 ${DC}"/>
     <circle class="dgold" id="dgold" cx="100" cy="100" r="${DR}" transform="rotate(-90 100 100)" stroke-dasharray="0 ${DC}"/>
     <g class="dtk">${tk}</g>
-    <g id="dneedle" style="transform-origin:50% 50%;transform:rotate(${up.rot}deg)"><rect x="98.6" y="22" width="2.8" height="40" rx="1.4" fill="url(#dnl)"/><circle class="dnb" cx="100" cy="18" r="9"/><circle class="dnc" cx="100" cy="18" r="3.6"/></g></svg>`;
+    <g id="dneedle" style="transform-origin:50% 50%;transform:rotate(${up.rot}deg)"><polygon points="90,3 110,3 100,21" fill="#9a9aa6" stroke="#9a9aa6" stroke-width="4" stroke-linejoin="round"/><rect x="98.4" y="24" width="3.2" height="34" rx="1.6" fill="#cfcfd8"/></g></svg>`;
 }
 let pctRaf=0;
 function tweenPct(to){
