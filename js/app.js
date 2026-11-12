@@ -2809,7 +2809,6 @@ function renderBon(){
   const li=loginInfo(),can=S.wheel!==todayK(),el=$('#tab-bon');
   let h=`<h2>Бонусы</h2><h4 class="bgrp">Сезон и события</h4>`+(()=>{try{return seasonCard()}catch(e){return ''}})()+hintCard('events')+(()=>{try{return taxLine()}catch(e){return ''}})()+'<h4 class="bgrp">Каждый день</h4>';
   try{h+=extraBon()}catch(e){}
-  try{h+=dayCards()}catch(e){}
   h+=`<details class="pcard fold" data-fold="login"${fo('login',1)}><summary class="bhead"><h3>Ежедневный вход</h3><span class="bsub">Серия: ${li.n} ${dw(li.n)}</span></summary><div class="lgrid">`+
     LOGIN.map((r,i)=>{const st=(li.done?i<=li.idx:i<li.idx)?'done':(!li.done&&i===li.idx)?'now':'';
       return `<div class="lcell ${st}${i===6?' big':''}"><small>День ${i+1}</small><b>${kfmt(r)}</b>${st==='done'?'<i>✓</i>':''}</div>`}).join('')+`</div>`+
@@ -2825,6 +2824,7 @@ function renderBon(){
     S.q.list.map((q,i)=>{const d=QDEF[q.id],ok=q.p>=q.n;
       return `<div class="quest${q.got?' got':''}"><div class="qtop"><b>${d.t(q.n)}</b><span>${fmt(d.r)} 🪙</span></div>${d.h?`<small class="qh">${d.h}</small>`:''}<div class="qbar"><i style="width:${q.p/q.n*100}%"></i></div>`+
       `<div class="qbot"><small>${q.p} / ${q.n}</small>${q.got?'<em>Получено ✓</em>':ok?`<button class="btn main sm" data-b="quest" data-i="${i}">Забрать</button>`:''}</div></div>`}).join('')+`</details>`;
+  try{h+=dayCards()}catch(e){}
   try{h+='<h4 class="bgrp">Банк</h4>'+bankCard()}catch(e){}
   try{h+=promoCard()}catch(e){}
   if(el._h!==h){
