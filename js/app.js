@@ -1728,7 +1728,8 @@ function caseSheet(){
 }
 function bulkBar(c){
   if(c.cd||cs.busy)return '';
-  return `<div class="cbulk"><span>Пачкой</span>${[3,5,10].map(n=>`<button class="btn sm" data-cbulk="${n}"${S.coins<c.price*n?' disabled':''}>×${n} · ${fmt(c.price*n)} 🪙</button>`).join('')}<button class="btn sm cauto" data-cauto="1">Автопродажа: ${AUTO[S.auto]}</button></div>`;
+  const pr=v=>v>=1e6?tz((v/1e6).toFixed(2))+' млн':fmt(v);
+  return `<div class="cbulk"><span class="cbh">Открыть пачкой</span><div class="cbg">${[3,5,10].map(n=>`<button class="cbb" data-cbulk="${n}"${S.coins<c.price*n?' disabled':''}><b>×${n}</b><small>${pr(c.price*n)} 🪙</small></button>`).join('')}</div><button class="cauto" data-cauto="1"><span>Автопродажа</span><b>${AUTO[S.auto]}</b></button></div>`;
 }
 function bulkHtml(){
   const b=cs.bulk;if(!b)return '';

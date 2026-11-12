@@ -328,3 +328,16 @@ header #bon-btn .dot{top:-6px;right:-6px;min-width:20px;height:20px;font-size:11
 /* активная вкладка: фиолетовая (перебивает html.v2-правила по специфичности) */
 html.v2 body nav [aria-selected=true],html body nav [aria-selected=true]{background:#2a2750;color:#fff}
 html.v2 body nav [aria-selected=true] svg,html body nav [aria-selected=true] svg{color:#8a7dff;filter:none}
+
+/* открытие кейсов пачкой */
+.cbulk{display:block!important;margin:12px 0}
+.cbulk .cbh{display:block;margin:0 0 8px;font:800 13px var(--head);color:#8d8da0}
+.cbulk .cbg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cbulk .cbb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;border-radius:14px;background:#22222b;border:1px solid #2d2d38;color:#fff;font:inherit;min-width:0}
+.cbulk .cbb b{font:800 17px var(--head)}
+.cbulk .cbb small{font:700 12px var(--head);color:#ffc933;white-space:nowrap}
+.cbulk .cbb:active:not([disabled]){transform:scale(.96)}
+.cbulk .cbb[disabled]{opacity:.4}
+.cbulk .cauto{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:8px;padding:11px 14px;border-radius:14px;background:#18181f;border:1px solid #2d2d38;color:#fff;font:inherit}
+.cbulk .cauto span{font:700 13px var(--head);color:#8d8da0}
+.cbulk .cauto b{font:800 13px var(--head);color:#cfc9ff}
