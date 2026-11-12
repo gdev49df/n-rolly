@@ -88,6 +88,12 @@ async function migrate(db) {   // добавляем новые столбцы �
   await db.prepare('CREATE TABLE IF NOT EXISTS chat_ban (uid TEXT PRIMARY KEY, until INTEGER NOT NULL DEFAULT 0, why TEXT NOT NULL DEFAULT \'\')').run();
   await db.prepare('CREATE TABLE IF NOT EXISTS ads (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL DEFAULT \'\', text TEXT NOT NULL, url TEXT NOT NULL, exp INTEGER NOT NULL DEFAULT 0, views INTEGER NOT NULL DEFAULT 0, clicks INTEGER NOT NULL DEFAULT 0, off INTEGER NOT NULL DEFAULT 0, ts INTEGER NOT NULL DEFAULT 0)').run();
   await db.prepare('CREATE TABLE IF NOT EXISTS evfeed (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT NOT NULL, ts INTEGER NOT NULL DEFAULT 0)').run();
+  await db.prepare('CREATE TABLE IF NOT EXISTS dayboard (day TEXT NOT NULL, uid TEXT NOT NULL, nick TEXT NOT NULL DEFAULT \'\', t INTEGER NOT NULL DEFAULT 0, v INTEGER NOT NULL DEFAULT 0, ts INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, uid))').run();
+  await db.prepare('CREATE TABLE IF NOT EXISTS daypaid (day TEXT PRIMARY KEY, uid TEXT NOT NULL DEFAULT \'\', ts INTEGER NOT NULL DEFAULT 0)').run();
+  await db.prepare('CREATE TABLE IF NOT EXISTS hunt (day TEXT PRIMARY KEY, target TEXT NOT NULL)').run();
+  await db.prepare('CREATE TABLE IF NOT EXISTS hunt_win (day TEXT NOT NULL, uid TEXT NOT NULL, rank INTEGER NOT NULL, prize INTEGER NOT NULL DEFAULT 0, ts INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, uid))').run();
+  await db.prepare('CREATE TABLE IF NOT EXISTS chal (id TEXT PRIMARY KEY, uid TEXT NOT NULL, nick TEXT NOT NULL, t INTEGER NOT NULL DEFAULT 0, v INTEGER NOT NULL DEFAULT 0, ts INTEGER NOT NULL DEFAULT 0, wins INTEGER NOT NULL DEFAULT 0)').run();
+  await db.prepare('CREATE TABLE IF NOT EXISTS chal_win (id TEXT NOT NULL, uid TEXT NOT NULL, ts INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (id, uid))').run();
   migrated = true;
 }
 const enc = new TextEncoder();
@@ -124,6 +130,84 @@ const CL_BG = [3,8,14,22,1,22,14,22,22,14,3,14,1,22,22,8,14,14,1,14,14,8,22,3,1,
 const clSum = (a) => a.reduce((x, y) => x + y, 0), CL_SB = clSum(CL_BG), CL_SS = clSum(CL_SY), CL_SF = clSum(CL_FR);
 const clPick = (w) => { const b = new Uint32Array(1); crypto.getRandomValues(b); let r = (b[0] / 4294967296) * clSum(w); for (let i = 0; i < w.length; i++) { r -= w[i]; if (r < 0) return i; } return w.length - 1; };
 const clOdds = (b, s, f) => Math.max(1, Math.round(1 / ((CL_BG[b] / CL_SB) * (CL_SY[s] / CL_SS) * (CL_FR[f] / CL_SF))));
+
+// ---------- Ник дня, Охота дня, вызовы другу ----------
+const dayKey5 = (t = Date.now()) => new Date(t + 5 * 3600e3).toISOString().slice(0, 10);   // сутки по UTC+5
+const NICK_DAY_PRIZE = 500000, HUNT_PRIZES = [2000000, 300000, 300000, 300000, 300000, 300000, 300000, 300000, 300000, 300000], CHAL_PRIZE = 100000;
+async function dayGrant(db, uid, amount) {
+  await db.prepare('INSERT INTO grants(uid,amount,claimed,ts) VALUES(?,?,0,?)').bind(uid, amount, Date.now()).run();
+}
+async function dayRoutes(url, req, env, uid, json) {
+  const db = env.DB, P = url.pathname, day = dayKey5();
+  const body = async () => { try { return await req.json(); } catch { return {}; } };
+  const nm = async (u) => { const r = await db.prepare('SELECT name,hide FROM players WHERE uid=?').bind(u).first(); return r && !r.hide ? r.name : 'игрок'; };
+  if (P === '/day/top' && req.method === 'GET') {
+    // награда за вчерашний «Ник дня»: один раз, при первом запросе нового дня
+    const yd = dayKey5(Date.now() - 86400e3);
+    const yb = await db.prepare('SELECT uid,nick,t,v FROM dayboard WHERE day=? AND v>0 ORDER BY v DESC LIMIT 1').bind(yd).first();
+    let prev = null;
+    if (yb) {
+      const ins = await db.prepare('INSERT OR IGNORE INTO daypaid(day,uid,ts) VALUES(?,?,?)').bind(yd, yb.uid, Date.now()).run();
+      if (ins.meta.changes) await dayGrant(db, yb.uid, NICK_DAY_PRIZE);
+      prev = { nick: yb.nick, t: yb.t, v: yb.v, name: await nm(yb.uid), me: yb.uid === uid, prize: NICK_DAY_PRIZE };
+    }
+    const bb = await db.prepare('SELECT uid,nick,t,v FROM dayboard WHERE day=? AND v>0 ORDER BY v DESC LIMIT 1').bind(day).first();
+    const best = bb ? { nick: bb.nick, t: bb.t, v: bb.v, name: await nm(bb.uid), me: bb.uid === uid } : null;
+    const mine = await db.prepare('SELECT nick,t,v FROM dayboard WHERE day=? AND uid=?').bind(day, uid).first();
+    const wins = (await db.prepare('SELECT w.uid,w.rank FROM hunt_win w WHERE w.day=? ORDER BY w.rank').bind(day).all()).results;
+    const winners = [];
+    for (const w of wins) winners.push({ rank: w.rank, name: await nm(w.uid), me: w.uid === uid });
+    return json({ day, best, mine: mine || null, prev, hunt: { winners, left: Math.max(0, HUNT_PRIZES.length - wins.length), prizes: [HUNT_PRIZES[0], HUNT_PRIZES[1]] }, prize: NICK_DAY_PRIZE });
+  }
+  if (P === '/day/nick' && req.method === 'POST') {
+    const b = await body(), nick = clean(b.n, 24), t = Math.max(0, Math.min(7, Math.trunc(Number(b.t)) || 0)), v = Math.max(0, Math.min(1e10, Math.trunc(Number(b.v)) || 0));
+    if (!nick || !v) return json({ ok: false });
+    await db.prepare('INSERT INTO dayboard(day,uid,nick,t,v,ts) VALUES(?,?,?,?,?,?) ON CONFLICT(day,uid) DO UPDATE SET nick=excluded.nick,t=excluded.t,v=excluded.v,ts=excluded.ts WHERE excluded.v>dayboard.v').bind(day, uid, nick, t, v, Date.now()).run();
+    return json({ ok: true });
+  }
+  if (P === '/day/hunt' && req.method === 'POST') {
+    const b = await body(), target = String(b.target || '').toLowerCase();
+    if (!/^[a-z0-9_]{1,6}$/.test(target) || !/[a-z]/.test(target)) return json({ ok: false, error: 'bad' });
+    await db.prepare('INSERT OR IGNORE INTO hunt(day,target) VALUES(?,?)').bind(day, target).run();
+    const h = await db.prepare('SELECT target FROM hunt WHERE day=?').bind(day).first();
+    if (!h || h.target !== target) return json({ ok: false, error: 'target' });
+    if (await db.prepare('SELECT 1 AS x FROM hunt_win WHERE day=? AND uid=?').bind(day, uid).first()) return json({ ok: true, again: true });
+    const n = (await db.prepare('SELECT COUNT(*) AS n FROM hunt_win WHERE day=?').bind(day).first()).n;
+    if (n >= HUNT_PRIZES.length) return json({ ok: true, rank: 0, prize: 0 });
+    const rank = n + 1, prize = HUNT_PRIZES[n];
+    const ins = await db.prepare('INSERT OR IGNORE INTO hunt_win(day,uid,rank,prize,ts) VALUES(?,?,?,?,?)').bind(day, uid, rank, prize, Date.now()).run();
+    if (!ins.meta.changes) return json({ ok: true, again: true });
+    await dayGrant(db, uid, prize);
+    return json({ ok: true, rank, prize });
+  }
+  if (P === '/chal/new' && req.method === 'POST') {
+    const b = await body(), nick = clean(b.nick, 24), t = Math.max(0, Math.min(7, Math.trunc(Number(b.t)) || 0)), v = Math.max(0, Math.min(1e10, Math.trunc(Number(b.v)) || 0));
+    if (!nick || !v) return json({ ok: false });
+    const c = await db.prepare('SELECT COUNT(*) AS n FROM chal WHERE uid=? AND ts>?').bind(uid, Date.now() - 86400e3).first();
+    if (c.n >= 10) return json({ ok: false, error: 'limit' });
+    const id = Array.from(crypto.getRandomValues(new Uint8Array(6)), (x) => 'abcdefghijkmnpqrstuvwxyz23456789'[x % 32]).join('');
+    await db.prepare('INSERT INTO chal(id,uid,nick,t,v,ts) VALUES(?,?,?,?,?,?)').bind(id, uid, nick, t, v, Date.now()).run();
+    return json({ ok: true, id });
+  }
+  if (P === '/chal/get' && req.method === 'GET') {
+    const id = clean(url.searchParams.get('id'), 12), c = await db.prepare('SELECT * FROM chal WHERE id=?').bind(id).first();
+    if (!c || c.ts < Date.now() - 7 * 86400e3) return json({ ok: false });
+    const won = await db.prepare('SELECT 1 AS x FROM chal_win WHERE id=? AND uid=?').bind(id, uid).first();
+    return json({ ok: true, id, nick: c.nick, t: c.t, v: c.v, by: await nm(c.uid), mine: c.uid === uid, won: !!won, wins: c.wins });
+  }
+  if (P === '/chal/win' && req.method === 'POST') {
+    const b = await body(), id = clean(b.id, 12), v = Math.max(0, Math.min(1e10, Math.trunc(Number(b.v)) || 0));
+    const c = await db.prepare('SELECT * FROM chal WHERE id=?').bind(id).first();
+    if (!c || c.uid === uid || c.ts < Date.now() - 7 * 86400e3 || v <= c.v) return json({ ok: false });
+    const ins = await db.prepare('INSERT OR IGNORE INTO chal_win(id,uid,ts) VALUES(?,?,?)').bind(id, uid, Date.now()).run();
+    if (!ins.meta.changes) return json({ ok: true, again: true });
+    await db.prepare('UPDATE chal SET wins=wins+1 WHERE id=?').bind(id).run();
+    await dayGrant(db, uid, CHAL_PRIZE);
+    if (c.wins < 5) await dayGrant(db, c.uid, CHAL_PRIZE);
+    return json({ ok: true, prize: CHAL_PRIZE });
+  }
+  return json({ error: 'not found' }, 404);
+}
 async function collRoutes(url, req, env, uid, json) {
   const db = env.DB, P = url.pathname;
   const body = async () => { try { return await req.json(); } catch { return {}; } };
@@ -1180,6 +1264,7 @@ async function handle(req, env) {
       }
       return json({ sum, nicks });
     }
+    if (url.pathname.startsWith('/day/') || url.pathname.startsWith('/chal/')) return await dayRoutes(url, req, env, uid, json);
     // ---- друзья ----
     const REF_MAX = 200;
     if (url.pathname === '/ref' && req.method === 'POST') {

@@ -969,8 +969,10 @@ $('#reels').onclick=e=>{
   if(pk){if(!busy&&+pk.dataset.pk!==sel)showSel(+pk.dataset.pk,false);return}
   const b=e.target.closest('[data-ra]');if(!b||b.disabled||busy)return;
   if(b.dataset.ra==='chat'||b.dataset.ra==='chal'){const c=cur[sel];if(!c)return;const v=fmt(val(c.t,c.p,c.name)),nm=T[c.t].n;
-    if(b.dataset.ra==='chal'){const txt=`Я выбил ник @${c.name} (${nm}, ${v} монет) в Нейм-рулетке. Сможешь лучше?`,u='https://t.me/share/url?url='+encodeURIComponent(refLink())+'&text='+encodeURIComponent(txt);
-      try{tg.openTelegramLink(u)}catch(x){window.open(u,'_blank')}return}
+    if(b.dataset.ra==='chal'){const txt=`Я выбил ник @${c.name} (${nm}, ${v} монет) в Нейм-рулетке. Сможешь лучше?`,go=l=>{const u='https://t.me/share/url?url='+encodeURIComponent(l)+'&text='+encodeURIComponent(txt);try{tg.openTelegramLink(u)}catch(x){window.open(u,'_blank')}};
+      if(!dayNet())return go(refLink());
+      b.disabled=true;(async()=>{try{const r=await lbReq('/chal/new',{nick:c.name,t:c.t,v:val(c.t,c.p,c.name)});
+        go(r&&r.ok?APP_LINK+(APP_LINK.includes('?')?'&':'?')+'startapp=c'+r.id:refLink())}catch(x){go(refLink())}b.disabled=false})();return}
     if(!API||!tg||!tg.initData){toast('Чат работает только в Telegram');return}
     b.disabled=true;(async()=>{try{const r=await lbReq('/chat',{text:`Выбил ник ${c.name} · ${nm} · ${v} 🪙`});
       if(r.ok){S.chm=(S.chm||0)+1;save();toast('Отправлено в чат')}else toast(chErr[r.error]||'Не отправилось')}
@@ -2495,6 +2497,8 @@ async function refInit(){
     try{const r=await lbReq('/ref',{inviter:sp.slice(1)});S.refd=1;
       if(r.ok){S.coins+=REF_NEW_C;S.en+=REF_NEW_E;save();render();toast(`🎁 Бонус за приглашение: +${fmt(REF_NEW_C)} 🪙 и +${REF_NEW_E} ⚡`)}else save()}catch(e){}
   }
+  if(/^c[a-z0-9]{6}$/.test(sp)&&!(S.chal&&S.chal.id===sp.slice(1))){
+    try{const r=await lbReq('/chal/get?id='+sp.slice(1),null);if(r&&r.ok&&!r.mine&&!r.won){S.chal={id:r.id,nick:r.nick,v:r.v,by:r.by,done:0};save();toast(`⚔️ Вызов от ${r.by}: выбей ник дороже ${fmt(r.v)} 🪙`)}}catch(e){}}
   refPoll();
 }
 async function refPoll(){
@@ -2785,24 +2789,43 @@ function extraBon(){
   return h;
 }
 
-// ---------- Ник дня и Охота дня (карточки в бонусах) ----------
-const HUNT_PRIZE=100000;
-function huntTarget(){const k=todayK(),h=nameHash('hunt'+k),h2=nameHash('len'+k),L='abcdefghijklmnopqrstuvwxyz';return{l:L[Math.floor(h*L.length)],n:4+Math.floor(h2*3)}}
+// ---------- Ник дня, Охота дня, вызовы друзей (общие, через воркер) ----------
+const HUNT_PRIZE=100000;   // запасной приз без сети
+const dayK5=()=>new Date(Date.now()+5*3600e3).toISOString().slice(0,10);   // сутки по UTC+5, как на сервере
+const dayNet=()=>!!(API&&tg&&tg.initData);
+var huntPool=null,dtop=null,dtopT=0;
+function huntTarget(){if(!huntPool){const s=new Set();[...CAT.flat(),...WORDS,...NAMES].forEach(x=>{x=String(x).toLowerCase();if(/^[a-z0-9_]{1,6}$/.test(x)&&/[a-z]/.test(x))s.add(x)});huntPool=[...s].sort()}
+  return huntPool[Math.floor(nameHash('hunt'+dayK5())*huntPool.length)]}
+async function dayLoad(force){if(!dayNet()||(!force&&Date.now()-dtopT<60000))return;dtopT=Date.now();try{dtop=await lbReq('/day/top')}catch(e){}try{renderBon()}catch(e){}}
 function dayNote(c){
-  const k=todayK(),v=val(c.t,c.p,c.name);
+  const k=dayK5(),v=val(c.t,c.p,c.name);
   if(!S.dn||S.dn.d!==k)S.dn={d:k,n:'',t:0,v:0};
-  if(v>S.dn.v){S.dn.n=c.name;S.dn.t=c.t;S.dn.v=v}
+  if(v>S.dn.v){S.dn.n=c.name;S.dn.t=c.t;S.dn.v=v;if(dayNet())lbReq('/day/nick',{n:c.name,t:c.t,v}).then(()=>{dtopT=0}).catch(()=>{})}
   const tg0=huntTarget();if(!S.hunt||S.hunt.d!==k)S.hunt={d:k,done:0};
-  if(!S.hunt.done&&String(c.name).toLowerCase()[0]===tg0.l&&[...String(c.name)].length===tg0.n){S.hunt.done=1;S.coins+=HUNT_PRIZE;setTimeout(()=>{try{toast('Охота дня выполнена: +'+fmt(HUNT_PRIZE)+' 🪙');sfx('ach')}catch(e){}},1200)}
+  if(!S.hunt.done&&String(c.name).toLowerCase()===tg0){S.hunt.done=1;
+    if(dayNet())lbReq('/day/hunt',{target:tg0}).then(r=>{
+      if(r&&r.ok&&r.prize)toast(`Охота дня: ты ${r.rank}-й! +${fmt(r.prize)} 🪙`);
+      else if(r&&r.ok&&!r.again)toast('Охота дня: ты нашёл ник, но призы уже разобраны');
+      dayLoad(true)}).catch(()=>{S.hunt.done=0;save()});
+    else{S.coins+=HUNT_PRIZE;setTimeout(()=>{try{toast('Охота дня выполнена: +'+fmt(HUNT_PRIZE)+' 🪙')}catch(e){}},1200)}}
+  if(S.chal&&!S.chal.done&&v>S.chal.v&&dayNet()){S.chal.done=1;const id=S.chal.id;lbReq('/chal/win',{id,v}).then(r=>{if(r&&r.ok&&r.prize)toast(`Вызов принят: +${fmt(r.prize)} 🪙`)}).catch(()=>{S.chal.done=0})}
 }
 function dayCards(){
-  const k=todayK(),dn=S.dn&&S.dn.d===k?S.dn:null,tg0=huntTarget(),done=S.hunt&&S.hunt.d===k&&S.hunt.done;
-  const ex='@'+tg0.l+'x'.repeat(tg0.n-1);
-  const best=dn&&dn.v?`<div class="dnick" style="--tc:${T[dn.t].c}"><b>@${escH(dn.n)}</b><span class="dnb"><i></i>${T[dn.t].n}</span></div><div class="dnrow"><span>Оценка</span><b>${fmt(dn.v)} 🪙</b></div>`:`<p class="sum">Сегодня ты ещё ничего не выбил. Покрути, и здесь появится лучший ник дня.</p>`;
-  return `<div class="pcard daycard"><div class="dch"><div><h3>Ник дня</h3><small>Самый дорогой ник, выбитый тобой сегодня</small></div><span class="dci" style="--c:#FFC933">👑</span></div>${best}</div>
-  <div class="pcard daycard hunt${done?' done':''}"><div class="dch"><div><h3>Охота дня</h3><small>Выбей ник на букву <b>${tg0.l.toUpperCase()}</b> длиной ровно ${tg0.n} символов. Приз ${fmt(HUNT_PRIZE)} 🪙, раз в день.</small></div><span class="dci" style="--c:#FF8A3D">🎯</span></div>
-  <div class="dhex"><span>например</span><b>${ex}</b></div><div class="dfoot">${done?'<em>Выполнено ✓</em>':'<span>Ещё не найдено</span>'}<span class="dtm">⏱ <span data-t="day"></span></span></div></div>`;
+  dayLoad();
+  const k=dayK5(),loc=S.dn&&S.dn.d===k?S.dn:null,tg0=huntTarget(),done=S.hunt&&S.hunt.d===k&&S.hunt.done,hn=dtop&&dtop.hunt;
+  const gb=dtop&&dtop.best,shown=gb||(loc&&loc.v?{nick:loc.n,t:loc.t,v:loc.v,name:'ты',me:true}:null);
+  const best=shown?`<div class="dnick" style="--tc:${T[shown.t].c}"><b>@${escH(shown.nick)}</b><span class="dnb"><i></i>${T[shown.t].n}</span></div><div class="dnrow"><span>${shown.me?'Владелец: ты':'Владелец: <b>'+escH(shown.name)+'</b>'}</span><b>${fmt(shown.v)} 🪙</b></div>`
+    :`<p class="sum">Сегодня ещё никто ничего не выбил.</p>`;
+  const prev=dtop&&dtop.prev?`<div class="dprev">Вчера: <b>@${escH(dtop.prev.nick)}</b> · ${dtop.prev.me?'ты':escH(dtop.prev.name)}${dtop.prev.me?` · +${fmt(dtop.prev.prize)} 🪙`:''}</div>`:'';
+  const mine=gb&&loc&&loc.v&&!(gb.me)?`<div class="dprev">Твой лучший сегодня: <b>@${escH(loc.n)}</b> · ${fmt(loc.v)} 🪙</div>`:'';
+  const prize=dtop?fmt(dtop.prize):'500 000';
+  const win=hn&&hn.winners.length?`<div class="dwin">${hn.winners.map(w=>`<span class="${w.me?'me':''}">${w.rank}. ${escH(w.name)}</span>`).join('')}</div>`:'';
+  const chal=S.chal&&!S.chal.done?`<div class="pcard daycard chal"><div class="dch"><div><h3>Вызов от ${escH(S.chal.by||'друга')}</h3><small>Выбей ник дороже <b>${fmt(S.chal.v)} 🪙</b> (его ник @${escH(S.chal.nick)}). Приз ${fmt(CHAL_P)} 🪙 вам обоим.</small></div><span class="dci" style="--c:#6cc4ff">⚔️</span></div></div>`:'';
+  return chal+`<div class="pcard daycard"><div class="dch"><div><h3>Ник дня</h3><small>Самый дорогой ник, выбитый сегодня среди всех игроков. Приз владельцу ${prize} 🪙</small></div><span class="dci" style="--c:#FFC933">👑</span></div>${best}${mine}${prev}</div>
+  <div class="pcard daycard hunt${done?' done':''}"><div class="dch"><div><h3>Охота дня</h3><small>Выбей этот юзернейм, он меняется каждый день. Первому ${dtop?fmt(dtop.hunt.prizes[0]):'2 000 000'} 🪙, следующим 9 по ${dtop?fmt(dtop.hunt.prizes[1]):'300 000'} 🪙.</small></div><span class="dci" style="--c:#FF8A3D">🎯</span></div>
+  <div class="dhex"><span>цель</span><b>@${escH(tg0)}</b></div>${win}<div class="dfoot">${done?'<em>Ты нашёл ✓</em>':hn&&hn.left===0?'<span>Призы разобраны</span>':`<span>Осталось призов: ${hn?hn.left:10}</span>`}<span class="dtm">⏱ <span data-t="day"></span></span></div></div>`;
 }
+const CHAL_P=100000;
 function renderBon(){
   if(bon.busy)return;
   ensureQuests();
@@ -3528,7 +3551,7 @@ function gmHtml(){
     card('gs-open','🔎','Дороже или дешевле','Угадай ник: серия верных — награда',`${limLeft('gs')} из ${LIM.gs} забегов · ${fmt(GSC)} 🪙`,'#27D9BD')+
     card('mn-open','💣','Минное поле','Открывай клетки: призы и мины',`${limLeft('mn')} из ${LIM.mn} сегодня · ${fmt(MNP)} 🪙`,'#FF5F7A')+
     card('ws-open','🔤','Найди слова','Сетка 10×10, в конце колесо ×1,2–10',`${wsLeft()} из ${WS_DAY} забегов · бесплатно`,'#FF8A3D')+
-    `</div><h4 class="gmh">Игры на удачу</h4><div class="gmg one">`+
+    `</div><h4 class="gmh">Игры на удачу</h4><div class="gmg">`+
     card('','🧳','Кейсы','Тематические кейсы, шансы открыты',`Открыто: ${fmt(S.casen)}`,'#8B7CFF','data-gm="cases"')+
     card('','⚔️','Батлы','Открывай кейсы против игроков — забирай всё',S.btn?`<i class="gmdot"></i>результатов: ${S.btn}`:'создай свой','#FF5F7A','data-gm="bt"')+
     `</div><button class="gmfair" data-gm="fair">🛡 Честная игра <span>как всё работает и какие шансы</span></button>
