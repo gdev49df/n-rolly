@@ -809,7 +809,6 @@ function renderMeta(){
     ?`<button class="btn main" disabled>${c.res}</button>`
     :`<button class="btn main" data-ra="keep">Сохранить</button><button class="btn" data-ra="sell">Продать за ${fmt(val(c.t,c.p,c.name))} 🪙</button>`)+`</div>`;
   meta.querySelector('.acts').classList.toggle('one',c.kept);
-  if(c.t>=2){const sh=document.createElement('div');sh.className='sharer';sh.innerHTML='<button class="btn" data-ra="chat"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>Кинуть в чат</button><button class="btn" data-ra="chal"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>Вызов другу</button>';meta.append(sh)}
 }
 function renderPicks(){
   const row=document.querySelector('#reels .rrow');if(!row)return;const pk=row.querySelector('.picks');
@@ -968,15 +967,6 @@ $('#reels').onclick=e=>{
   const pk=e.target.closest('[data-pk]');
   if(pk){if(!busy&&+pk.dataset.pk!==sel)showSel(+pk.dataset.pk,false);return}
   const b=e.target.closest('[data-ra]');if(!b||b.disabled||busy)return;
-  if(b.dataset.ra==='chat'||b.dataset.ra==='chal'){const c=cur[sel];if(!c)return;const v=fmt(val(c.t,c.p,c.name)),nm=T[c.t].n;
-    if(b.dataset.ra==='chal'){const txt=`Я выбил ник @${c.name} (${nm}, ${v} монет) в Нейм-рулетке. Сможешь лучше?`,go=l=>{const u='https://t.me/share/url?url='+encodeURIComponent(l)+'&text='+encodeURIComponent(txt);try{tg.openTelegramLink(u)}catch(x){window.open(u,'_blank')}};
-      if(!dayNet())return go(refLink());
-      b.disabled=true;(async()=>{try{const r=await lbReq('/chal/new',{nick:c.name,t:c.t,v:val(c.t,c.p,c.name)});
-        go(r&&r.ok?APP_LINK+(APP_LINK.includes('?')?'&':'?')+'startapp=c'+r.id:refLink())}catch(x){go(refLink())}b.disabled=false})();return}
-    if(!API||!tg||!tg.initData){toast('Чат работает только в Telegram');return}
-    b.disabled=true;(async()=>{try{const r=await lbReq('/chat',{text:`Выбил ник ${c.name} · ${nm} · ${v} 🪙`});
-      if(r.ok){S.chm=(S.chm||0)+1;save();toast('Отправлено в чат')}else toast(chErr[r.error]||'Не отправилось')}
-      catch(x){toast('Нет связи, попробуй ещё раз')}b.disabled=false})();return}
   const c=cur[sel];if(!c||c.kept)return;
   if(b.dataset.ra==='keep'){
     if(S.items.length>=MAX){toast(`Коллекция заполнена (${MAX}/${MAX}). Продай ник или освободи место.`);return}

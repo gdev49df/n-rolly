@@ -75,11 +75,6 @@ html.v2 .item button[data-a=copy] svg{width:20px;height:20px}
 html.v2 .item button[data-a=copy]:active{transform:scale(.88);color:#43e585;border-color:rgba(67,229,133,.6);background:rgba(67,229,133,.14)}
 @media(hover:hover){html.v2 .item button[data-a=copy]:hover{color:#fff;border-color:rgba(255,255,255,.3)}}
 /* кнопки «Кинуть в чат» / «Вызов другу» */
-.sharer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.sharer .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 8px;border-radius:18px;font-weight:800;font-size:14px}
-.sharer [data-ra=chat]{color:#6cc4ff;background:rgba(80,170,255,.12);border:1px solid rgba(100,180,255,.4)}
-.sharer [data-ra=chal]{color:#fff;background:linear-gradient(160deg,rgba(255,150,60,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14)}
-.sharer [data-ra=chal] svg{color:#ff9a3d}
 /* Ник дня и Охота дня */
 html.v2 .daycard{padding:18px}
 .dch{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
