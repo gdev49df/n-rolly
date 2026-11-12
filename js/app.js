@@ -1550,7 +1550,7 @@ function renderTop(){
   <button class="pcard achbtn" id="clan-open"><div><b>Кланы</b><small>Вступи в клан или создай свой</small></div><span class="trophy">🛡️</span></button>
   ${lb.cheat?'<div class="pcard lbmsg warn"><b>Данные не прошли проверку</b><small>Капитал вырос быстрее, чем это возможно в игре. Рейтинг, рынок, кланы и музей закрыты, пока данные не придут в норму.</small></div>':''}
   ${body}
-  <div class="pcard sndrow"><div><b>Показывать меня</b><small>Если выключить, тебя не будет в таблице</small></div><button class="sw${S.hide?'':' on'}" id="top-hide" role="switch" aria-checked="${!S.hide}"></button></div>`);
+  <div class="pcard sndrow"><div><b>Показывать меня</b><small>Если выключить, тебя не будет в таблице</small></div><button class="sw${S.hide?'':' on'}" id="top-hide" role="switch" aria-checked="${!S.hide}" aria-label="Показывать меня"><i></i></button></div>`);
 }
 $('#tab-top').onclick=e=>{
   {const pr=e.target.closest('[data-pi]');if(pr&&!e.target.closest('#top-hide'))return playerSheet(+pr.dataset.pi)}
