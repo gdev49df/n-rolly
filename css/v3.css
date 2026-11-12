@@ -151,9 +151,64 @@ html.v2 .nct small{font:600 11px/1.2 var(--head);white-space:nowrap}
 html.v2 .ndot{top:-3px;right:-3px;width:9px;height:9px;box-shadow:0 0 0 2px #0b0b0e}
 html.v2 .app{padding-bottom:92px}
 
-/* ежедневный вход: дни 1-4 в первом ряду, 5-7 под ними */
-.lgrid{grid-template-columns:repeat(12,1fr);gap:8px}
-.lgrid .lcell{grid-column:span 3;overflow:visible;padding:8px 2px 7px}
-.lgrid .lcell:nth-child(n+5){grid-column:span 4}
-.lgrid .lcell small{font-size:11px}
-.lgrid .lcell b{font-size:16px;letter-spacing:0;margin-top:3px}
+
+/* ===== вкладка «Бонусы»: палитра #0d0d12 / #18181f / #2d2d38 / #22222b ===== */
+html:has(#tab-bon:not([hidden])) body{background:radial-gradient(90% 38% at 50% -6%,rgba(120,100,255,.13),transparent 64%),#0d0d12}
+#tab-bon .pcard{background:#18181f;border:1px solid #2d2d38;border-radius:22px;box-shadow:none;backdrop-filter:none}
+#tab-bon .pcard.holc{background:linear-gradient(rgba(255,138,61,.1),rgba(255,138,61,.02)),#18181f;border-color:rgba(255,138,61,.4)}
+#tab-bon .bgrp{display:flex;align-items:center;gap:9px;margin:22px 2px 12px;font:800 15px var(--head);letter-spacing:0;text-transform:none;color:#fff}
+#tab-bon .bgrp::before{content:"";flex:none;width:14px;height:3px;border-radius:2px;background:linear-gradient(90deg,#8b7cff 0 5px,transparent 5px 8px,#8b7cff 8px 14px)}
+/* бонус за вход */
+#tab-bon .lcard{padding:18px 18px 16px}
+#tab-bon .lct{margin:0 0 6px;font:800 19px var(--head);color:#fff}
+#tab-bon .lcd{margin:0 0 14px;font-size:13px;line-height:1.35;color:#8a8c96}
+#tab-bon .lgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+#tab-bon .lgrid .lcell{grid-column:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:62px;padding:10px 4px;overflow:visible;background:#22222b;border:1px solid #2d2d38;border-radius:14px;opacity:1;transform:none;animation:none}
+#tab-bon .lgrid .lcell:nth-child(7){grid-column:span 2}
+#tab-bon .lcell small{font:700 11px var(--head);letter-spacing:.06em;text-transform:uppercase;color:#8a8c96}
+#tab-bon .lcell b{margin-top:4px;font:800 16px var(--head);letter-spacing:0;color:#fff;white-space:nowrap}
+#tab-bon .lcell.past{background:transparent;border:1px dashed #3a3a46}
+#tab-bon .lcell.past b{color:#8a8c96;text-decoration:line-through}
+#tab-bon .lcell.now{background:#10261b;border:2px solid #2fbf6a}
+#tab-bon .lcell.today{background:#10261b;border:2px solid #2fbf6a}
+#tab-bon .lcell.today small,#tab-bon .lcell.now small{color:#9fd9b6}
+#tab-bon .lck{display:grid;place-items:center;width:26px;height:26px;margin-top:5px;border-radius:50%;background:#2fd377;color:#0d1f15}
+#tab-bon .lsum{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#c4c6cf}
+#tab-bon .lsum b{color:#fff;font-weight:800}
+#tab-bon .lstrip{display:flex;align-items:center;gap:10px;margin-top:14px;padding:14px 16px;border-radius:14px;background:#22222b;color:#9a9ca6;font-size:13.5px}
+#tab-bon .lstrip svg{flex:none}
+#tab-bon .lstrip b{color:#fff;font-weight:800}
+#tab-bon .lclaim{width:100%;margin-top:14px}
+#tab-bon .lcard .streakl{margin:12px 0 0;font-size:12px;color:#8a8c96}
+/* выложи в историю */
+#tab-bon .story{padding:16px}
+#tab-bon .strow{display:flex;align-items:center;gap:16px}
+#tab-bon .stph{flex:none;width:78px;aspect-ratio:9/16;padding:3px;border-radius:18px;background:linear-gradient(160deg,#ff4fa3,#ff9a3d 55%,#8b7cff);transform:rotate(-5deg);box-shadow:0 10px 24px -10px rgba(255,90,140,.55)}
+#tab-bon .stph img{display:block;width:100%;height:100%;object-fit:cover;border-radius:15px;background:#0d0d12}
+#tab-bon .stb{min-width:0}
+#tab-bon .stb h3{margin:0 0 4px;font:800 19px var(--head);color:#fff}
+#tab-bon .stb p{margin:0 0 10px;font-size:13px;line-height:1.3;color:#8a8c96}
+#tab-bon .stchips{display:flex;flex-wrap:wrap;gap:8px}
+#tab-bon .stch{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#0f2a1c;border:1px solid #1d5a38;color:#43e585;font:800 13px var(--head)}
+#tab-bon .stch.got{opacity:.5}
+#tab-bon .ststrip{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:14px 16px;border-radius:14px;background:#22222b;color:#9a9ca6;font-size:13.5px;text-align:center}
+#tab-bon .stgo{width:100%;margin-top:14px}
+/* задания недели: строки как в «Задания дня» */
+#tab-bon .quest{display:grid;grid-template-columns:1fr auto auto;grid-template-areas:"t t r" "h h h" "b c a";align-items:center;gap:8px 12px;padding:14px 0;border:0;border-top:1px solid #2d2d38;background:none}
+#tab-bon .quest .qtop{display:contents}
+#tab-bon .quest .qtop b{grid-area:t;font:800 15px var(--head);color:#fff}
+#tab-bon .quest .qtop span{grid-area:r;padding:4px 10px;border-radius:999px;background:#22222b;color:#fff;font:800 13px var(--head);white-space:nowrap}
+#tab-bon .quest .qh{grid-area:h;color:#8a8c96}
+#tab-bon .quest .qbar{grid-area:b;height:6px;margin:0;border-radius:99px;background:#2d2d38;border:0;overflow:hidden}
+#tab-bon .quest .qbar i{background:#3ddc84;border-radius:99px}
+#tab-bon .quest .qbot{display:contents}
+#tab-bon .quest .qbot small{grid-area:c;font-size:12px;color:#8a8c96}
+#tab-bon .quest .qbot em,#tab-bon .quest .qbot button{grid-area:a}
+#tab-bon .quest .qbot em{font:800 12px var(--head);font-style:normal;color:#3ddc84}
+#tab-bon .quest.got .qtop b,#tab-bon .quest.got .qbar,#tab-bon .quest.got .qtop span{opacity:.5}
+/* кнопка-подарок в шапке */
+html.v2 header:has(.hwho) #bon-btn{background:radial-gradient(circle at 30% 22%,#ffdc92 0,#ffa64d 46%,#f2644f 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -7px 12px rgba(170,45,25,.32),0 0 0 1px rgba(255,205,130,.35),0 10px 26px -8px rgba(243,115,91,.7)}
+html.v2 header:has(.hwho) #bon-btn svg{width:25px;height:25px;filter:drop-shadow(0 2px 3px rgba(120,30,10,.4))}
+#tab-bon .hint{background:#18181f;border:1px solid #2d2d38;box-shadow:none}
+#tab-bon .lsum{font-size:12px;gap:4px 14px}
+#tab-bon .lsum span{white-space:nowrap}

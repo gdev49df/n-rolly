@@ -1837,10 +1837,16 @@ async function promoUse(raw){
 }
 // ---------- История в Telegram ----------
 // shareToStory открывает редактор истории с картинкой media/story.jpg; кнопка-виджет в истории ведёт в игру по реферальной ссылке.
-function storyCard(){return `<div class="pcard story"><div class="bhead"><h3>Выложи в историю</h3><span class="bsub">со ссылкой на игру</span></div><p class="sum">В историю уйдёт картинка игры и ссылка, по которой друзья зайдут к тебе в приглашённые.</p><button class="btn main" id="story-go">Выложить в историю</button></div>`}
+const storyOk=()=>{try{return !!(tg&&tg.shareToStory&&tg.isVersionAtLeast&&tg.isVersionAtLeast('7.8'))}catch(e){return false}};
+const ST_C=15000,ST_E=15;   // награда за историю: раз в сутки, без проверки (Telegram не сообщает, выложили ли её)
+function storyCard(){const got=S.storyD===todayK();
+  return `<div class="pcard story"><div class="strow"><div class="stph"><img src="media/story.jpg" alt=""></div><div class="stb"><h3>Выложи в историю</h3><p>Похвастайся в Telegram — награда каждый день</p><div class="stchips"><span class="stch${got?' got':''}">⚡ +${ST_E} энергии</span><span class="stch${got?' got':''}">🪙 ${fmt(ST_C)}</span></div></div></div>`+
+    (storyOk()?`<button class="btn main stgo" id="story-go">${got?'Награда получена · выложить ещё раз':'Выложить в историю'}</button>`:`<div class="ststrip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Истории выкладываются из Telegram на телефоне</div>`)+`</div>`}
 function shareStory(){
   const link=refLink(),text=S.spins?`Мой лучший ник в Нейм-рулетке: ${T[S.best].n}. Заходи, выбей лучше!`:'Выбивай редкие юзернеймы в Нейм-рулетке!',media=new URL('media/story.jpg',location.href).href;
-  try{if(tg&&tg.shareToStory&&tg.isVersionAtLeast&&tg.isVersionAtLeast('7.8')){tg.shareToStory(media,{text,widget_link:{url:link,name:'Нейм-рулетка'}});return}}catch(x){}
+  try{if(storyOk()){tg.shareToStory(media,{text,widget_link:{url:link,name:'Нейм-рулетка'}});
+    if(S.storyD!==todayK()){S.storyD=todayK();S.coins=Math.min(CAP,S.coins+ST_C);S.en+=ST_E;try{sfx('coin')}catch(x){}save();toast(`За историю: +${fmt(ST_C)} 🪙 и +${ST_E} ⚡`);render()}
+    return}}catch(x){}
   openTg(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
   toast('Истории не поддерживаются в этой версии Telegram: открыл обычную отправку');
 }
@@ -2517,7 +2523,8 @@ function wresHtml(){
   return `<div class="stage" id="wstage" style="--tc:${T[r.t].c}"><div class="reel" id="wreel"></div><div class="badge"><i></i>${T[r.t].n}</div></div>`+
     `<div class="win" style="--tc:${T[r.t].c}">${r.saved?'Ник добавлен в коллекцию.':`Коллекция заполнена, ник продан за ${fmt(r.v)} 🪙.`}</div>`;
 }
-function updTimers(){document.querySelectorAll('#tab-bon [data-t]').forEach(s=>s.textContent=leftT(s.dataset.t==='day'?msToDay():msToWeek()))}
+const hms=ms=>{const q=Math.max(0,Math.floor(ms/1000));return[Math.floor(q/3600),Math.floor(q%3600/60),q%60].map(x=>String(x).padStart(2,'0')).join(':')};
+function updTimers(){document.querySelectorAll('#tab-bon [data-t]').forEach(s=>s.textContent=s.dataset.t==='dayc'?hms(msToDay()):leftT(s.dataset.t==='day'?msToDay():msToWeek()))}
 // ---------- Фоновая музыка (свои ambient-треки, media/music) ----------
 var MUS=[['evening','Вечерний город','мягкое пианино'],['fog','Туман','глубокие аккорды'],['night','Ночной рейс','тихий ритм']],musEl=null;
 function musApply(){
@@ -2810,12 +2817,15 @@ function renderBon(){
   const li=loginInfo(),can=S.wheel!==todayK(),el=$('#tab-bon');
   let h=`<h2>Бонусы</h2><h4 class="bgrp">Сезон и события</h4>`+(()=>{try{return seasonCard()}catch(e){return ''}})()+hintCard('events')+(()=>{try{return taxLine()}catch(e){return ''}})()+'<h4 class="bgrp">Каждый день</h4>';
   try{h+=extraBon()}catch(e){}
-  h+=`<details class="pcard fold" data-fold="login"${fo('login',1)}><summary class="bhead"><h3>Ежедневный вход</h3><span class="bsub">Серия: ${li.n} ${dw(li.n)}</span></summary><div class="lgrid">`+
-    LOGIN.map((r,i)=>{const st=(li.done?i<=li.idx:i<li.idx)?'done':(!li.done&&i===li.idx)?'now':'';
-      return `<div class="lcell ${st}${i===6?' big':''}"><small>День ${i+1}</small><b>${kfmt(r)}</b>${st==='done'?'<i>✓</i>':''}</div>`}).join('')+`</div>`+
-    (li.done?`<button class="btn" disabled>Получено · следующая через <span data-t="day"></span></button>`
-      :`<button class="btn main" data-b="login">Забрать день ${li.idx+1}: ${fmt(Math.round(LOGIN[li.idx]*evC()))} 🪙${evC()>1?' ×'+evF(evC()):''}</button>`)+
-    (!li.done&&!li.alive&&S.login.n>0?`<p class="sum">Серия прервалась, награды идут с первого дня.</p>`:streakLine(li.alive?li.n:0))+`</details>`;
+  {const tdy=LOGIN[li.idx],nxt=LOGIN[(li.idx+1)%7],ck='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    clk='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  h+=`<div class="pcard lcard"><h3 class="lct">Бонус за вход</h3><p class="lcd">Заходи каждый день: награда растёт до ${kfmt(LOGIN[6])} 🪙 на 7-й день. Пропущенный день не вернуть, серия начнётся заново.</p><div class="lgrid">`+
+    LOGIN.map((r,i)=>{const cl=i<li.idx?'past':i===li.idx?(li.done?'today':'now'):'';
+      return `<div class="lcell ${cl}"><small>День ${i+1}</small>${cl==='today'?`<i class="lck">${ck}</i>`:`<b>${kfmt(r)}</b>`}</div>`}).join('')+`</div>`+
+    `<div class="lsum"><span>Сегодня: <b>${fmt(tdy)} 🪙</b> — ${li.done?'получено':'забери'}</span><span>Завтра: <b>${fmt(nxt)} 🪙</b></span></div>`+
+    (li.done?`<div class="lstrip">${clk}<span>Завтра <b>${fmt(nxt)} 🪙</b> через <b class="tm" data-t="dayc"></b> — не пропусти</span></div>`
+      :`<button class="btn main lclaim" data-b="login">Забрать день ${li.idx+1}: ${fmt(Math.round(LOGIN[li.idx]*evC()))} 🪙${evC()>1?' ×'+evF(evC()):''}</button>`)+
+    (!li.done&&!li.alive&&S.login.n>0?`<p class="sum">Серия прервалась, награды идут с первого дня.</p>`:streakLine(li.alive?li.n:0))+`</div>`}
   h+=`<details class="pcard fold" data-fold="wheel"${fo('wheel',1)}><summary class="bhead"><h3>Ежедневная рулетка</h3><span class="bsub">${S.wheelx?`1 в сутки + ${S.wheelx} докупленных`:'1 попытка в сутки'}</span></summary>
     ${wheelHtml()}<p class="sum" hidden>${fmt(Math.min(...WHEEL.filter(p=>p.k==='c').map(p=>p.v)))} до ${fmt(Math.max(...WHEEL.filter(p=>p.k==='c').map(p=>p.v)))} 🪙.</p>`+
     (can?`<button class="spin" data-b="wheel">Крутить рулетку${S.wheelx?` · ещё ×${S.wheelx}`:''}</button>`:S.wheelx?`<button class="spin" data-b="wheel">Крутить ещё · осталось ${S.wheelx}</button>`:`<button class="spin" disabled>Уже крутили · ещё <span data-t="day"></span></button>`)+
