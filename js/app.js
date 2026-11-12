@@ -1337,7 +1337,7 @@ function renderProf(){
   const av=u.photo_url?`<img src="${u.photo_url}" alt="" onerror="this.remove()">`:'';
   $('#tab-prof').innerHTML=`<h2 class="ptitle">Профиль</h2>
   <div class="pcard pro"><div class="ptop"><div class="av" style="--p:${pct}">${frameRing(frameId())}<span class="avi">${av}<b>${name.slice(0,1).toUpperCase()}</b></span><em class="lvb">${S.lvl}</em></div>
-    <div class="pnm"><b class="pname">${nickHtml(name,cosOwn(S.cn)?S.cn:'')}</b>${cosOwn(S.ct)?`<span class="ttlrow">${titleHtml(S.ct)}</span>`:''}${vipOn()?'<span class="vipb">👑 VIP</span>':''}<span class="rank" style="--rc:${rk[2]}">🛡 ${rk[1]}</span>${nx?`<small>до «${nx[1]}»: ${nx[0]} ур.</small>`:'<small>Высший ранг</small>'}</div></div>
+    <div class="pnm"><b class="pname">${nickHtml(name,cosOwn(S.cn)?S.cn:'')}</b>${cosOwn(S.ct)?`<span class="ttlrow">${titleHtml(S.ct)}</span>`:''}${vipOn()?'<span class="vipb">👑 VIP</span>':''}${lgHtml(lgOf(((lb.data.net||{}).me||{}).rank))}<span class="rank" style="--rc:${rk[2]}">🛡 ${rk[1]}</span>${nx?`<small>до «${nx[1]}»: ${nx[0]} ур.</small>`:'<small>Высший ранг</small>'}</div></div>
   <div class="pid idc"><span class="idtag">ID</span><b>${idStr()}</b><button id="idcopy" aria-label="Скопировать ID">⧉</button></div>
   <div class="lvrow"><b>Уровень ${S.lvl}</b><small>${fmt(S.xp)} / ${fmt(need)} опыта</small></div>
   <div class="xbar"><i style="width:${pct}%"></i></div>
@@ -1515,6 +1515,9 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{if(b.dataset.t
 const API='https://rt.wsmp.workers.dev';   // например: https://nr-rating.твой-аккаунт.workers.dev
 const escH=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const netWorth=()=>S.coins+S.items.reduce((s,x)=>s+val(x.t,x.p,x.n),0)+(window.bankHeld?bankHeld():0);   // капитал = монеты + стоимость коллекции
+const LGC={1:'#FFC83D',2:'#19E6D4',3:'#8FA0C8',4:'#9A9EB0'},LGN=['','M·I','M·II','M·III','M·IV'];
+const lgOf=r=>!r||r<1||r>100?0:r===1?1:r<=3?2:r<=10?3:4;
+const lgHtml=l=>l?`<span class="lgb" style="--lc:${LGC[l]}"><svg viewBox="0 0 24 24" width="15" height="15"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5z" fill="var(--lc)"/><circle cx="8.6" cy="11.5" r="1.1" fill="#14161e"/><circle cx="12" cy="11.5" r="1.1" fill="#14161e"/><circle cx="15.4" cy="11.5" r="1.1" fill="#14161e"/></svg><i>${LGN[l]}</i></span>`:'';
 const TOPS=[['net','Капитал'],['best','Юзер'],['lvl','Уровень'],['museum','Музей']];
 const lb={cheat:0,by:'net',data:{},load:false,err:'',sent:'',last:0};
 function bestOwn(){   // лучший ник из коллекции, если имя ещё не записано
@@ -1560,11 +1563,11 @@ function renderTop(){
     const top=d.top;
     const pod=k=>{const r=top[k-1];if(!r)return `<div class="pd p${k} empty"><div class="ped">${k}</div></div>`;
       return `<div class="pd p${k}${r.me?' me':''}" data-pi="${k-1}">${k===1?'<span class="crown">👑</span>':''}<div class="pava g${k}">${frameOf(r)}<b>${ini(r)}</b><i class="pbadge">${k}</i></div>
-      <div class="pn">${tagH(r)}<span class="pnk">${nick(r)}</span></div><div class="psub">${sub(r)}</div><b class="pval">${val2(bvv(r))}</b><div class="ped">${k}</div></div>`};
-    const rows=top.slice(3).map((r,i)=>`<div class="lrow${r.me?' me':''}" data-pi="${i+3}"><em class="lrk">${i+4}</em>${tagH(r)}<span class="lnk">${nick(r)}</span><span class="lsub">${sub(r)}</span><b class="lval">${val2(bvv(r))}</b></div>`).join('');
+      <div class="pn">${by==='net'?lgHtml(lgOf(k)):''}${tagH(r)}<span class="pnk">${nick(r)}</span></div><div class="psub">${sub(r)}</div><b class="pval">${val2(bvv(r))}</b><div class="ped">${k}</div></div>`};
+    const rows=top.slice(3).map((r,i)=>`<div class="lrow${r.me?' me':''}" data-pi="${i+3}"><em class="lrk">${i+4}</em>${by==='net'?lgHtml(lgOf(i+4)):''}${tagH(r)}<span class="lnk">${nick(r)}</span><span class="lsub">${sub(r)}</span><b class="lval">${val2(bvv(r))}</b></div>`).join('');
     const u=tgUser(),mine={name:u.first_name||'Игрок',me:true};
     body=(top.length?`<div class="podium">${pod(2)}${pod(1)}${pod(3)}</div>`+(rows?`<div class="lbcard">${rows}</div>`:''):'<div class="pcard lbmsg"><small>Пока никого нет. Ты можешь стать первым.</small></div>')+
-    `<div class="mebar"><em>${me&&me.rank?fmt(me.rank):'—'}</em><span class="mnm">${nick(mine)}</span><span class="you">ТЫ</span><b class="lval">${val2(net?Math.round(netWorth()):by==='best'?S.bestv:by==='lvl'?S.lvl:(me&&me.v)||0)}</b></div>`;
+    `<div class="mebar"><em>${me&&me.rank?fmt(me.rank):'—'}</em>${by==='net'&&me?lgHtml(lgOf(me.rank)):''}<span class="mnm">${nick(mine)}</span><span class="you">ТЫ</span><b class="lval">${val2(net?Math.round(netWorth()):by==='best'?S.bestv:by==='lvl'?S.lvl:(me&&me.v)||0)}</b></div>`;
   }else body='';
   setHtml($('#tab-top'),`<div class="ptabs" role="tablist">${TOPS.map(([k,l])=>`<button role="tab" data-by="${k}" aria-selected="${by===k}">${l}</button>`).join('')}</div>
   <button class="pcard achbtn" id="clan-open"><div><b>Кланы</b><small>Вступи в клан или создай свой</small></div><span class="trophy">🛡️</span></button>
@@ -1892,7 +1895,7 @@ function plDraw(){
     const ttl=cs3[1]&&cosTitle(cs3[1])?`<span class="ttlrow">${titleHtml(cs3[1])}</span>`:'';
     const fr=cs3[2]&&cosFrame(cs3[2])?frameRing(cs3[2]):'';
     b=`<div class="plhd"><div class="av">${fr}<span class="avi"><b>${eh([...String(d.name||'?')][0]||'?').toUpperCase()}</b></span><em class="lvb">${d.lvl||1}</em></div>
-    <div class="pnm"><b class="pname">${d.tag?`<em class="ctag">[${eh(d.tag)}]</em> `:''}${nickHtml(d.name,cs3[0])}</b>${ttl}${d.vip?'<span class="vipb">👑 VIP</span>':''}<span class="rank" style="--rc:${rk[2]}">🛡 ${rk[1]}</span></div></div>
+    <div class="pnm"><b class="pname">${d.tag?`<em class="ctag">[${eh(d.tag)}]</em> `:''}${nickHtml(d.name,cs3[0])}</b>${ttl}${d.vip?'<span class="vipb">👑 VIP</span>':''}<span class="rank" style="--rc:${rk[2]}">🛡 ${rk[1]}</span>${lb.by==='net'?lgHtml(lgOf(d.rank)):''}</div></div>
     <div class="pgrid"><div class="pt"><small>Место в рейтинге</small><b>#${d.rank}</b></div><div class="pt"><small>Капитал</small><b>${fmtC(d.net)} 🪙</b></div>
     <div class="pt"><small>Уровень</small><b>${d.lvl||1}</b></div><div class="pt"><small>Клан</small><b>${d.cname?eh(d.cname):'—'}</b></div>${d.gid?`<button class="pt plid" data-plid="${d.gid}"><small>ID игрока · нажми, чтобы скопировать</small><b>${String(d.gid).padStart(6,'0')} ⧉</b></button>`:''}</div>
     <div class="pcard" style="margin:10px 0 0"><small class="cap2">Самый дорогой ник</small>${bn?`<div class="muprev">${plate(d.bestn,bn.t)}<span>${(()=>{const v=Math.max(bn.v,d.best||0);return v>=1e6?tz((v/1e6).toFixed(1))+' млн':fmt(v)})()} 🪙</span></div>`:'<p class="sum">—</p>'}</div>`+(d.me?'':d.un?`<button class="btn main cwide" data-pltg="${eh(d.un)}" style="margin-top:12px">Открыть в Telegram ↗</button>`:`<p class="sum" style="margin-top:12px;text-align:center">Ссылка на Telegram появится, когда игрок зайдёт в игру в обновлённой версии, или у него нет username</p>`);
@@ -3304,7 +3307,7 @@ function chatRender(stick){
   const near=box.scrollHeight-box.scrollTop-box.clientHeight<80;
   const dmN=chat.items.filter(m=>m.dm).length,list=chat.items.filter(m=>chat.tab==='dm'?m.dm:!m.dm);
   const t=o.querySelectorAll('[data-cht]');t.forEach(b=>b.setAttribute('aria-pressed',b.dataset.cht===chat.tab));
-  box.innerHTML=list.length?list.map(m=>`<div class="chm${m.mine?' me':''}${m.dm?' dm':''}" data-mid="${m.id}"><b>${m.vip?'👑 ':''}${escH(m.name)}${m.dm?` <em>→ ${m.mine?escH(m.tn||'игрок'):'тебе'}</em>`:''}</b>${m.re?`<div class="chq"><b>${escH(m.rn||'сообщение')}</b> ${escH(m.rt||'')}</div>`:''}<span>${escH(m.text)}</span><small><i>${new Date(m.ts).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}</i>${m.mine?'':`<span class="cha"><button data-chr="${m.id}" title="Ответить">↩</button><button data-chd="${m.gid}" data-n="${escH(m.name)}" title="Написать лично">✉</button><button data-chf="${m.id}" title="Пожаловаться">⚑</button></span>`}</small></div>`).join(''):`<p class="sum" style="text-align:center">${chat.tab==='dm'?'Личных сообщений пока нет. Нажми ✉ у сообщения игрока.':'Пока никто не писал. Начни первым.'}</p>`;
+  box.innerHTML=list.length?list.map(m=>`<div class="chm${m.mine?' me':''}${m.dm?' dm':''}" data-mid="${m.id}"><b>${lgHtml(m.lg)}${m.vip?'👑 ':''}${escH(m.name)}${m.dm?` <em>→ ${m.mine?escH(m.tn||'игрок'):'тебе'}</em>`:''}</b>${m.re?`<div class="chq"><b>${escH(m.rn||'сообщение')}</b> ${escH(m.rt||'')}</div>`:''}<span>${escH(m.text)}</span><small><i>${new Date(m.ts).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}</i>${m.mine?'':`<span class="cha"><button data-chr="${m.id}" title="Ответить">↩</button><button data-chd="${m.gid}" data-n="${escH(m.name)}" title="Написать лично">✉</button><button data-chf="${m.id}" title="Пожаловаться">⚑</button></span>`}</small></div>`).join(''):`<p class="sum" style="text-align:center">${chat.tab==='dm'?'Личных сообщений пока нет. Нажми ✉ у сообщения игрока.':'Пока никто не писал. Начни первым.'}</p>`;
   if(stick||near)box.scrollTop=box.scrollHeight;
   const er=o.querySelector('.cher');if(er)er.textContent=chat.ban>Date.now()?'Ты в бане чата до '+fmtDate(chat.ban):chat.err;
   const ct=o.querySelector('.chctx');if(ct)ct.innerHTML=chat.to?`<span>✉ Лично для <b>${escH(chat.to.n)}</b></span><button data-chc="1">✕</button>`:chat.re?`<span>↩ Ответ для <b>${escH(chat.re.n)}</b>: ${escH(chat.re.t)}</span><button data-chc="1">✕</button>`:'';

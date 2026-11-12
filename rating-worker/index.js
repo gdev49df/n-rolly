@@ -834,6 +834,19 @@ function topSql(by, tail, full) {
   return `SELECT p.uid,p.name,p.${col} AS v,p.bestn,p.lvl,p.cos,p.vit,${tag}${extra},(SELECT COUNT(*) FROM museum WHERE owner=p.uid) AS mc FROM players p WHERE p.hide=0 AND p.flag=0 AND p.${col}>0 ORDER BY p.${col} DESC, p.upd ASC ${tail}`;
 }
 
+// лига по месту в рейтинге капитала: 1 → M-I, 2–3 → M-II, 4–10 → M-III, 11–100 → M-IV
+let LG = { t: 0, m: null };
+async function leagueMap(env) {
+  if (LG.m && Date.now() - LG.t < 60000) return LG.m;
+  const m = new Map();
+  try {
+    const rows = (await env.DB.prepare('SELECT uid FROM players WHERE hide=0 AND flag=0 AND net>0 ORDER BY net DESC, upd ASC LIMIT 100').all()).results;
+    rows.forEach((r, i) => m.set(r.uid, i + 1 === 1 ? 1 : i + 1 <= 3 ? 2 : i + 1 <= 10 ? 3 : 4));
+  } catch (e) {}
+  LG = { t: Date.now(), m };
+  return m;
+}
+
 export default {
   async scheduled(ev, env, ctx) { CTX = ctx; ctx.waitUntil(cron(env).catch(() => {})); },
   async fetch(req, env, ctx) {
@@ -1186,7 +1199,8 @@ async function handle(req, env) {
         ? (await env.DB.prepare(sel + ' AND c.id>?2 ORDER BY c.id LIMIT 60').bind(uid, after).all()).results
         : (await env.DB.prepare('SELECT * FROM (' + sel + ' ORDER BY c.id DESC LIMIT 80) ORDER BY id').bind(uid).all()).results;
       const ban = await env.DB.prepare('SELECT until FROM chat_ban WHERE uid=? AND until>?').bind(uid, Date.now()).first();
-      return json({ now: Date.now(), ban: ban ? ban.until : 0, me: gidOf(uid), items: rows.map((r) => ({
+      const lgm = await leagueMap(env);
+      return json({ now: Date.now(), ban: ban ? ban.until : 0, me: gidOf(uid), items: rows.map((r) => ({ lg: lgm.get(r.uid) || 0,
         id: r.id, name: r.name || 'Игрок', text: r.text, ts: r.ts, mine: r.uid === uid ? 1 : 0, vip: r.vip > Date.now() ? 1 : 0,
         gid: gidOf(r.uid), re: r.re || 0, rn: r.rn || '', rt: r.rt ? String(r.rt).slice(0, 60) : '', dm: r.to_uid ? 1 : 0, tn: r.tn || '', tg: r.to_uid ? gidOf(r.to_uid) : 0 })) });
     }
