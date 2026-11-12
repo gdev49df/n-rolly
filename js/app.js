@@ -23,7 +23,7 @@ const T=[{n:'Обычный',c:'#9AA5DB',v:390},{n:'Необычный',c:'#27D9
 const BDGP={crown:10000000,dragon:7500000,unicorn:5000000,liberty:4000000,slot:3000000,fire:2000000,rose:1500000,coin:1000000,moai:1000000},TOPP=500000,MULTIP=1000000,MULTIN=5;
 T.forEach((t,i)=>t.s=['Обычн.','Необыч.','Редкий','Эпик','Легенд.','Миф.','Секрет','Эксклюз.'][i]);;
 const MULTI5={l:'×5',min:0,cost:0};   // мульти-крутка ×5: только за монеты, 5 000 🪙 за каждый ник, режим не выбирается
-const MODES=[{l:'Любой',min:0,cost:3000},{l:'Редкий+',min:2,cost:10500},{l:'Эпик+',min:3,cost:40000}];
+const MODES=[{l:'Любой',min:0,cost:3000},{l:'Редкий+',min:2,cost:10500},{l:'Эпик+',min:3,cost:52000}];
 const WORDS=['storm','night','wolf9','cyber','pixel','ghost','nova7','lunar','ember','frost','raven','blaze','orbit','pulse','zenith','vortex','shadow','dragon','falcon','comet','atlas','magic','royal','alpha','omega','delta','sigma','ninja','panda','tiger','cobalt','cipher','quartz','rocket','silent','golden','crystal','phoenix','nexus','vector','matrix','legend','hunter','pirate','wizard','spirit','shiver','velvet','copper','jungle','sunset','thunder','galaxy','planet','meteor','aurora','eclipse','horizon','cosmos','stellar','nebula','quasar','photon','plasma','neutron','proton','carbon','silver','bronze','marble','granite','onyx','amber','jade','ruby','sapphire','opal','ivory','ebony','crimson','scarlet','violet','indigo','azure','emerald','cinder','smoke','steel','iron','titan','giant','knight','archer','viking','samurai','shogun','ronin','sensei','monk','sage','oracle','druid','shaman','rogue','bandit','outlaw','rebel','phantom','specter','wraith','demon','angel','mystic','arcane','cosmic','atomic','turbo','hyper','super','rapid','swift','stealth','blizzard','glacier','tundra','desert','canyon','island','ocean','river','forest','meadow','garden','harbor','castle','temple','tower','bridge','anchor','compass','lantern','candle','mirror','puzzle','riddle','secret','myth','fable','story','poem','melody','rhythm','echo','whisper','thunder','lightning','tornado','cyclone','volcano','crater','spark','flame','inferno','magma','cobra','viper','python','raptor','condor','eagle','hawk','owl','lynx','puma','jaguar','leopard','cheetah','panther','wolfpack','badger','otter','beaver','bison','moose','walrus','penguin','dolphin','octopus','kraken','hydra','griffin','pegasus','unicorn','goblin','ogre','troll','golem','zombie','vampire','captain','sailor','pilot','shuttle','module','sensor','signal','binary','kernel','socket','packet','buffer','cache','proxy','server','client','script','coder','hacker','gamer','streamer','player','winner','champion','master','expert','genius','sorcerer','alchemy','potion','gemstone','diamond','pearl','coral','reef','wave','tide','breeze','zephyr','mistral','monsoon'].filter(w=>/^[a-z]{5,}$/.test(w));
 const L='abcdefghijklmnopqrstuvwxyz',V='aeiouy',K='bcdfghjklmnprstvwxz',POOL=L+'0123456789_#$%@';
 const R=n=>Math.floor(Math.random()*n),P=a=>a[R(a.length)];
@@ -381,20 +381,20 @@ function taxLine(){
 }
 setTimeout(()=>{try{taxTick()}catch(e){}},2500);setInterval(()=>{try{taxTick()}catch(e){}},60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)try{taxTick()}catch(e){}});
-const LOGIN=[300000,450000,600000,900000,1200000,1500000,2250000];   // бонус за вход ×10
+const LOGIN=[60000,90000,120000,180000,240000,300000,450000];   // бонус за вход: 1,44 млн за неделю (≈ 205 тыс. в день)
 // Призы ежедневной рулетки; w = шанс в процентах (сумма 100). k:'c' монеты, k:'n' ник редкости t
-const WHEEL0=[{k:'c',v:30000,w:32},{k:'c',v:60000,w:22},{k:'c',v:120000,w:13},{k:'c',v:200000,w:7},{k:'c',v:300000,w:3.5},{k:'c',v:600000,w:1}];   // ежедневная рулетка: только денежные призы
+const WHEEL0=[{k:'c',v:7500,w:32},{k:'c',v:15000,w:22},{k:'c',v:30000,w:13},{k:'c',v:50000,w:7},{k:'c',v:75000,w:3.5},{k:'c',v:150000,w:1}];   // ежедневная рулетка: только денежные призы
 const WHEEL=[0,4,1,3,2,5].map(i=>WHEEL0[i]);   // секторы расставлены вперемешку; шансы остаются прежними
 const WTOT=WHEEL.reduce((a,p)=>a+p.w,0);
 // Недельные задания: n цель, r награда в монетах. Каждую неделю выбираются 3 из 6
 const QDEF={
-  spins:{n:30,r:300000,t:n=>`Сделай ${n} круток`},
-  wheel:{n:3,r:240000,t:n=>n===1?'Прокрути ежедневную рулетку':`Прокрути ежедневную рулетку ${n} раза`},
-  invite:{n:1,r:150000,t:()=>'Позови друга',h:'Засчитывается, когда ты отправишь приглашение'},
-  ups:{n:25,r:450000,t:n=>`Сделай ${n} апгрейдов`},
-  upw:{n:3,r:600000,t:n=>`Выиграй ${n} апгрейда`},
-  sell:{n:10,r:240000,t:n=>`Продай ${n} ников`},
-  save:{n:5,r:180000,t:n=>`Сохрани ${n} ников`},
+  spins:{n:30,r:75000,t:n=>`Сделай ${n} круток`},
+  wheel:{n:3,r:60000,t:n=>n===1?'Прокрути ежедневную рулетку':`Прокрути ежедневную рулетку ${n} раза`},
+  invite:{n:1,r:40000,t:()=>'Позови друга',h:'Засчитывается, когда ты отправишь приглашение'},
+  ups:{n:25,r:110000,t:n=>`Сделай ${n} апгрейдов`},
+  upw:{n:3,r:150000,t:n=>`Выиграй ${n} апгрейда`},
+  sell:{n:10,r:60000,t:n=>`Продай ${n} ников`},
+  save:{n:5,r:45000,t:n=>`Сохрани ${n} ников`},
 };
 const dkey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const todayK=()=>dkey(new Date());
@@ -1380,13 +1380,13 @@ $('#tab-prof').onclick=e=>{
 
 // ---------- Срочные задания: 3 дня, потом набор меняется ----------
 const TQP=[
-  {id:'chat',i:'💬',n:'Живой разговор',d:'Напиши 5 сообщений в чате',k:()=>S.chm||0,g:5,r:60000,e:3},
-  {id:'buy',i:'⭐',n:'Поддержи игру',d:'Купи любой товар за ⭐',k:()=>S.sbuys||0,g:1,r:150000,e:10},
-  {id:'v5',i:'👑',n:'Королевская крутка',d:'Сделай VIP-крутку ×5',k:()=>S.v5tot||0,g:1,r:100000,e:5,vip:1},
-  {id:'gift',i:'🎁',n:'Подарок короны',d:'Забери подарок VIP',k:()=>S.vgn||0,g:1,r:80000,e:5,vip:1},
-  {id:'spins',i:'🎰',n:'Горячие руки',d:'Сделай 50 круток',k:()=>S.spins,g:50,r:90000,e:5},
-  {id:'upw',i:'⚡',n:'Удачный апгрейд',d:'Выиграй 3 апгрейда',k:()=>S.upw,g:3,r:120000,e:5},
-  {id:'epic',i:'💎',n:'Редкая добыча',d:'Выбей 3 ника Эпик и выше',k:()=>S.cnt[3]+S.cnt[4]+S.cnt[5]+S.cnt[6]+S.cnt[7],g:3,r:130000,e:5}];
+  {id:'chat',i:'💬',n:'Живой разговор',d:'Напиши 5 сообщений в чате',k:()=>S.chm||0,g:5,r:15000,e:3},
+  {id:'buy',i:'⭐',n:'Поддержи игру',d:'Купи любой товар за ⭐',k:()=>S.sbuys||0,g:1,r:40000,e:10},
+  {id:'v5',i:'👑',n:'Королевская крутка',d:'Сделай VIP-крутку ×5',k:()=>S.v5tot||0,g:1,r:25000,e:5,vip:1},
+  {id:'gift',i:'🎁',n:'Подарок короны',d:'Забери подарок VIP',k:()=>S.vgn||0,g:1,r:20000,e:5,vip:1},
+  {id:'spins',i:'🎰',n:'Горячие руки',d:'Сделай 50 круток',k:()=>S.spins,g:50,r:22000,e:5},
+  {id:'upw',i:'⚡',n:'Удачный апгрейд',d:'Выиграй 3 апгрейда',k:()=>S.upw,g:3,r:30000,e:5},
+  {id:'epic',i:'💎',n:'Редкая добыча',d:'Выбей 3 ника Эпик и выше',k:()=>S.cnt[3]+S.cnt[4]+S.cnt[5]+S.cnt[6]+S.cnt[7],g:3,r:32000,e:5}];
 const TQD=3*864e5,tqWin=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/TQD);
 function tqState(){
   const w=tqWin();
@@ -1853,7 +1853,7 @@ async function promoUse(raw){
 // ---------- История в Telegram ----------
 // shareToStory открывает редактор истории с картинкой media/story.jpg; кнопка-виджет в истории ведёт в игру по реферальной ссылке.
 const storyOk=()=>{try{return !!(tg&&tg.shareToStory&&tg.isVersionAtLeast&&tg.isVersionAtLeast('7.8'))}catch(e){return false}};
-const ST_C=15000,ST_E=15;   // награда за историю: раз в сутки, без проверки (Telegram не сообщает, выложили ли её)
+const ST_C=5000,ST_E=5;   // награда за историю: раз в сутки, без проверки (Telegram не сообщает, выложили ли её)
 function storyCard(){const got=S.storyD===todayK();
   return `<div class="pcard story"><div class="strow"><div class="stph"><img src="media/story0.jpg" alt=""></div><div class="stb"><h3>Выложи в историю</h3><p>Похвастайся в Telegram — награда каждый день</p><div class="stchips"><span class="stch${got?' got':''}">⚡ +${ST_E} энергии</span><span class="stch${got?' got':''}">🪙 ${fmt(ST_C)}</span></div></div></div>`+
     (storyOk()?`<button class="btn main stgo" id="story-go">${got?'Выложить ещё одну · без награды':'Выложить в историю'}</button>`:`<div class="ststrip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Истории выкладываются из Telegram на телефоне</div>`)+`</div>`}
@@ -3642,7 +3642,7 @@ function renderChances(){
   const pr=CHP[chx.m],ml=(CHM.find(x=>x[0]===chx.m)||CHM[0])[1];
   const rows=[0,1,2,3,4,5,6].map(t=>`<div class="chr3" style="--tc:${T[t].c}"><span><i></i>${T[t].n}</span><b>${chFmt(CHN[t],t)}</b><b class="chb">${chFmt(pr[t],t)}</b></div>`).join('');
   const prices=CHPR.map((x,i)=>`<div class="chr" style="--tc:${T[i].c}"><span><i></i>${x[0]}</span><b>${x[1]} 🪙</b></div>`).join('');
-  const note={rare:'«Редкий+» повторяет крутку, пока не выпадет редкий или выше. Стоит 10 500 🪙 за ник.',epic:'«Эпик+» повторяет крутку, пока не выпадет эпический или выше. Стоит 40 000 🪙 за ник.',luck:'«Талисман удачи» увеличивает шансы на редкий–легендарный в 3 раза, на мифический в 1,5 раза. Обычные при этом выпадают реже.'}[chx.m];
+  const note={rare:'«Редкий+» повторяет крутку, пока не выпадет редкий или выше. Стоит 10 500 🪙 за ник.',epic:'«Эпик+» повторяет крутку, пока не выпадет эпический или выше. Стоит 52 000 🪙 за ник.',luck:'«Талисман удачи» увеличивает шансы на редкий–легендарный в 3 раза, на мифический в 1,5 раза. Обычные при этом выпадают реже.'}[chx.m];
   const sec=CASES.filter(c=>c.w.some(x=>x[0]===6)).map(c=>`${c.ic} ${c.n} — ${pctw(c.w.find(x=>x[0]===6)[1])}%`).join('<br>');
   el.innerHTML=`<div class="ahead"><button class="btn sm" data-chx="1">‹ Назад</button><h2>Шансы</h2></div><div class="gmpage">
   <div class="pcard chok"><span class="chsh">🛡️</span><div><b>Одинаковые для всех · открытые</b><p>Шансы не зависят от игрока и покупок. Все шансы и множители в таблицах ниже, без скрытых условий. Меняют их только «Талисман удачи», «Счастливая серия» и «Фарт дня», они описаны ниже. Таблицы показывают обычную крутку без множителей.</p></div></div>
