@@ -42,7 +42,7 @@ const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 const CAP=1e12;                    // максимальный баланс: 1 трлн монет
 const tz=x=>String(x).replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'').replace('.',',');
 const short=n=>n>=1e12?tz((n/1e12).toFixed(2))+'T':n>=1e9?tz((n/1e9).toFixed(2))+'B':n>=1e6?tz((n/1e6).toFixed(2))+'M':n>=1e3?tz((n/1e3).toFixed(1))+'K':String(n);   // 1 500 000 → 1,5M
-const fmtC=n=>n>=1e12?tz((n/1e12).toFixed(2))+' трлн':n>=1e9?tz((n/1e9).toFixed(2))+' млрд':n>=1e7?tz((n/1e6).toFixed(1))+' млн':fmt(n);   // для узких мест: 27,7 млн
+const fmtC=n=>n>=1e12?tz((n/1e12).toFixed(2))+' трлн':n>=1e9?tz((n/1e9).toFixed(2))+' млрд':n>=1e6?tz((n/1e6).toFixed(1))+' млн':fmt(n);   // для узких мест: 27,7 млн
 // цена ника плавно растёт с его баллами (без «пустот» между редкостями); секретные цены фиксированы
 const PRICE_BASE=360,PRICE_K=.056;   // цена обычных ников от баллов; общий масштаб экономики: ×30 к версии 3
 const START=90000;                   // стартовый баланс
