@@ -226,3 +226,8 @@ html.v2:not([data-theme]) .pcard:not(.holc){background:#18181f;border:1px solid 
 /* счётчик наград на кнопке-подарке */
 html.v2 header:has(.hwho) #bon-btn .dot,#bon-btn .dot{top:-5px;right:-5px;width:auto;min-width:22px;height:22px;padding:0 6px;box-sizing:border-box;border-radius:999px;background:#f0364b;border:2px solid #0d0d12;color:#fff;font:800 12px/1 var(--head);display:grid;place-items:center;box-shadow:0 2px 8px -2px rgba(240,54,75,.7)}
 #bon-btn .dot[hidden]{display:none}
+/* покачивание подарка при наградах: заметнее и чаще */
+@keyframes bongift{0%,100%{transform:none}8%{transform:translateY(-4px) rotate(-14deg)}16%{transform:translateY(0) rotate(12deg)}24%{transform:translateY(-3px) rotate(-10deg)}32%{transform:rotate(8deg)}40%{transform:rotate(-4deg)}48%{transform:none}}
+html.v2 header:has(.hwho) #bon-btn:has(.dot:not([hidden])) svg{animation:bongift 2.2s ease-in-out infinite}
+html.v2 header:has(.hwho) #bon-btn:has(.dot:not([hidden])){animation:bonglow 2.2s ease-in-out infinite,bonshake 2.2s ease-in-out infinite}
+@keyframes bonshake{0%,100%{transform:none}8%{transform:rotate(-6deg) scale(1.06)}16%{transform:rotate(5deg) scale(1.06)}24%{transform:rotate(-3deg)}32%{transform:rotate(2deg)}40%{transform:none}}
