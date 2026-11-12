@@ -212,3 +212,10 @@ html.v2 header:has(.hwho) #bon-btn svg{width:25px;height:25px;filter:drop-shadow
 #tab-bon .hint{background:#18181f;border:1px solid #2d2d38;box-shadow:none}
 #tab-bon .lsum{font-size:12px;gap:4px 14px}
 #tab-bon .lsum span{white-space:nowrap}
+
+/* меню «Ещё»: без рамки-панели вокруг списка, цвета из палитры */
+#more-sheet .sbox{background:#0d0d12;border-color:#2d2d38}
+#more-sheet .mlist{border:0;border-radius:0;background:none;gap:8px;padding:2px 0 12px;margin:0}
+#more-sheet .mrow{border:1px solid #2d2d38;border-radius:18px;background:#18181f;padding:12px 14px}
+#more-sheet .mrow:last-child{border-bottom:1px solid #2d2d38}
+#more-sheet .mrow:active{background:#1f1f28}
