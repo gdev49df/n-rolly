@@ -88,6 +88,14 @@ function szClaim(l, paid, silent) {
   if (!silent) { save(); render(); sfx('coins'); hap('n', 'success'); renderSeason(); }
   return 1;
 }
+function szReady() {   // сколько наград пропуска и заданий сезона можно забрать (для счётчика у кнопки бонусов)
+  try {
+    const z = szState(), lv = szLevel(); let n = 0;
+    for (let l = 1; l <= lv; l++) { if (!z.fc.includes(l)) n++; if (z.paid && !z.pc.includes(l)) n++; }
+    SZQ.forEach((q, i) => { if (!z.qc.includes(i) && q.v(z) >= q.n) n++; });
+    return n;
+  } catch (e) { return 0; }
+}
 function szClaimAll() {
   const z = szState(), lv = szLevel();
   let n = 0;
