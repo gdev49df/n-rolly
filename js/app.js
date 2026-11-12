@@ -433,8 +433,9 @@ function ensureQuests(){
   S.q={wk,list:ids.map(id=>({id,n:id==='wheel'?Math.min(QDEF.wheel.n,days):QDEF[id].n,p:0,got:false}))};
   save();
 }
+setInterval(()=>{try{updBonDot()}catch(e){}},3000);
 function bonAvail(){return !loginInfo().done||S.wheel!==todayK()||S.q.list.some(q=>!q.got&&q.p>=q.n)}
-function bonCount(){let n=0;try{n=(loginInfo().done?0:1)+(S.wheel!==todayK()?1:0)+S.q.list.filter(q=>!q.got&&q.p>=q.n).length;if(typeof dcReady==='function')n+=dcReady()||0;if(typeof szReady==='function')n+=szReady()||0}catch(e){}return n}   // сколько наград можно забрать
+function bonCount(){let n=0;try{n=(loginInfo().done?0:1)+(S.wheel!==todayK()?1:0)+S.q.list.filter(q=>!q.got&&q.p>=q.n).length;if(typeof dcReady==='function')n+=dcReady()||0;if(typeof szReady==='function')n+=szReady()||0;if(typeof tqReady==='function')n+=tqReady()||0;if(storyOk()&&S.storyD!==todayK())n++;if(typeof achReady==='function')n+=achReady().length;if(lb&&lb.refn>0)n++;try{const dg=Array.isArray(S.dexg)?S.dexg:[];n+=DEXS.filter((x,i)=>dexCount()>=x[0]&&!dg.includes(i)).length}catch(e){}}catch(e){}return n}   // сколько наград можно забрать
 function updBonDot(){const d=document.querySelector('#bon-btn .dot');if(!d)return;const n=bonCount();d.hidden=!n;d.textContent=n>9?'9+':String(n)}
 function addQuest(id,n=1){ensureQuests();const q=S.q.list.find(x=>x.id===id);if(q&&!q.got&&q.p<q.n){q.p=Math.min(q.n,q.p+n);save()}updBonDot()}
 ensureQuests();

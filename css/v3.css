@@ -325,3 +325,6 @@ header #bon-btn .dot{top:-6px;right:-6px;min-width:20px;height:20px;font-size:11
 .sw i{transition:transform .3s cubic-bezier(.3,1.35,.5,1),background-color .28s ease!important}
 .sw:active i{width:24px}
 .sw.on:active i{transform:translateX(20px)}
+/* активная вкладка: фиолетовая (перебивает html.v2-правила по специфичности) */
+html.v2 body nav [aria-selected=true],html body nav [aria-selected=true]{background:#2a2750;color:#fff}
+html.v2 body nav [aria-selected=true] svg,html body nav [aria-selected=true] svg{color:#8a7dff;filter:none}
