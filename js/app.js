@@ -3844,3 +3844,20 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 })();
 
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#lkp')){try{tab('chances')}catch(x){location.href='index.html#chances'}}});
+
+// ---------- плавные переключатели: после перерисовки экрана ползунок едет из прежнего положения ----------
+(function(){
+  const st=new Map(),key=b=>b.id||(b.dataset.nt?'nt'+b.dataset.nt:'')||b.getAttribute('aria-label')||'';
+  function scan(root){
+    const list=root.matches&&root.matches('.sw')?[root]:(root.querySelectorAll?[...root.querySelectorAll('.sw')]:[]);
+    list.forEach(b=>{const k=key(b);if(!k)return;const cur=b.classList.contains('on'),old=st.get(k);
+      st.set(k,cur);
+      if(old!==undefined&&old!==cur){b.classList.toggle('on',old);void b.offsetWidth;requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.toggle('on',cur)))}});
+  }
+  try{
+    new MutationObserver(ms=>{ms.forEach(m=>{m.addedNodes.forEach(n=>{if(n.nodeType===1)scan(n)});
+      if(m.type==='attributes'&&m.target.classList&&m.target.classList.contains('sw')){const k=key(m.target);if(k)st.set(k,m.target.classList.contains('on'))}})})
+      .observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+    scan(document.body);
+  }catch(e){}
+})();
