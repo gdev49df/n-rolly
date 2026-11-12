@@ -136,3 +136,17 @@ html.v2 .chd b{font:800 18px var(--head)}
 .lgb i{font:800 11px/1 var(--head,inherit);font-style:normal;letter-spacing:.3px;color:#e9ecf6;background:linear-gradient(180deg,#5a6478,#3d4658);border-radius:8px;padding:4px 8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
 .chm b .lgb{margin-right:6px}
 .lrow .lgb,.pn .lgb{margin-right:4px}
+
+/* компактнее: нижняя панель и ленты-карточки сверху */
+html.v2 nav,html body nav{padding:4px 6px calc(5px + env(safe-area-inset-bottom));border-radius:18px 18px 0 0}
+html.v2 nav button,html body nav button{padding:4px 2px 3px;gap:2px;border-radius:14px;font:700 9.5px/1.1 var(--head)}
+html.v2 nav button svg,html body nav button svg{width:17px;height:17px}
+html.v2 .ncards{gap:10px;padding:2px 16px 4px}
+html.v2 .ncard{min-width:52%;gap:10px;padding:9px 14px 9px 9px;border-radius:20px}
+html.v2 .nci{width:38px;height:38px;border-radius:13px}
+html.v2 .nci svg{width:20px;height:20px}
+html.v2 .nct{gap:2px}
+html.v2 .nct b{font:800 14px/1.15 var(--head)}
+html.v2 .nct small{font:600 12px/1.2 var(--head)}
+html.v2 .ndot{top:10px;right:10px;box-shadow:0 0 0 2px #17181f}
+html.v2 .app{padding-bottom:92px}
