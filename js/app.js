@@ -944,7 +944,7 @@ function render(){
   {const cl=vipOn()?[1,3,5]:[1,3],ck=cl.join();if(cn.dataset.k!==ck){cn.dataset.k=ck;cn.innerHTML=cl.map(n=>`<button aria-pressed="false" data-n="${n}">×${n}<small>${n===1?'один ник':n===3?'три ника':'👑 VIP'}</small></button>`).join('')}}
   [...seg.children].forEach((b,i)=>b.setAttribute('aria-pressed',i===mode));
   [...cn.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===count));
-  const sp=$('#spin');sp.textContent=`Крутить${count>1?' ×'+count:''} · ${free?count+' ⚡':count===5?'VIP · без лимита':fmt(m.cost*count)+' 🪙'}`;sp.disabled=busy;
+  const sp=$('#spin');sp.textContent=`Крутить${count>1?' ×'+count:''} · ${free?count+' ⚡':count===5?'VIP · без лимита · '+fmt(m.cost*count)+' 🪙':fmt(m.cost*count)+' 🪙'}`;sp.disabled=busy;
   $('#st-spins').textContent=`Круток: ${fmt(S.spins)}`;
   $('#st-best').innerHTML=`Лучший: <b class="chip" style="background:${T[S.best].c}">${S.spins?T[S.best].n:'—'}</b>`;
   renderCol();
