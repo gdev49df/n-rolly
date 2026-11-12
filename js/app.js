@@ -1424,12 +1424,13 @@ $('#prof-btn').onclick=()=>tab($('#tab-prof').hidden?'prof':'game');
 {const w=document.getElementById('hwho');if(w)w.onclick=()=>$('#prof-btn').click()}
 
 // Страницы: index.html (игра), rating.html (рейтинг), achievements.html (достижения). Состояние общее — в localStorage и облаке Telegram.
+const BUILD=(()=>{try{return new URL(document.currentScript.src).searchParams.get('v')||''}catch(e){return ''}})();   // версия сборки из ?v= у app.js: страницы открываем с ней, чтобы не подхватывать старые копии из кэша
 const PAGE=document.body.dataset.page||'main',PAGES={top:'rating.html',ach:'achievements.html',clan:'clans.html',market:'market.html',museum:'museum.html',shop:'shop.html',auction:'auction.html'};
 function tab(n){
   const here=PAGE==='main'?['game','col','up','prof','bon','help','guide','season','games','battles','fair','friends','chances']:[PAGE];
   if(here.includes(n))return tabIn(n);
   save();try{if(cloudDone)cloudPush()}catch(e){}
-  const go=(PAGES[n]||'index.html')+(PAGES[n]||n==='game'?'':'#'+n);
+  const go=(PAGES[n]||'index.html')+(BUILD?'?v='+BUILD:'')+(PAGES[n]||n==='game'?'':'#'+n);
   try{sessionStorage.setItem('nr_nav','1')}catch(e){}
   location.href=go;
 }
@@ -3399,7 +3400,7 @@ setTimeout(()=>ntSync(),7000);
 renderUp();
 if(PAGE!=='main')tabIn(PAGE);
 else{const h=location.hash.slice(1);if(['col','up','prof','bon','help','guide','season','games','battles','fair','friends','chances'].includes(h)){if(h==='friends'||h==='chances')setTimeout(()=>tabIn(h),0);else tabIn(h)}}
-try{if(PAGE!=='main'&&tg&&tg.BackButton){tg.BackButton.show();tg.BackButton.onClick(()=>{location.href=PAGE==='clan'?'rating.html':'index.html'})}}catch(e){}
+try{if(PAGE!=='main'&&tg&&tg.BackButton){tg.BackButton.show();tg.BackButton.onClick(()=>{location.href=(PAGE==='clan'?'rating.html':'index.html')+(BUILD?'?v='+BUILD:'')})}}catch(e){}
 refInit();
 cloudLoad();
 try{window.bootDone&&bootDone()}catch(e){}   // игра готова: убираем загрузочный экран
@@ -3863,3 +3864,6 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#lk
     scan(document.body);
   }catch(e){}
 })();
+
+// предзагрузка соседних страниц сразу с версией сборки (раньше в html лежали ссылки без версии и отдавали старые копии)
+try{if(BUILD)setTimeout(()=>['shop.html','auction.html','rating.html'].forEach(h=>{const l=document.createElement('link');l.rel='prefetch';l.href=h+'?v='+BUILD;document.head.append(l)}),2500)}catch(e){}
