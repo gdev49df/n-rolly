@@ -87,3 +87,23 @@ html.v2 .item button[data-a=copy]{display:grid;place-items:center;width:44px;hei
 html.v2 .item button[data-a=copy] svg{width:20px;height:20px}
 html.v2 .item button[data-a=copy]:active{transform:scale(.88);color:#43e585;border-color:rgba(67,229,133,.6);background:rgba(67,229,133,.14)}
 @media(hover:hover){html.v2 .item button[data-a=copy]:hover{color:#fff;border-color:rgba(255,255,255,.3)}}
+/* кнопки «Кинуть в чат» / «Вызов другу» */
+.sharer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sharer .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 8px;border-radius:18px;font-weight:800;font-size:14px}
+.sharer [data-ra=chat]{color:#6cc4ff;background:rgba(80,170,255,.12);border:1px solid rgba(100,180,255,.4)}
+.sharer [data-ra=chal]{color:#fff;background:linear-gradient(160deg,rgba(255,150,60,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14)}
+.sharer [data-ra=chal] svg{color:#ff9a3d}
+/* Ник дня и Охота дня */
+html.v2 .daycard{padding:18px}
+.dch{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.dch h3{font:800 20px var(--head)}.dch small{display:block;color:var(--mute);margin-top:5px;font-size:13px;line-height:1.35}.dch small b{color:#fff}
+.dci{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:17px;font-size:26px;background:color-mix(in srgb,var(--c) 22%,rgba(0,0,0,.35));border:1px solid color-mix(in srgb,var(--c) 40%,transparent)}
+.dnick{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 0 10px;padding:16px;border-radius:20px;background:radial-gradient(90% 120% at 50% 0,color-mix(in srgb,var(--tc) 22%,transparent),rgba(0,0,0,.25));border:1px solid color-mix(in srgb,var(--tc) 35%,transparent)}
+.dnick b{font:800 22px var(--head);overflow:hidden;text-overflow:ellipsis}
+.dnb{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;font:800 13px var(--head);color:var(--tc);background:color-mix(in srgb,var(--tc) 16%,transparent);border:1px solid color-mix(in srgb,var(--tc) 40%,transparent);white-space:nowrap}
+.dnb i{width:8px;height:8px;border-radius:50%;background:var(--tc);box-shadow:0 0 8px var(--tc)}
+.dnrow{display:flex;justify-content:space-between;align-items:center;color:var(--mute);font-size:14px}.dnrow b{font:800 18px var(--head);color:#fff}
+.dhex{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 0 12px;padding:14px 16px;border-radius:18px;background:rgba(0,0,0,.3);border:1px dashed rgba(255,255,255,.18)}
+.dhex span{color:var(--mute);font-size:13px}.dhex b{font:800 22px var(--head);letter-spacing:.06em}
+.dfoot{display:flex;justify-content:space-between;align-items:center;color:var(--mute);font-size:13px}.dfoot em{font-style:normal;font-weight:800;color:#43e585}
+.hunt.done{border-color:rgba(67,229,133,.4)}
