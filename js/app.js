@@ -19,7 +19,7 @@ function safeTop(){
 }
 if(tg){tg.ready();tg.expand();safeTop();['safeAreaChanged','contentSafeAreaChanged','fullscreenChanged','viewportChanged'].forEach(ev=>{try{tg.onEvent(ev,safeTop)}catch(e){}});try{tg.setHeaderColor('#0D0B1A');tg.setBackgroundColor('#0D0B1A')}catch(e){}}
 const hap=(k,v)=>{try{tg&&tg.HapticFeedback&&(k==='n'?tg.HapticFeedback.notificationOccurred(v):tg.HapticFeedback.impactOccurred(v))}catch(e){}};
-const T=[{n:'Обычный',c:'#9AA5DB',v:390},{n:'Необычный',c:'#27D9BD',v:1470},{n:'Редкий',c:'#9B7BFF',v:4800},{n:'Эпический',c:'#FF5FA2',v:17700},{n:'Легендарный',c:'#FFC933',v:72000},{n:'Мифический',c:'#FF4B3E',v:378000},{n:'Секретный',c:'#EAF1FF',v:1000000},{n:'Эксклюзивный',c:'#B455FF',v:25000000}]
+const T=[{n:'Обычный',c:'#9AA5DB',v:390},{n:'Необычный',c:'#27D9BD',v:1470},{n:'Редкий',c:'#9B7BFF',v:4800},{n:'Эпический',c:'#FF5FA2',v:17700},{n:'Легендарный',c:'#FFC933',v:72000},{n:'Мифический',c:'#19E6D4',v:378000},{n:'Секретный',c:'#FFFFFF',v:1000000},{n:'Эксклюзивный',c:'#B455FF',v:25000000}]
 const BDGP={crown:10000000,dragon:7500000,unicorn:5000000,liberty:4000000,slot:3000000,fire:2000000,rose:1500000,coin:1000000,moai:1000000},TOPP=500000,MULTIP=1000000,MULTIN=5;
 T.forEach((t,i)=>t.s=['Обычн.','Необыч.','Редкий','Эпик','Легенд.','Миф.','Секрет','Эксклюз.'][i]);;
 const MULTI5={l:'×5',min:0,cost:0};   // мульти-крутка ×5: только за монеты, 5 000 🪙 за каждый ник, режим не выбирается
@@ -785,7 +785,7 @@ async function spin(){
   $('#idle').hidden=true;render();
   const box=$('#reels');box.innerHTML='';const row=mkRow();box.append(row);
   const c=cur[sel],reel=row.querySelector('.reel');
-  if(c.t>=5&&!reduce){await sleep(build('??????',true,reel,0)+150);await epic(c);build(c.name,false,reel)}
+  if(false){}
   else{await sleep(build(c.name,true,reel,0))}
   showSel(sel,true);plShow(plGot,plSp,plEn);
   busy=false;render();
@@ -797,10 +797,10 @@ function showSel(i,fresh){
   row.style.setProperty('--tc',t.c);
   if(!fresh)build(c.name,false,reel);
   row.classList.remove('hit','shake','mythic','secret');row.classList.toggle('calm',!fresh);void row.offsetWidth;   // calm: при переключении без тряски и вспышек
-  row.classList.add('hit');row.classList.toggle('shake',fresh&&c.t>=3);row.classList.toggle('mythic',c.t===5);row.classList.toggle('secret',c.t===6);
+  row.classList.add('hit');row.classList.toggle('shake',fresh&&c.t>=3&&c.t<5);
   renderPicks();renderMeta();
   requestAnimationFrame(()=>requestAnimationFrame(()=>meta.classList.add('on')));
-  if(fresh){if(!c.epic)sfx('tier',c.t);if(c.t>=2){hap('n','success');rareHap(c.t)}if(c.t>=3)boom(t.c,c.t)}
+  if(fresh){if(!c.epic)sfx('tier',c.t);if(c.t>=2){hap('n','success');rareHap(c.t)}if(c.t>=3&&c.t<5)boom(t.c,c.t)}
 }
 function renderMeta(){
   const row=document.querySelector('#reels .rrow');if(!row)return;const c=cur[sel],t=T[c.t],meta=row.querySelector('.rmeta');
