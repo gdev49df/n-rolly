@@ -65,3 +65,18 @@ html.v2 .gmg.one .gmc{min-height:132px;display:grid;grid-template-columns:1fr au
 html.v2 .gmg.one .gmc .gmci{grid-column:2;grid-row:1/4;width:84px;height:84px;border-radius:26px;font-size:44px;margin:0}
 html.v2 .gmg.one .gmc b,html.v2 .gmg.one .gmc small{grid-column:1}
 html.v2 .gmg.one .gmc .gmm{grid-column:1;justify-self:start}
+/* нижняя панель: плоская, на всю ширину, как в референсе */
+html.v2 nav{left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;padding:8px 6px calc(10px + env(safe-area-inset-bottom));gap:2px;border-radius:26px 26px 0 0;background:#181a22;backdrop-filter:none;-webkit-backdrop-filter:none;border:0;border-top:1px solid #2a2d38;box-shadow:0 -10px 30px rgba(0,0,0,.35)}
+html.v2 nav button{flex:1;min-width:0;padding:7px 2px 6px;gap:5px;border-radius:18px;background:none;box-shadow:none;border:0;font:700 12px/1.1 var(--head);color:#8b8fa2}
+html.v2 nav button svg{width:26px;height:26px}
+html.v2 nav [aria-selected=true]{background:#272a35;color:#fff;box-shadow:none}
+html.v2 nav [aria-selected=true] svg{color:#43e585;transform:none;filter:none}
+html.v2 nav button::before,html.v2 nav button::after{display:none!important}
+html.v2 .app{padding-bottom:112px}
+/* перебить liquid-glass из style.css */
+html body nav[role=tablist]{position:fixed;left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;padding:8px 6px calc(10px + env(safe-area-inset-bottom));gap:2px;border-radius:26px 26px 0 0;background:#181a22;-webkit-backdrop-filter:none;backdrop-filter:none;border:0;border-top:1px solid #2a2d38;box-shadow:0 -10px 30px rgba(0,0,0,.35);overflow:visible}
+html body nav[role=tablist]::before,html body nav[role=tablist]::after{display:none!important;content:none}
+html body nav button{flex:1;min-width:0;padding:7px 2px 6px;border-radius:18px;background:none;box-shadow:none;border:0;color:#8b8fa2;font:700 12px/1.1 var(--head)}
+html body nav [aria-selected=true]{color:#fff;background:#272a35;box-shadow:none;border:0}
+html body nav [aria-selected=true] svg{filter:none;color:#43e585}
+html body nav button::before,html body nav button::after{display:none!important;content:none}
