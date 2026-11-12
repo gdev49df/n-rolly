@@ -1482,7 +1482,7 @@ const escH=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;
 const netWorth=()=>S.coins+S.items.reduce((s,x)=>s+val(x.t,x.p,x.n),0)+(window.bankHeld?bankHeld():0);   // капитал = монеты + стоимость коллекции
 const LGC={1:'#FFC83D',2:'#19E6D4',3:'#8FA0C8',4:'#9A9EB0'},LGN=['','M·I','M·II','M·III','M·IV'];
 const lgOf=r=>!r||r<1||r>100?0:r===1?1:r<=3?2:r<=10?3:4;
-const lgHtml=l=>l?`<span class="lgb" style="--lc:${LGC[l]}"><svg viewBox="0 0 24 24" width="15" height="15"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5z" fill="var(--lc)"/><circle cx="8.6" cy="11.5" r="1.1" fill="#0d0d12"/><circle cx="12" cy="11.5" r="1.1" fill="#0d0d12"/><circle cx="15.4" cy="11.5" r="1.1" fill="#0d0d12"/></svg><i>${LGN[l]}</i></span>`:'';
+const lgHtml=l=>l?`<span class="lgb" style="--lc:${LGC[l]}"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 2.8c2.4 1.6 4.8 2.2 7.2 2.3.7 0 1.2.5 1.2 1.2v5c0 4.9-3 8.3-8.4 10.5-5.4-2.2-8.4-5.6-8.4-10.5v-5c0-.7.5-1.2 1.2-1.2 2.4-.1 4.8-.7 7.2-2.3z" fill="var(--lc)" stroke="var(--lc)" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 4.6c1.9 1.1 3.9 1.7 5.9 1.9v3.6c-3.9.6-7.9.6-11.8 0V6.5c2-.2 4-.8 5.9-1.9z" fill="#fff" opacity=".28"/><circle cx="8.7" cy="13.2" r="1.25" fill="#0d0d12"/><circle cx="12" cy="13.2" r="1.25" fill="#0d0d12"/><circle cx="15.3" cy="13.2" r="1.25" fill="#0d0d12"/></svg><i>${LGN[l]}</i></span>`:'';
 const TOPS=[['net','Капитал'],['best','Юзер'],['lvl','Уровень'],['museum','Музей']];
 const lb={cheat:0,by:'net',data:{},load:false,err:'',sent:'',last:0};
 function bestOwn(){   // лучший ник из коллекции, если имя ещё не записано
