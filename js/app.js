@@ -237,7 +237,7 @@ fixState();
 const THEMES=[{id:'',n:'Ночь',a:'#5B6BFF',b:'#0D0B1A',price:0},{id:'ocean',n:'Океан',a:'#2E8BFF',b:'#06121F',price:500000},{id:'emerald',n:'Изумруд',a:'#1FBF72',b:'#06130E',price:1000000},{id:'sunset',n:'Закат',a:'#FF6B4A',b:'#17090F',price:2000000},{id:'amoled',n:'Чёрная',a:'#5B6BFF',b:'#000000',price:3000000},{id:'royal',n:'Королевская',a:'#B05BFF',b:'#120A1F',price:5000000},{id:'neon',n:'Неон',a:'#00F0FF',b:'#08051A',price:4000000},{id:'sakura',n:'Сакура',a:'#FF7FB0',b:'#1A0B14',price:3000000},{id:'gold',n:'Золото',a:'#FFC933',b:'#141006',price:8000000}];
 const themeOwn=t=>!t.id||(S.cown||[]).includes('t_'+t.id);
 function applyTheme(){
-  const t=THEMES.find(x=>x.id===S.theme&&themeOwn(x))||THEMES[0];
+  S.theme='';const t=THEMES[0];   // цветовые темы убраны: всегда одна палитра
   try{if(t.id)document.documentElement.dataset.theme=t.id;else delete document.documentElement.dataset.theme;
     const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t.b;
     if(tg){tg.setHeaderColor&&tg.setHeaderColor(t.b);tg.setBackgroundColor&&tg.setBackgroundColor(t.b)}}catch(e){}
@@ -276,7 +276,7 @@ function fixState(){
   if(typeof S.bestn!=='string')S.bestn='';S.hide=S.hide?1:0;
   num('refc',0);S.refc=Math.max(0,Math.floor(S.refc));S.refd=S.refd?1:0;
   if(typeof S.dcase!=='string')S.dcase='';if(!S.cdt||typeof S.cdt!=='object')S.cdt={};{const d=new Date();if(S.dcase===d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')&&!S.cdt.daily)S.cdt.daily=Date.now()}
-  S.fast=S.fast?1:0;if(typeof S.theme!=='string')S.theme='';if(S.theme&&Array.isArray(S.cown)&&!S.cown.includes('t_'+S.theme))S.cown.push('t_'+S.theme);if(typeof S.cf!=='string')S.cf='';
+  S.fast=S.fast?1:0;S.theme='';if(typeof S.cf!=='string')S.cf='';
   S.work=(Array.isArray(S.work)?S.work:[]).filter(w=>w&&typeof w.id==='string'&&isFinite(+w.t)).map(w=>({id:w.id,t:Math.min(Date.now(),+w.t)})).slice(0,3);
   if(!(S.lotp&&typeof S.lotp==='object'&&((S.lotp.k==='c'&&isFinite(+S.lotp.v)&&+S.lotp.v>0)||(S.lotp.k==='n'&&typeof S.lotp.name==='string'))))S.lotp=null;
   num('lotn',0);S.lotn=Math.max(0,Math.floor(S.lotn));S.cown=Array.isArray(S.cown)?[...new Set(S.cown.filter(x=>typeof x==='string'))]:[];if(typeof S.cn!=='string')S.cn='';if(typeof S.ct!=='string')S.ct='';
@@ -860,7 +860,7 @@ const GUIDE=[
   ['🎁','Забирай бонусы каждый день','Кнопка подарка вверху: награда за вход (серия из 7 дней), бесплатное колесо раз в день, задания и сезон. Не пропускай дни, серия даёт больше.'],
   ['🗂️','Музей','«Склад» → «Музей»: поставь ник навсегда, он приносит монеты.'],
   ['🔨','Магазин, рынок и аукцион','Вкладка «Магазин»: услуги, рынок игроков и аукцион. Выставляй свои ники и покупай чужие. Продажа приносит монеты, а бот пришлёт уведомление, когда ник купят.'],
-  ['🏆','Рейтинг и профиль','«Рейтинг»: капитал, лучший ник, уровень и музей, а также кланы. «Профиль»: оформление (титулы, рамки, ник, тема), достижения и приглашение друзей. За каждого приглашённого ты получаешь монеты и энергию.']
+  ['🏆','Рейтинг и профиль','«Рейтинг»: капитал, лучший ник, уровень и музей, а также кланы. «Профиль»: оформление (титулы, рамки и ник), достижения и приглашение друзей. За каждого приглашённого ты получаешь монеты и энергию.']
 ];
 function renderGuide(){
   const el=$('#tab-guide');if(!el)return;
@@ -1231,16 +1231,16 @@ FRM=[
   {id:'f_emerald',n:'Изумрудная рамка',price:20e6},
   {id:'f_diamond',n:'Бриллиантовая рамка',price:80e6},
 ];
-const cosNick=id=>NSTY.find(x=>x.id===id),cosTitle=id=>TTL.find(x=>x.id===id),cosFrame=id=>FRM.find(x=>x.id===id),cosTheme=id=>typeof id==='string'&&id.startsWith('t_')?THEMES.find(x=>x.id&&'t_'+x.id===id):null;
+const cosNick=id=>NSTY.find(x=>x.id===id),cosTitle=id=>TTL.find(x=>x.id===id),cosFrame=id=>FRM.find(x=>x.id===id),cosTheme=id=>null;
 const cosOwn=id=>S.cown.includes(id);
 const nickHtml=(name,id)=>`<span class="nk${cosNick(id)?' nk-'+id:''}">${escH(name)}</span>`;
 const titleHtml=id=>{const t=cosTitle(id);return t?`<span class="ttl" style="--tc:${t.c}">${t.n}</span>`:''};
 const cosKey=()=>(cosOwn(S.cn)&&cosNick(S.cn)?S.cn:'')+'|'+(cosOwn(S.ct)&&cosTitle(S.ct)?S.ct:'')+'|'+(cosOwn(S.cf)&&cosFrame(S.cf)?S.cf:'');
-function cosFix(){try{if(Array.isArray(S.cown)&&S.cown.includes('t_hallow')){S.cown=S.cown.filter(x=>x!=='t_hallow');S.coins=Math.min(CAP,(S.coins|0)+2500000);if(S.theme==='hallow')S.theme=''}}catch(e){}const ol=S.sx&&S.sx.title_oligarch;S.cown=[...new Set(S.cown.map(x=>x==='oligarch'&&!ol?'biz':OLDT[x]||x))].filter(x=>cosNick(x)||cosTitle(x)||cosFrame(x)||cosTheme(x)||/^a_(ghost|pop|rain)$/.test(x));if(OLDT[S.ct])S.ct=OLDT[S.ct];if(S.ct==='oligarch'&&!ol)S.ct='biz';if(S.cn&&!cosOwn(S.cn))S.cn='';if(S.ct&&!cosOwn(S.ct))S.ct='';if(S.cf&&!cosOwn(S.cf))S.cf='';if(S.theme&&!S.cown.includes('t_'+S.theme))S.theme=''}
+function cosFix(){try{if(Array.isArray(S.cown)){const ids=THEMES.filter(x=>x.id);S.cown.filter(x=>/^t_/.test(x)&&x!=='t_hallow').forEach(x=>{const t=ids.find(y=>'t_'+y.id===x);if(t&&t.price)S.coins=Math.min(CAP,(S.coins|0)+t.price)});S.cown=S.cown.filter(x=>!/^t_/.test(x)||x==='t_hallow')}}catch(e){}try{if(Array.isArray(S.cown)&&S.cown.includes('t_hallow')){S.cown=S.cown.filter(x=>x!=='t_hallow');S.coins=Math.min(CAP,(S.coins|0)+2500000);if(S.theme==='hallow')S.theme=''}}catch(e){}const ol=S.sx&&S.sx.title_oligarch;S.cown=[...new Set(S.cown.map(x=>x==='oligarch'&&!ol?'biz':OLDT[x]||x))].filter(x=>cosNick(x)||cosTitle(x)||cosFrame(x)||cosTheme(x)||/^a_(ghost|pop|rain)$/.test(x));if(OLDT[S.ct])S.ct=OLDT[S.ct];if(S.ct==='oligarch'&&!ol)S.ct='biz';if(S.cn&&!cosOwn(S.cn))S.cn='';if(S.ct&&!cosOwn(S.ct))S.ct='';if(S.cf&&!cosOwn(S.cf))S.cf='';if(S.theme&&!S.cown.includes('t_'+S.theme))S.theme=''}
 cosFix();
 try{avaKey='';updAva()}catch(e){}
 var cosTab='t';
-const COST=[['t','Титулы'],['f','Рамки'],['n','Ник'],['h','Тема']];
+const COST=[['t','Титулы'],['f','Рамки'],['n','Ник']];
 function cosSheet(){
   let o=document.getElementById('cosheet');
   if(!o){o=document.createElement('div');o.id='cosheet';o.className='usheet';document.body.append(o);
@@ -1263,9 +1263,10 @@ function cosSheet(){
   const row=(it,kind)=>{const own=kind===4?themeOwn({id:it.id.slice(2)}):cosOwn(it.id),on=kind===1?S.cn===it.id:kind===2?S.ct===it.id:kind===3?S.cf===it.id:S.theme===it.id.slice(2),poor=!own&&!it.star&&S.coins<it.price;
     return `<div class="crow2${on?' on':''}"><div class="cprev">${kind===1?nickHtml(nm,it.id):kind===2?titleHtml(it.id):kind===3?`<span class="fprev">${frameRing(it.id)}<b>${escH([...nm][0]||'?').toUpperCase()}</b></span>`:`<i class="dthm" style="background:linear-gradient(135deg,${it.b} 52%,${it.a} 52%);border:2px solid ${it.a}"></i>`}</div><div class="cinfo"><b>${it.n}</b><small${own?'':' class="prc"'}>${own?(on?'Надето':'Куплено'):it.star?'⭐ '+it.star+' · только за звёзды':fmtC(it.price)+' 🪙'}</small></div><button class="btn sm${own||!poor?' main':''}" data-cb="${it.id}"${poor?' disabled':''}>${own?(on?(kind===4?'Выбрано':'Снять'):'Надеть'):it.star?'В магазин':poor?'Не хватает':'Купить'}</button></div>`};
   const free=()=>{const on=!S.theme;return `<div class="crow2${on?' on':''}"><div class="cprev"><i class="dthm" style="background:linear-gradient(135deg,#0D0B1A 52%,#5B6BFF 52%);border:2px solid #5B6BFF"></i></div><div class="cinfo"><b>Ночь</b><small>${on?'Надето':'Бесплатно'}</small></div><button class="btn sm main" data-cb="t_"${on?' disabled':''}>${on?'Выбрано':'Надеть'}</button></div>`};
-  const list=cosTab==='t'?TTL.map(x=>row(x,2)).join(''):cosTab==='f'?FRM.map(x=>row(x,3)).join(''):cosTab==='n'?NSTY.map(x=>row(x,1)).join(''):free()+THEMES.filter(x=>x.id).map(x=>row({...x,id:'t_'+x.id},4)).join('');
+  if(!COST.some(x=>x[0]===cosTab))cosTab='t';
+  const list=cosTab==='t'?TTL.map(x=>row(x,2)).join(''):cosTab==='f'?FRM.map(x=>row(x,3)).join(''):cosTab==='n'?NSTY.map(x=>row(x,1)).join(''):'';
   const have=S.cown.length;
-  o.innerHTML=`<div class="sbg" data-cx="1"></div><div class="sbox casebox"><div class="shead"><b>✨ Оформление</b><button class="btn sm" data-cx="1">✕</button></div>
+  o.innerHTML=`<div class="sbg" data-cx="1"></div><div class="sbox casebox"><div class="shead"><b>Косметика</b><button class="btn sm" data-cx="1">✕</button></div>
     <div class="cprevbig">${nickHtml(nm,cosOwn(S.cn)?S.cn:'')}${cosOwn(S.ct)?`<div>${titleHtml(S.ct)}</div>`:''}</div>
     <div class="ptabs sm" role="tablist" style="margin-top:12px">${COST.map(([k,l])=>`<button role="tab" data-ctab="${k}" aria-selected="${cosTab===k}">${l}</button>`).join('')}</div>
     <div class="clist">${list}</div></div>`;
@@ -1319,7 +1320,7 @@ function renderProf(){
     <button class="pf-t pf-b" id="clan-open" style="--ic:#7c6cff"><span class="pf-i">${I(IC.shield)}</span><b>Кланы</b><small>${cl.me&&cl.me.clan?escH('['+(cl.me.clan.tag||'')+'] '+(cl.me.clan.name||'')):'вступи или создай свой'}</small></button>
   </div>
   <div class="pf-g">
-    ${tile('cos-open','spark','#d56bff','Оформление','титулы, рамки, ник, тема')}
+    ${tile('cos-open','spark','#d56bff','Оформление','титулы, рамки и ник')}
     ${tile('guide-open','book','#2fb6a5','Как играть','видео и 8 шагов')}
     ${tile('chat-open','chat','#4e8dff','Чат игроков','общий и личные')}
     ${tile('hist-open','rec','#e0a13a','Покупки','история за звёзды')}
